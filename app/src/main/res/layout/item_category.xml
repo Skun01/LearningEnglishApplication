@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_margin="8dp"
+    android:background="@drawable/item_background"> <!-- Tạo một background bo góc -->
+
+    <TextView
+        android:id="@+id/tv_category_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tên Thể Loại"
+        android:textSize="18sp"
+        android:textColor="@color/text_color_primary"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tv_word_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Số từ: 20"
+        android:textSize="14sp"
+        android:textColor="@color/text_color_secondary"
+        android:layout_marginTop="4dp"/>
+</LinearLayout>

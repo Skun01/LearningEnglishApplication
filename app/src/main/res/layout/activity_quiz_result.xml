@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp"
+    android:background="@color/background_color"
+    tools:context=".QuizResultActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hoàn Thành!"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Đây là kết quả của bạn"
+        android:textSize="18sp"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/text_color_secondary"/>
+
+    <!-- Khung kết quả -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/item_background">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tổng điểm"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/text_color_secondary"/>
+
+        <TextView
+            android:id="@+id/tv_final_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_color_primary"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            tools:text="18/20"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_color"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Chi tiết -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Số câu đúng:"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/tv_correct_answers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="18"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Số câu sai:"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/tv_wrong_answers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="2"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Nút chức năng -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="32dp">
+
+        <Button
+            android:id="@+id/btn_retry_quiz"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Làm lại bài kiểm tra"/>
+        <Button
+            android:id="@+id/btn_back_to_home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Về màn hình chính"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_marginTop="8dp"/>
+    </LinearLayout>
+</LinearLayout>
