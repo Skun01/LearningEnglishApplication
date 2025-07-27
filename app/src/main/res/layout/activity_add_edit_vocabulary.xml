@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/background_color">
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Từ mới" style="@style/TextAppearance.AppCompat.Title"/>
+    <EditText android:id="@+id/et_word" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Ví dụ: Hello"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Nghĩa của từ" style="@style/TextAppearance.AppCompat.Title" android:layout_marginTop="16dp"/>
+    <EditText android:id="@+id/et_meaning" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Ví dụ: Xin chào"/>
+
+    <!-- Bạn có thể thêm các trường khác như phiên âm, ví dụ... -->
+
+    <Button android:id="@+id/btn_save_vocabulary" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Lưu Từ" android:layout_marginTop="32dp"/>
+</LinearLayout>

@@ -33,6 +33,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_CAT_NAME = "name";
     public static final String COLUMN_CAT_DESCRIPTION = "description";
 
+    // Tên bảng và cột cho Vocabularies
+    public static final String TABLE_VOCABULARIES = "vocabularies";
+    public static final String COLUMN_VOCAB_ID = "id";
+    public static final String COLUMN_VOCAB_USER_ID = "user_id";
+    public static final String COLUMN_VOCAB_CATEGORY_ID = "category_id";
+    public static final String COLUMN_VOCAB_WORD = "word";
+    public static final String COLUMN_VOCAB_MEANING = "meaning";
+
 
     // Câu lệnh tạo bảng Users
     private static final String CREATE_TABLE_USERS = "CREATE TABLE " + TABLE_USERS + "("
@@ -48,7 +56,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + COLUMN_CAT_DESCRIPTION + " TEXT,"
             + "FOREIGN KEY(" + COLUMN_CAT_USER_ID + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_USER_ID + ")" + ")";
 
-    // ... (Thêm các câu lệnh tạo bảng khác ở đây)
+    // Câu lệnh tạo bảng Vocabularies
+    private static final String CREATE_TABLE_VOCABULARIES = "CREATE TABLE " + TABLE_VOCABULARIES + "("
+            + COLUMN_VOCAB_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + COLUMN_VOCAB_USER_ID + " INTEGER,"
+            + COLUMN_VOCAB_CATEGORY_ID + " INTEGER,"
+            + COLUMN_VOCAB_WORD + " TEXT NOT NULL,"
+            + COLUMN_VOCAB_MEANING + " TEXT,"
+            // Thêm các cột khác nếu cần
+            + "FOREIGN KEY(" + COLUMN_VOCAB_USER_ID + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_USER_ID + "),"
+            + "FOREIGN KEY(" + COLUMN_VOCAB_CATEGORY_ID + ") REFERENCES " + TABLE_CATEGORIES + "(" + COLUMN_CAT_ID + ")" + ")";
+
 
 
     public DatabaseHelper(Context context) {
@@ -60,7 +78,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // Tạo các bảng
         db.execSQL(CREATE_TABLE_USERS);
         db.execSQL(CREATE_TABLE_CATEGORIES);
-        // ... (Thực thi các câu lệnh tạo bảng khác)
+        db.execSQL(CREATE_TABLE_VOCABULARIES);
     }
 
     @Override
@@ -148,5 +166,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // Dấu '%' là ký tự đại diện trong SQL, tìm bất cứ chuỗi nào chứa query
         String[] selectionArgs = {String.valueOf(userId), "%" + query + "%"};
         return db.query(TABLE_CATEGORIES, null, selection, selectionArgs, null, null, COLUMN_CAT_NAME);
+    }
+
+    public boolean addVocabulary(long userId, long categoryId, String word, String meaning) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_VOCAB_USER_ID, userId);
+        values.put(COLUMN_VOCAB_CATEGORY_ID, categoryId);
+        values.put(COLUMN_VOCAB_WORD, word);
+        values.put(COLUMN_VOCAB_MEANING, meaning);
+        long result = db.insert(TABLE_VOCABULARIES, null, values);
+        return result != -1;
+    }
+
+    public Cursor getVocabulariesForCategory(long categoryId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.query(TABLE_VOCABULARIES, null, COLUMN_VOCAB_CATEGORY_ID + "=?", new String[]{String.valueOf(categoryId)}, null, null, null);
+    }
+
+    public String getCategoryName(long categoryId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_CATEGORIES, new String[]{COLUMN_CAT_NAME}, COLUMN_CAT_ID + "=?", new String[]{String.valueOf(categoryId)}, null, null, null);
+        if (cursor.moveToFirst()) {
+            String name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CAT_NAME));
+            cursor.close();
+            return name;
+        }
+        return "Không rõ";
     }
 }

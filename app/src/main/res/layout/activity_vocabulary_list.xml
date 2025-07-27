@@ -8,26 +8,16 @@
     android:background="@color/background_color"
     tools:context=".VocabularyListActivity">
 
-    <!-- Thanh tiêu đề -->
-    <LinearLayout
+    <!-- THAY THẾ THANH TIÊU ĐỀ CŨ BẰNG TOOLBAR NÀY -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_vocabulary_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
+        android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
-        android:gravity="center_vertical">
+        app:titleTextColor="@color/white"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
-        <TextView
-            android:id="@+id/tv_category_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Tên Thể Loại"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
-    </LinearLayout>
-
+    <!-- Nút bắt đầu Flashcard (Giữ nguyên) -->
     <Button
         android:id="@+id/btn_start_flashcard"
         android:layout_width="match_parent"
@@ -37,7 +27,7 @@
         android:backgroundTint="@color/colorAccent"
         android:textColor="@color/white"/>
 
-    <!-- Danh sách từ vựng -->
+    <!-- Danh sách từ vựng (Giữ nguyên) -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_vocabularies"
         android:layout_width="match_parent"
@@ -45,7 +35,7 @@
         android:layout_weight="1"
         android:padding="8dp"/>
 
-    <!-- Nút thêm từ mới -->
+    <!-- Nút thêm từ mới (Giữ nguyên) -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_vocabulary"
         android:layout_width="wrap_content"

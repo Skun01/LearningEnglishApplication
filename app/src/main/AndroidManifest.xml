@@ -26,6 +26,10 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".CategoryManagementActivity" />
         <activity android:name=".AddEditCategoryActivity" />
+        <activity android:name=".VocabularyListActivity" />
+        <activity android:name=".AddEditVocabularyActivity" />
+
+
 
 
 

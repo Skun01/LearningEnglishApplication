@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class CategoryManagementActivity extends AppCompatActivity {
+public class CategoryManagementActivity extends AppCompatActivity implements CategoryAdapter.OnItemClickListener {
 
     private RecyclerView recyclerView;
     private CategoryAdapter adapter;
@@ -69,6 +69,19 @@ public class CategoryManagementActivity extends AppCompatActivity {
                 startActivity(new Intent(CategoryManagementActivity.this, AddEditCategoryActivity.class));
             }
         });
+
+        adapter = new CategoryAdapter(this, cursor);
+        adapter.setOnItemClickListener(this); // Đăng ký listener
+        recyclerView.setAdapter(adapter);
+    }
+
+    // Phương thức được gọi khi một thể loại được nhấn
+    @Override
+    public void onItemClick(long categoryId, String categoryName) {
+        Intent intent = new Intent(this, VocabularyListActivity.class);
+        intent.putExtra("CATEGORY_ID", categoryId);
+        intent.putExtra("CATEGORY_NAME", categoryName);
+        startActivity(intent);
     }
 
     // Cập nhật lại danh sách mỗi khi quay lại màn hình này
@@ -113,6 +126,8 @@ public class CategoryManagementActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 
 
 
