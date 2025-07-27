@@ -86,6 +86,7 @@ public class AddEditVocabularyActivity extends AppCompatActivity {
             }
             boolean isAdded = databaseHelper.addVocabulary(userId, categoryId, word, meaning);
             if (isAdded) {
+                databaseHelper.logWordLearned(userId);
                 Toast.makeText(this, "Đã thêm từ mới!", Toast.LENGTH_SHORT).show();
                 finish();
             } else {

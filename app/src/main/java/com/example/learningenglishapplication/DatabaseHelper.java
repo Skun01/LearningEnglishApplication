@@ -8,7 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.Map;
 import java.util.HashMap;
 import com.example.learningenglishapplication.model.Vocabulary;
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +51,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_SETTING_USER_ID = "user_id";
     public static final String COLUMN_SETTING_THEME = "theme";
 
+    // Cần có các cột cho bảng Statistics
+    public static final String TABLE_STATISTICS = "statistics";
+    public static final String COLUMN_STAT_USER_ID = "user_id";
+    public static final String COLUMN_STAT_DATE = "date";
+    public static final String COLUMN_STAT_WORDS_LEARNED = "words_learned";
+
 
     // Câu lệnh tạo bảng Users
     private static final String CREATE_TABLE_USERS = "CREATE TABLE " + TABLE_USERS + "("
@@ -81,6 +89,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + COLUMN_SETTING_THEME + " TEXT,"
             + "FOREIGN KEY(" + COLUMN_SETTING_USER_ID + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_USER_ID + ")" + ")";
 
+    // Câu lệnh tạo bảng Statistics
+    private static final String CREATE_TABLE_STATISTICS = "CREATE TABLE " + TABLE_STATISTICS + "("
+            + COLUMN_STAT_USER_ID + " INTEGER,"
+            + COLUMN_STAT_DATE + " TEXT," // Lưu dưới dạng YYYY-MM-DD
+            + COLUMN_STAT_WORDS_LEARNED + " INTEGER DEFAULT 0,"
+            + "PRIMARY KEY (" + COLUMN_STAT_USER_ID + ", " + COLUMN_STAT_DATE + ")," // Khóa chính kép
+            + "FOREIGN KEY(" + COLUMN_STAT_USER_ID + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_USER_ID + ")" + ")";
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -92,6 +108,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_CATEGORIES);
         db.execSQL(CREATE_TABLE_VOCABULARIES);
         db.execSQL(CREATE_TABLE_USER_SETTINGS);
+        db.execSQL(CREATE_TABLE_STATISTICS);
+
     }
 
     @Override
@@ -362,5 +380,48 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return theme;
         }
         return "System"; // Trả về mặc định nếu chưa có cài đặt
+    }
+
+    /**
+     * Ghi nhận một từ mới được học cho ngày hôm nay.
+     */
+    public void logWordLearned(long userId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String todayDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+
+        // Kiểm tra xem đã có bản ghi cho ngày hôm nay chưa
+        Cursor cursor = db.query(TABLE_STATISTICS, null,
+                COLUMN_STAT_USER_ID + "=? AND " + COLUMN_STAT_DATE + "=?",
+                new String[]{String.valueOf(userId), todayDate}, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            // Đã có -> UPDATE
+            int currentCount = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_STAT_WORDS_LEARNED));
+            ContentValues values = new ContentValues();
+            values.put(COLUMN_STAT_WORDS_LEARNED, currentCount + 1);
+            db.update(TABLE_STATISTICS, values,
+                    COLUMN_STAT_USER_ID + "=? AND " + COLUMN_STAT_DATE + "=?",
+                    new String[]{String.valueOf(userId), todayDate});
+        } else {
+            // Chưa có -> INSERT
+            ContentValues values = new ContentValues();
+            values.put(COLUMN_STAT_USER_ID, userId);
+            values.put(COLUMN_STAT_DATE, todayDate);
+            values.put(COLUMN_STAT_WORDS_LEARNED, 1);
+            db.insert(TABLE_STATISTICS, null, values);
+        }
+        cursor.close();
+        db.close();
+    }
+
+    /**
+     * Lấy dữ liệu thống kê trong 7 ngày gần nhất để vẽ biểu đồ
+     */
+    public Cursor getWeeklyStats(long userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        // Lấy dữ liệu từ 7 ngày trước đến hôm nay
+        String query = "SELECT * FROM " + TABLE_STATISTICS + " WHERE " + COLUMN_STAT_USER_ID + " = " + userId +
+                " AND " + COLUMN_STAT_DATE + " >= date('now', '-7 days') ORDER BY " + COLUMN_STAT_DATE + " ASC";
+        return db.rawQuery(query, null);
     }
 }
