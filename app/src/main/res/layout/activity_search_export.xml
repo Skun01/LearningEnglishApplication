@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background_color"
-    tools:context=".SearchExportActivity">
+    tools:context=".SearchActivity">
 
-    <!-- Thanh tiêu đề -->
-    <TextView
+    <!-- THÊM TOOLBAR VÀO ĐÂY VÀ THAY THẾ TEXTVIEW TIÊU ĐỀ CŨ -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_search"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Tìm Kiếm và Lọc"
-        android:padding="16dp"
+        android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:gravity="center"/>
+        app:titleTextColor="@color/white"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
+    <!-- Phần còn lại của layout giữ nguyên -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -45,62 +44,17 @@
                 android:layout_marginTop="8dp"
                 android:hint="Nhập từ hoặc nghĩa..."/>
 
-            <!-- Lọc theo thể loại -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Lọc theo thể loại"
-                android:layout_marginTop="16dp"
-                android:textColor="@color/text_color_primary"
-                android:textSize="16sp"/>
-
-            <Spinner
-                android:id="@+id/spinner_category_filter"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="8dp"/>
-
-            <!-- Các bộ lọc khác -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Bộ lọc khác"
-                android:layout_marginTop="16dp"
-                android:textColor="@color/text_color_primary"
-                android:textSize="16sp"/>
-
-            <CheckBox
-                android:id="@+id/cb_starred"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Chỉ hiển thị từ đã đánh dấu sao"/>
+            <!-- Bỏ qua các bộ lọc khác để đơn giản hóa -->
 
             <!-- Nút chức năng -->
-            <LinearLayout
+            <Button
+                android:id="@+id/btn_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="24dp">
-
-                <Button
-                    android:id="@+id/btn_search"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Tìm Kiếm"
-                    android:backgroundTint="@color/colorPrimary"
-                    android:textColor="@color/white"
-                    android:layout_marginEnd="8dp"/>
-
-                <Button
-                    android:id="@+id/btn_export"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Xuất File"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_marginStart="8dp"/>
-            </LinearLayout>
+                android:layout_marginTop="16dp"
+                android:text="Tìm Kiếm"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/white"/>
 
             <!-- Vạch ngăn cách -->
             <View

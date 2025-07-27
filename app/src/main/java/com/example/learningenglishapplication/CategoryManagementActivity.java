@@ -10,7 +10,8 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.Menu;
 import androidx.appcompat.widget.SearchView;
-
+import android.content.DialogInterface;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -84,14 +85,6 @@ public class CategoryManagementActivity extends AppCompatActivity implements Cat
         startActivity(intent);
     }
 
-    // Cập nhật lại danh sách mỗi khi quay lại màn hình này
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Cursor newCursor = databaseHelper.getAllCategories(currentUserId);
-        adapter.swapCursor(newCursor);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.category_menu, menu);
@@ -127,9 +120,57 @@ public class CategoryManagementActivity extends AppCompatActivity implements Cat
         return super.onOptionsItemSelected(item);
     }
 
+    // THÊM PHƯƠNG THỨC MỚI ĐỂ XỬ LÝ LONG CLICK
+    @Override
+    public void onItemLongClick(long categoryId, String categoryName) {
+        final CharSequence[] options = {"Sửa", "Xóa", "Hủy"};
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Lựa chọn cho: " + categoryName);
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (options[item].equals("Sửa")) {
+                    // Chuyển sang màn hình AddEditCategory với dữ liệu cũ
+                    Intent intent = new Intent(CategoryManagementActivity.this, AddEditCategoryActivity.class);
+                    intent.putExtra("CATEGORY_ID", categoryId); // Gửi ID để biết là đang sửa
+                    startActivity(intent);
+                } else if (options[item].equals("Xóa")) {
+                    // Hiển thị hộp thoại xác nhận xóa
+                    showDeleteConfirmationDialog(categoryId, categoryName);
+                } else if (options[item].equals("Hủy")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
 
+    private void showDeleteConfirmationDialog(long categoryId, String categoryName) {
+        new AlertDialog.Builder(this)
+                .setTitle("Xác nhận xóa")
+                .setMessage("Bạn có chắc chắn muốn xóa thể loại '" + categoryName + "' không? Tất cả từ vựng bên trong cũng sẽ bị xóa vĩnh viễn.")
+                .setPositiveButton("Xóa", (dialog, which) -> {
+                    databaseHelper.deleteCategory(categoryId);
+                    Toast.makeText(this, "Đã xóa thể loại: " + categoryName, Toast.LENGTH_SHORT).show();
+                    loadCategories(); // Tải lại danh sách
+                })
+                .setNegativeButton("Hủy", null) // Không làm gì khi nhấn Hủy
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
 
+    // Tạo một phương thức riêng để tải lại danh sách cho gọn
+    private void loadCategories() {
+        Cursor newCursor = databaseHelper.getAllCategories(currentUserId);
+        adapter.swapCursor(newCursor);
+    }
 
+    // Cập nhật lại danh sách mỗi khi quay lại màn hình này
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadCategories(); // Sử dụng phương thức mới
+    }
 
 }

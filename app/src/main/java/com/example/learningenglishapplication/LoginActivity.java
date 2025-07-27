@@ -69,6 +69,10 @@ public class LoginActivity extends AppCompatActivity {
             editor.putString("userEmail", email);
             editor.apply();
 
+            // ÁP DỤNG THEME CỦA NGƯỜI DÙNG NGAY LẬP TỨC
+            String theme = databaseHelper.getThemeSetting(userId);
+            ThemeManager.applyTheme(theme);
+
             // Chuyển đến màn hình chính
             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
             startActivity(intent);

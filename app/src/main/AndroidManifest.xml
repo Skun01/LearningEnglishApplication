@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -28,7 +29,11 @@
         <activity android:name=".AddEditCategoryActivity" />
         <activity android:name=".VocabularyListActivity" />
         <activity android:name=".AddEditVocabularyActivity" />
-
+        <activity android:name=".FlashcardActivity" />
+        <activity android:name=".QuizSetupActivity" />
+        <activity android:name=".QuizActivity" />
+        <activity android:name=".QuizResultActivity" />
+        <activity android:name=".ProfileSettingsActivity" />
 
 
 

@@ -13,11 +13,24 @@ public class VocabularyAdapter extends RecyclerView.Adapter<VocabularyAdapter.Vo
 
     private Context mContext;
     private Cursor mCursor;
+    private OnItemInteractionListener listener;
+
+    // Interface để xử lý cả click ngắn và dài
+    public interface OnItemInteractionListener {
+        void onItemClick(long vocabId); // Có thể dùng sau này
+        void onItemLongClick(long vocabId, String word);
+    }
+
+    public void setOnItemInteractionListener(OnItemInteractionListener listener) {
+        this.listener = listener;
+    }
 
     public VocabularyAdapter(Context context, Cursor cursor) {
         mContext = context;
         mCursor = cursor;
     }
+
+
 
     // ViewHolder chứa các View của một item
     public static class VocabularyViewHolder extends RecyclerView.ViewHolder {
@@ -46,13 +59,21 @@ public class VocabularyAdapter extends RecyclerView.Adapter<VocabularyAdapter.Vo
             return;
         }
 
-        // Lấy dữ liệu từ Cursor
+        long id = mCursor.getLong(mCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_ID));
         String word = mCursor.getString(mCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_WORD));
         String meaning = mCursor.getString(mCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_MEANING));
 
-        // Gán dữ liệu lên View
         holder.wordTextView.setText(word);
         holder.meaningTextView.setText(meaning);
+
+        // THÊM SỰ KIỆN LONG CLICK
+        holder.itemView.setOnLongClickListener(v -> {
+            if (listener != null) {
+                listener.onItemLongClick(id, word);
+                return true; // Đã xử lý sự kiện
+            }
+            return false;
+        });
     }
 
     @Override
@@ -71,4 +92,6 @@ public class VocabularyAdapter extends RecyclerView.Adapter<VocabularyAdapter.Vo
             notifyDataSetChanged();
         }
     }
+
+
 }

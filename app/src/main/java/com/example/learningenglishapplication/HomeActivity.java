@@ -63,8 +63,7 @@ public class HomeActivity extends AppCompatActivity {
 
         // (Để dành) Xử lý cho các thẻ khác
         cardCreateQuiz.setOnClickListener(v -> {
-            Toast.makeText(HomeActivity.this, "Chức năng Tạo kiểm tra sẽ được phát triển!", Toast.LENGTH_SHORT).show();
-            // startActivity(new Intent(HomeActivity.this, QuizSetupActivity.class));
+            startActivity(new Intent(HomeActivity.this, QuizSetupActivity.class));
         });
 
         cardSearch.setOnClickListener(v -> {
@@ -97,17 +96,16 @@ public class HomeActivity extends AppCompatActivity {
                     return true;
                 } else if (itemId == R.id.nav_quiz) {
                     // Chuyển đến trang Kiểm tra
-                    Toast.makeText(HomeActivity.this, "Chuyển đến trang Kiểm tra...", Toast.LENGTH_SHORT).show();
-                    // startActivity(new Intent(getApplicationContext(), QuizSetupActivity.class));
+                     startActivity(new Intent(getApplicationContext(), QuizSetupActivity.class));
                     return true;
                 } else if (itemId == R.id.nav_profile) {
-                    // Chuyển đến trang Cá nhân
-                    Toast.makeText(HomeActivity.this, "Chuyển đến trang Cá nhân...", Toast.LENGTH_SHORT).show();
-                    // startActivity(new Intent(getApplicationContext(), ProfileSettingsActivity.class));
+                     startActivity(new Intent(getApplicationContext(), ProfileSettingsActivity.class));
                     return true;
                 }
                 return false;
             }
         });
+
+
     }
 }

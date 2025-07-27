@@ -19,6 +19,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     public interface OnItemClickListener {
         void onItemClick(long categoryId, String categoryName);
+        void onItemLongClick(long categoryId, String categoryName);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -57,19 +58,25 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
         String name = mCursor.getString(mCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_CAT_NAME));
         String description = mCursor.getString(mCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_CAT_DESCRIPTION));
-
-        holder.nameTextView.setText(name);
-        holder.countTextView.setText(description); // Tạm dùng description để hiển thị
-
         long id = mCursor.getLong(mCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_CAT_ID));
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (listener != null) {
-                    listener.onItemClick(id, name);
-                }
+        holder.nameTextView.setText(name);
+        holder.countTextView.setText(description);
+
+        // Sự kiện click ngắn (giữ nguyên)
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(id, name);
             }
+        });
+
+        // THÊM SỰ KIỆN LONG CLICK
+        holder.itemView.setOnLongClickListener(v -> {
+            if (listener != null) {
+                listener.onItemLongClick(id, name);
+                return true; // Trả về true để báo rằng sự kiện đã được xử lý
+            }
+            return false;
         });
     }
 
