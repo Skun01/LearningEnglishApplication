@@ -37,5 +37,5 @@
         android:id="@+id/iv_star"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:src="@drawable/ic_star_border"/> <!-- Tạo 2 icon star và star_border -->
+        android:src="@android:drawable/btn_star_big_off"/> <!-- Tạo 2 icon star và star_border -->
 </LinearLayout>

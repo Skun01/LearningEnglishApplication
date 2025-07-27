@@ -8,39 +8,17 @@
     android:background="@color/background_color"
     tools:context=".CategoryManagementActivity">
 
-    <!-- Thanh tiêu đề -->
-    <LinearLayout
+    <!-- THAY THẾ THANH TIÊU ĐỀ CŨ BẰNG TOOLBAR NÀY -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_category"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
+        android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
-        android:gravity="center_vertical">
+        app:title="Thể Loại Từ Vựng"
+        app:titleTextColor="@color/white"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Thể Loại Từ Vựng"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
-
-        <ImageView
-            android:id="@+id/iv_search"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@android:drawable/ic_menu_search"
-            android:layout_marginEnd="16dp"/>
-
-        <ImageView
-            android:id="@+id/iv_sort"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@android:drawable/ic_menu_sort_by_size"/>
-    </LinearLayout>
-
-    <!-- Danh sách thể loại -->
+    <!-- Danh sách thể loại (Giữ nguyên) -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_categories"
         android:layout_width="match_parent"
@@ -48,7 +26,7 @@
         android:layout_weight="1"
         android:padding="8dp"/>
 
-    <!-- Nút thêm thể loại mới (Floating Action Button) -->
+    <!-- Nút thêm thể loại mới (Giữ nguyên) -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_category"
         android:layout_width="wrap_content"
