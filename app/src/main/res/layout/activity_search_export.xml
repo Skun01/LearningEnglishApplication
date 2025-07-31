@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background_color"
-    tools:context=".SearchActivity">
+    tools:context=".Searching.SearchActivity">
 
     <!-- THÊM TOOLBAR VÀO ĐÂY VÀ THAY THẾ TEXTVIEW TIÊU ĐỀ CŨ -->
     <androidx.appcompat.widget.Toolbar

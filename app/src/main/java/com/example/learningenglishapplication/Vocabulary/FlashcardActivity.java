@@ -1,4 +1,4 @@
-package com.example.learningenglishapplication;
+package com.example.learningenglishapplication.Vocabulary;
 
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
@@ -14,7 +14,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.learningenglishapplication.model.Vocabulary;
+import com.example.learningenglishapplication.R;
+import com.example.learningenglishapplication.Data.model.Vocabulary;
 
 import java.util.List;
 

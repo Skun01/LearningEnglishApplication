@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
-        android:name=".MyApplication"
+        android:name=".Home.MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LearningEnglishApplication">
         <activity
-            android:name=".HomeActivity"
+            android:name=".Home.HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,18 +22,18 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".Auth.LoginActivity" />
 
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".CategoryManagementActivity" />
-        <activity android:name=".AddEditCategoryActivity" />
-        <activity android:name=".VocabularyListActivity" />
-        <activity android:name=".AddEditVocabularyActivity" />
-        <activity android:name=".FlashcardActivity" />
-        <activity android:name=".QuizSetupActivity" />
-        <activity android:name=".QuizActivity" />
-        <activity android:name=".QuizResultActivity" />
-        <activity android:name=".ProfileSettingsActivity" />
+        <activity android:name=".Auth.RegisterActivity" />
+        <activity android:name=".category.CategoryManagementActivity" />
+        <activity android:name=".category.AddEditCategoryActivity" />
+        <activity android:name=".Vocabulary.VocabularyListActivity" />
+        <activity android:name=".Vocabulary.AddEditVocabularyActivity" />
+        <activity android:name=".Vocabulary.FlashcardActivity" />
+        <activity android:name=".Quiz.QuizSetupActivity" />
+        <activity android:name=".Quiz.QuizActivity" />
+        <activity android:name=".Quiz.QuizResultActivity" />
+        <activity android:name=".Profile.ProfileSettingsActivity" />
 
 
 

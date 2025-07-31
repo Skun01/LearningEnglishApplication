@@ -1,4 +1,4 @@
-package com.example.learningenglishapplication;
+package com.example.learningenglishapplication.Vocabulary;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.learningenglishapplication.Data.DatabaseHelper;
+import com.example.learningenglishapplication.R;
 
 public class VocabularyAdapter extends RecyclerView.Adapter<VocabularyAdapter.VocabularyViewHolder> {
 

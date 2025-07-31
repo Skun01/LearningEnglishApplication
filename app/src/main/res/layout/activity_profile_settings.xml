@@ -6,7 +6,7 @@
     android:id="@+id/layout_theme_setting"
     android:orientation="vertical"
     android:background="@color/background_color"
-    tools:context=".ProfileSettingsActivity">
+    tools:context=".Profile.ProfileSettingsActivity">
 
     <!-- Thanh tiêu đề -->
     <TextView

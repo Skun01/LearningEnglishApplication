@@ -1,4 +1,4 @@
-package com.example.learningenglishapplication;
+package com.example.learningenglishapplication.Auth;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +11,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.learningenglishapplication.Data.DatabaseHelper;
+import com.example.learningenglishapplication.Home.HomeActivity;
+import com.example.learningenglishapplication.R;
+import com.example.learningenglishapplication.Profile.ThemeManager;
 
 public class LoginActivity extends AppCompatActivity {
 

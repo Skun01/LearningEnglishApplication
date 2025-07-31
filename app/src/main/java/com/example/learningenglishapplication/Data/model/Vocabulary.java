@@ -1,4 +1,4 @@
-package com.example.learningenglishapplication.model;
+package com.example.learningenglishapplication.Data.model;
 
 import java.io.Serializable;
 

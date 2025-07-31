@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background_color"
-    tools:context=".VocabularyListActivity">
+    tools:context=".Vocabulary.VocabularyListActivity">
 
     <!-- THAY THẾ THANH TIÊU ĐỀ CŨ BẰNG TOOLBAR NÀY -->
     <androidx.appcompat.widget.Toolbar

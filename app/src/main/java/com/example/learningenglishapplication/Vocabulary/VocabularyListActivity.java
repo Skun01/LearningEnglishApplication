@@ -1,16 +1,13 @@
-package com.example.learningenglishapplication;
-
-import android.app.Activity;
+package com.example.learningenglishapplication.Vocabulary;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-import android.content.DialogInterface;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,7 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.Serializable;
 import java.util.List;
 
-import com.example.learningenglishapplication.model.Vocabulary;
+import com.example.learningenglishapplication.Data.DatabaseHelper;
+import com.example.learningenglishapplication.R;
+import com.example.learningenglishapplication.Data.model.Vocabulary;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class VocabularyListActivity extends AppCompatActivity implements VocabularyAdapter.OnItemInteractionListener {

@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:background="@color/background_color"
     android:padding="16dp"
-    tools:context=".QuizActivity">
+    tools:context=".Quiz.QuizActivity">
 
     <!-- Thanh tiến trình và thông tin -->
     <LinearLayout

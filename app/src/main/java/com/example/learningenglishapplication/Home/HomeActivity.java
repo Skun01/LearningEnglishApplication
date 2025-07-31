@@ -1,4 +1,4 @@
-package com.example.learningenglishapplication;
+package com.example.learningenglishapplication.Home;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.example.learningenglishapplication.Auth.LoginActivity;
+import com.example.learningenglishapplication.Profile.ProfileSettingsActivity;
+import com.example.learningenglishapplication.Quiz.QuizSetupActivity;
+import com.example.learningenglishapplication.R;
+import com.example.learningenglishapplication.category.CategoryManagementActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 

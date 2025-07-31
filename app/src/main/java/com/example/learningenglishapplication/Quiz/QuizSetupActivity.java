@@ -1,4 +1,4 @@
-package com.example.learningenglishapplication;
+package com.example.learningenglishapplication.Quiz;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +11,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.learningenglishapplication.model.Vocabulary;
+import com.example.learningenglishapplication.Data.DatabaseHelper;
+import com.example.learningenglishapplication.R;
+import com.example.learningenglishapplication.Data.model.Vocabulary;
 
 import java.io.Serializable;
 import java.util.ArrayList;

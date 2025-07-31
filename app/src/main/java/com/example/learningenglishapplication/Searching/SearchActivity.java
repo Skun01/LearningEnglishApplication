@@ -1,6 +1,5 @@
-package com.example.learningenglishapplication;
+package com.example.learningenglishapplication.Searching;
 
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +9,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.learningenglishapplication.Data.DatabaseHelper;
+import com.example.learningenglishapplication.R;
+import com.example.learningenglishapplication.Vocabulary.VocabularyAdapter;
 
 public class SearchActivity extends AppCompatActivity {
 

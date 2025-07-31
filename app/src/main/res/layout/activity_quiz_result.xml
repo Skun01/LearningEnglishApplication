@@ -7,7 +7,7 @@
     android:gravity="center"
     android:padding="16dp"
     android:background="@color/background_color"
-    tools:context=".QuizResultActivity">
+    tools:context=".Quiz.QuizResultActivity">
 
     <TextView
         android:layout_width="wrap_content"

@@ -1,12 +1,13 @@
-package com.example.learningenglishapplication;
-
-import android.app.Activity;
+package com.example.learningenglishapplication.Quiz;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.learningenglishapplication.Home.HomeActivity;
+import com.example.learningenglishapplication.R;
 
 public class QuizResultActivity extends AppCompatActivity {
 

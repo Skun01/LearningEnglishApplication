@@ -1,11 +1,13 @@
-package com.example.learningenglishapplication;
-import android.content.SharedPreferences;
+package com.example.learningenglishapplication.Vocabulary;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.learningenglishapplication.Data.DatabaseHelper;
+import com.example.learningenglishapplication.R;
 
 public class AddEditVocabularyActivity extends AppCompatActivity {
 

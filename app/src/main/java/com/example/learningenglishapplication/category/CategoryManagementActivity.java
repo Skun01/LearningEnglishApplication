@@ -1,4 +1,4 @@
-package com.example.learningenglishapplication;
+package com.example.learningenglishapplication.category;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +16,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.learningenglishapplication.Data.DatabaseHelper;
+import com.example.learningenglishapplication.R;
+import com.example.learningenglishapplication.Vocabulary.VocabularyListActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class CategoryManagementActivity extends AppCompatActivity implements CategoryAdapter.OnItemClickListener {

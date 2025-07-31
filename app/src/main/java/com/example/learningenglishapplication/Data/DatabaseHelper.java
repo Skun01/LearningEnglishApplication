@@ -1,4 +1,4 @@
-package com.example.learningenglishapplication;
+package com.example.learningenglishapplication.Data;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import java.util.Map;
 import java.util.HashMap;
-import com.example.learningenglishapplication.model.Vocabulary;
+import com.example.learningenglishapplication.Data.model.Vocabulary;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;

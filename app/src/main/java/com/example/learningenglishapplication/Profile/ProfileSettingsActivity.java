@@ -1,6 +1,4 @@
-package com.example.learningenglishapplication;
-
-import android.app.Activity;
+package com.example.learningenglishapplication.Profile;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -11,10 +9,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.database.Cursor;
 import android.graphics.Color;
-import android.os.Bundle;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.learningenglishapplication.Data.DatabaseHelper;
+import com.example.learningenglishapplication.R;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;

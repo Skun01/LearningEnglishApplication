@@ -1,6 +1,4 @@
-package com.example.learningenglishapplication;
-
-import android.app.Activity;
+package com.example.learningenglishapplication.Quiz;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,7 +11,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.learningenglishapplication.model.Vocabulary;
+import com.example.learningenglishapplication.R;
+import com.example.learningenglishapplication.Data.model.Vocabulary;
 
 import java.util.ArrayList;
 import java.util.Collections;
