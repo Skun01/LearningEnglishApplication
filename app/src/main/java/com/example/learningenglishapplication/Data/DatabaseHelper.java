@@ -19,8 +19,8 @@ import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "VocabularyApp.db";
-    private static final int DATABASE_VERSION = 1;
+    public static final String DATABASE_NAME = "VocabularyApp.db";
+    public static final int DATABASE_VERSION = 1;
 
     // Tên bảng
     public static final String TABLE_USERS = "users";
@@ -45,6 +45,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_VOCAB_CATEGORY_ID = "category_id";
     public static final String COLUMN_VOCAB_WORD = "word";
     public static final String COLUMN_VOCAB_MEANING = "meaning";
+    public static final String COLUMN_VOCAB_LEARNED = "learned";
+    public static final String COLUMN_VOCAB_DATE_LEARNED = "date_learned";
 
     // Tên bảng và cột cho UserSettings
     public static final String TABLE_USER_SETTINGS = "user_settings";
@@ -79,6 +81,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + COLUMN_VOCAB_CATEGORY_ID + " INTEGER,"
             + COLUMN_VOCAB_WORD + " TEXT NOT NULL,"
             + COLUMN_VOCAB_MEANING + " TEXT,"
+            + COLUMN_VOCAB_LEARNED + " TEXT,"
+            + COLUMN_VOCAB_DATE_LEARNED + " TEXT,"
             // Thêm các cột khác nếu cần
             + "FOREIGN KEY(" + COLUMN_VOCAB_USER_ID + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_USER_ID + "),"
             + "FOREIGN KEY(" + COLUMN_VOCAB_CATEGORY_ID + ") REFERENCES " + TABLE_CATEGORIES + "(" + COLUMN_CAT_ID + ")" + ")";
@@ -93,9 +97,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_STATISTICS = "CREATE TABLE " + TABLE_STATISTICS + "("
             + COLUMN_STAT_USER_ID + " INTEGER,"
             + COLUMN_STAT_DATE + " TEXT," // Lưu dưới dạng YYYY-MM-DD
-            + COLUMN_STAT_WORDS_LEARNED + " INTEGER DEFAULT 0,"
-            + "PRIMARY KEY (" + COLUMN_STAT_USER_ID + ", " + COLUMN_STAT_DATE + ")," // Khóa chính kép
-            + "FOREIGN KEY(" + COLUMN_STAT_USER_ID + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_USER_ID + ")" + ")";
+            + COLUMN_STAT_WORDS_LEARNED + " INTEGER DEFAULT 0" + ")";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
