@@ -12,24 +12,23 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.learningenglishapplication.Data.DatabaseHelper;
+import com.example.learningenglishapplication.Data.DAO.AuthDAO;
 import com.example.learningenglishapplication.Home.HomeActivity;
 import com.example.learningenglishapplication.R;
-import com.example.learningenglishapplication.Profile.ThemeManager;
 
 public class LoginActivity extends AppCompatActivity {
 
     private EditText etEmail, etPassword;
     private Button btnLogin;
     private TextView tvGoToRegister;
-    private DatabaseHelper databaseHelper;
+    private AuthDAO authDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        databaseHelper = new DatabaseHelper(this);
+        authDAO = new AuthDAO(this);
 
         etEmail = findViewById(R.id.et_login_email);
         etPassword = findViewById(R.id.et_login_password);
@@ -60,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        long userId = databaseHelper.checkUser(email, password);
+        long userId = authDAO.checkUser(email, password);
 
         if (userId != -1) {
             Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
@@ -73,10 +72,6 @@ public class LoginActivity extends AppCompatActivity {
             editor.putLong("userId", userId);
             editor.putString("userEmail", email);
             editor.apply();
-
-            // ÁP DỤNG THEME CỦA NGƯỜI DÙNG NGAY LẬP TỨC
-            String theme = databaseHelper.getThemeSetting(userId);
-            ThemeManager.applyTheme(theme);
 
             // Chuyển đến màn hình chính
             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);

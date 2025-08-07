@@ -1,4 +1,4 @@
-package com.example.learningenglishapplication.category;
+package com.example.learningenglishapplication.Category;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.learningenglishapplication.Data.DAO.CategoryDAO;
 import com.example.learningenglishapplication.Data.DatabaseHelper;
 import com.example.learningenglishapplication.R;
 import com.example.learningenglishapplication.Vocabulary.VocabularyListActivity;
@@ -25,7 +26,7 @@ public class CategoryManagementActivity extends AppCompatActivity implements Cat
 
     private RecyclerView recyclerView;
     private CategoryAdapter adapter;
-    private DatabaseHelper databaseHelper;
+    private CategoryDAO categoryDAO;
     private FloatingActionButton fabAddCategory;
     private long currentUserId;
     private Toolbar toolbar;
@@ -44,7 +45,7 @@ public class CategoryManagementActivity extends AppCompatActivity implements Cat
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        databaseHelper = new DatabaseHelper(this);
+        categoryDAO = new CategoryDAO(this);
 
         // Lấy User ID đã được lưu khi đăng nhập
         SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
@@ -61,7 +62,7 @@ public class CategoryManagementActivity extends AppCompatActivity implements Cat
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Lấy dữ liệu và gán cho adapter
-        Cursor cursor = databaseHelper.getAllCategories(currentUserId);
+        Cursor cursor = categoryDAO.getAllCategories(currentUserId);
         adapter = new CategoryAdapter(this, cursor);
         recyclerView.setAdapter(adapter);
 
@@ -105,7 +106,7 @@ public class CategoryManagementActivity extends AppCompatActivity implements Cat
             @Override
             public boolean onQueryTextChange(String newText) {
                 // Khi người dùng gõ từng chữ
-                Cursor cursor = databaseHelper.searchCategories(currentUserId, newText);
+                Cursor cursor = categoryDAO.searchCategories(currentUserId, newText);
                 adapter.swapCursor(cursor); // Cập nhật lại RecyclerView
                 return true;
             }
@@ -154,7 +155,7 @@ public class CategoryManagementActivity extends AppCompatActivity implements Cat
                 .setTitle("Xác nhận xóa")
                 .setMessage("Bạn có chắc chắn muốn xóa thể loại '" + categoryName + "' không? Tất cả từ vựng bên trong cũng sẽ bị xóa vĩnh viễn.")
                 .setPositiveButton("Xóa", (dialog, which) -> {
-                    databaseHelper.deleteCategory(categoryId);
+                    categoryDAO.deleteCategory(categoryId);
                     Toast.makeText(this, "Đã xóa thể loại: " + categoryName, Toast.LENGTH_SHORT).show();
                     loadCategories(); // Tải lại danh sách
                 })
@@ -165,7 +166,7 @@ public class CategoryManagementActivity extends AppCompatActivity implements Cat
 
     // Tạo một phương thức riêng để tải lại danh sách cho gọn
     private void loadCategories() {
-        Cursor newCursor = databaseHelper.getAllCategories(currentUserId);
+        Cursor newCursor = categoryDAO.getAllCategories(currentUserId);
         adapter.swapCursor(newCursor);
     }
 

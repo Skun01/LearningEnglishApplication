@@ -1,4 +1,4 @@
-package com.example.learningenglishapplication.category;
+package com.example.learningenglishapplication.Category;
 
 import android.content.Context;
 import android.database.Cursor;

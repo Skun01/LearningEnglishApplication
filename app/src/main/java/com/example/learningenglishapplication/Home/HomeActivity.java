@@ -16,7 +16,8 @@ import com.example.learningenglishapplication.Auth.LoginActivity;
 import com.example.learningenglishapplication.Profile.ProfileSettingsActivity;
 import com.example.learningenglishapplication.Quiz.QuizSetupActivity;
 import com.example.learningenglishapplication.R;
-import com.example.learningenglishapplication.category.CategoryManagementActivity;
+import com.example.learningenglishapplication.Category.CategoryManagementActivity;
+import com.example.learningenglishapplication.System.DailyNotificationScheduler;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -31,6 +32,12 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        // Schedule notification 7h sáng hàng ngày
+        DailyNotificationScheduler.scheduleDailyNotification(this);
+
+        // Test ngay (để kiểm tra)
+        DailyNotificationScheduler.testNotificationNow(this);
 
         // --- Kiểm tra đăng nhập và lấy thông tin người dùng ---
         SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);

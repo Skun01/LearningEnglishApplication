@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <application
         android:name=".Home.MyApplication"
         android:allowBackup="true"
@@ -25,8 +27,8 @@
         <activity android:name=".Auth.LoginActivity" />
 
         <activity android:name=".Auth.RegisterActivity" />
-        <activity android:name=".category.CategoryManagementActivity" />
-        <activity android:name=".category.AddEditCategoryActivity" />
+        <activity android:name=".Category.CategoryManagementActivity" />
+        <activity android:name=".Category.AddEditCategoryActivity" />
         <activity android:name=".Vocabulary.VocabularyListActivity" />
         <activity android:name=".Vocabulary.AddEditVocabularyActivity" />
         <activity android:name=".Vocabulary.FlashcardActivity" />

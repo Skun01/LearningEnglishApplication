@@ -1,4 +1,4 @@
-package com.example.learningenglishapplication.category;
+package com.example.learningenglishapplication.Category;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.learningenglishapplication.Data.DAO.CategoryDAO;
 import com.example.learningenglishapplication.Data.DatabaseHelper;
 import com.example.learningenglishapplication.R;
 
@@ -14,7 +15,7 @@ public class AddEditCategoryActivity extends AppCompatActivity {
 
     private EditText etName, etDescription;
     private Button btnSave;
-    private DatabaseHelper databaseHelper;
+    private CategoryDAO categoryDAO;
     private long currentUserId;
 
     // Biến để xác định là đang sửa hay thêm mới
@@ -26,7 +27,7 @@ public class AddEditCategoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_edit_category);
 
-        databaseHelper = new DatabaseHelper(this);
+        categoryDAO = new CategoryDAO(this);
         etName = findViewById(R.id.et_category_name);
         etDescription = findViewById(R.id.et_category_description);
         btnSave = findViewById(R.id.btn_save_category);
@@ -69,7 +70,7 @@ public class AddEditCategoryActivity extends AppCompatActivity {
 
         if (isEditing) {
             // Logic cho việc SỬA
-            int rowsAffected = databaseHelper.updateCategory(categoryIdToEdit, name, description);
+            int rowsAffected = categoryDAO.updateCategory(categoryIdToEdit, name, description);
             if (rowsAffected > 0) {
                 Toast.makeText(this, "Đã cập nhật thể loại!", Toast.LENGTH_SHORT).show();
                 finish();
@@ -78,7 +79,7 @@ public class AddEditCategoryActivity extends AppCompatActivity {
             }
         } else {
             // Logic cho việc THÊM MỚI (giữ nguyên)
-            boolean isAdded = databaseHelper.addCategory(name, description, currentUserId);
+            boolean isAdded = categoryDAO.addCategory(name, description, currentUserId);
             if (isAdded) {
                 Toast.makeText(this, "Đã lưu thể loại!", Toast.LENGTH_SHORT).show();
                 finish();

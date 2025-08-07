@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.learningenglishapplication.Data.DAO.VocabularyDAO;
 import com.example.learningenglishapplication.Data.DatabaseHelper;
 import com.example.learningenglishapplication.R;
 import com.example.learningenglishapplication.Vocabulary.VocabularyAdapter;
@@ -20,7 +21,7 @@ public class SearchActivity extends AppCompatActivity {
     private Button btnSearch;
     private RecyclerView rvSearchResults;
     private VocabularyAdapter adapter; // Tái sử dụng Adapter tuyệt vời này!
-    private DatabaseHelper databaseHelper;
+    private VocabularyDAO vocabularyDAO;
     private long userId;
 
     @Override
@@ -36,7 +37,7 @@ public class SearchActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // --- Ánh xạ Views và khởi tạo ---
-        databaseHelper = new DatabaseHelper(this);
+        vocabularyDAO = new VocabularyDAO(this);
         userId = getSharedPreferences("user_prefs", MODE_PRIVATE).getLong("userId", -1);
 
         etSearchKeyword = findViewById(R.id.et_search_keyword);
@@ -60,7 +61,7 @@ public class SearchActivity extends AppCompatActivity {
     private void performSearch() {
         String keyword = etSearchKeyword.getText().toString().trim();
         if (!keyword.isEmpty()) {
-            Cursor cursor = databaseHelper.searchVocabularies(userId, keyword);
+            Cursor cursor = vocabularyDAO.searchVocabularies(userId, keyword);
             adapter.swapCursor(cursor); // Cập nhật kết quả lên RecyclerView
         }
     }
