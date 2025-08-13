@@ -76,13 +76,13 @@ public class DailyNotificationScheduler {
 
         // Constraints
         Constraints constraints = new Constraints.Builder()
-                .setRequiresBatteryNotLow(false) // Cho phép chạy khi pin thấp
+                .setRequiresBatteryNotLow(false)
                 .build();
 
         // Tạo periodic work request
         PeriodicWorkRequest dailyNotificationWork = new PeriodicWorkRequest.Builder(
                 DailyNotificationWorker.class,
-                24, TimeUnit.HOURS // Mỗi 24h
+                1, TimeUnit.MINUTES // Mỗi 24h
         )
                 .setConstraints(constraints)
                 .setInitialDelay(calculateDelayTo7AM(), TimeUnit.MILLISECONDS)
@@ -92,7 +92,7 @@ public class DailyNotificationScheduler {
         // Enqueue work
         WorkManager.getInstance(context).enqueueUniquePeriodicWork(
                 WORK_TAG,
-                ExistingPeriodicWorkPolicy.KEEP,
+                ExistingPeriodicWorkPolicy.REPLACE,
                 dailyNotificationWork
         );
     }
@@ -102,8 +102,8 @@ public class DailyNotificationScheduler {
         Calendar now = Calendar.getInstance();
         Calendar target = Calendar.getInstance();
 
-        target.set(Calendar.HOUR_OF_DAY, 7); // 7h sáng
-        target.set(Calendar.MINUTE, 0);
+        target.set(Calendar.HOUR_OF_DAY, 20); // 7h sáng
+        target.set(Calendar.MINUTE, 58);
         target.set(Calendar.SECOND, 0);
         target.set(Calendar.MILLISECOND, 0);
 
