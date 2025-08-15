@@ -3,80 +3,147 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
     android:padding="16dp"
     android:background="@color/background_color">
 
-    <!-- Khung Flashcard -->
-    <FrameLayout
-        android:id="@+id/fl_flashcard_container"
-        android:layout_width="match_parent"
-        android:layout_height="300dp">
-
-        <!-- Mặt trước của thẻ -->
-        <LinearLayout
-            android:id="@+id/ll_card_front"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:background="@drawable/item_background">
-
-            <TextView
-                android:id="@+id/tv_flashcard_word"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Word"
-                android:textSize="32sp"
-                android:textColor="@color/text_color_primary"
-                android:textStyle="bold"/>
-        </LinearLayout>
-
-        <!-- Mặt sau của thẻ -->
-        <LinearLayout
-            android:id="@+id/ll_card_back"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone"
-            android:background="@drawable/item_background">
-
-            <TextView
-                android:id="@+id/tv_flashcard_meaning"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Meaning"
-                android:textSize="24sp"
-                android:textColor="@color/text_color_primary"/>
-
-            <TextView
-                android:id="@+id/tv_flashcard_pronunciation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="/pronunciation/"
-                android:layout_marginTop="8dp"
-                android:textSize="16sp"
-                android:textColor="@color/text_color_secondary"/>
-
-            <TextView
-                android:id="@+id/tv_flashcard_example"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Example sentence."
-                android:layout_marginTop="16dp"
-                android:textSize="16sp"
-                android:textColor="@color/text_color_secondary"
-                android:textAlignment="center"/>
-        </LinearLayout>
-    </FrameLayout>
-
-    <!-- Nút điều khiển -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="32dp">
+        android:gravity="start|center_vertical"
+        android:paddingBottom="16dp"
+        android:paddingTop="8dp">
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"
+            android:src="@drawable/ic_arrow_back"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Quay lại"/>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_flashcard_container"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_gravity="center">
+
+        <FrameLayout
+            android:id="@+id/ll_card_front"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/item_background">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tv_flashcard_word"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Word"
+                    android:textSize="32sp"
+                    android:textColor="@color/text_color_primary"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_flashcard_pronunciation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="/pronunciation/"
+                    android:textSize="20sp"
+                    android:textColor="@color/text_color_secondary"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="top|end"
+                android:layout_margin="16dp">
+
+                <ImageView
+                    android:id="@+id/iv_edit_front"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_edit"
+                    android:padding="4dp"
+                    android:contentDescription="Sửa từ"/>
+
+                <ImageView
+                    android:id="@+id/iv_favorite_front"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_favorite_border"
+                    android:padding="4dp"
+                    android:layout_marginStart="8dp"
+                    android:contentDescription="Yêu thích"/>
+            </LinearLayout>
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/ll_card_back"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:background="@drawable/item_background">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tv_flashcard_meaning"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Meaning"
+                    android:textSize="24sp"
+                    android:textColor="@color/text_color_primary" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="top|end"
+                android:layout_margin="16dp">
+
+                <ImageView
+                    android:id="@+id/iv_edit_back"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_edit"
+                    android:padding="4dp"
+                    android:contentDescription="Sửa từ"/>
+
+                <ImageView
+                    android:id="@+id/iv_favorite_back"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_favorite_border"
+                    android:padding="4dp"
+                    android:layout_marginStart="8dp"
+                    android:contentDescription="Yêu thích"/>
+            </LinearLayout>
+        </FrameLayout>
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="32dp"
+        android:gravity="center">
 
         <Button
             android:id="@+id/btn_prev_card"
@@ -84,7 +151,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Trước"
-            android:layout_marginEnd="8dp"/>
+            android:layout_marginEnd="8dp" />
 
         <Button
             android:id="@+id/btn_next_card"
@@ -92,6 +159,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Tiếp"
-            android:layout_marginStart="8dp"/>
+            android:layout_marginStart="8dp" />
+
+        <Button
+            android:id="@+id/btn_complete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hoàn thành"
+            android:visibility="gone"
+            android:layout_marginTop="16dp" />
     </LinearLayout>
 </LinearLayout>

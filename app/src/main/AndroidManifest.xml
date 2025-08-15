@@ -21,7 +21,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".Auth.LoginActivity" />
+
         <activity android:name=".Auth.RegisterActivity" />
         <activity android:name=".category.CategoryManagementActivity" />
         <activity android:name=".category.AddEditCategoryActivity" />
@@ -32,6 +34,10 @@
         <activity android:name=".Quiz.QuizActivity" />
         <activity android:name=".Quiz.QuizResultActivity" />
         <activity android:name=".Profile.ProfileSettingsActivity" />
+        <activity android:name=".Vocabulary.VocabularyDetailActivity" />
+
+
+
     </application>
 
 </manifest>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/filter_all"
+        android:title="Tất cả" />
+    <item
+        android:id="@+id/filter_favorite"
+        android:title="Yêu thích" />
+    <item
+        android:id="@+id/filter_unlearned"
+        android:title="Chưa học" />
+    <item
+        android:id="@+id/filter_learned"
+        android:title="Đã học" />
+</menu>

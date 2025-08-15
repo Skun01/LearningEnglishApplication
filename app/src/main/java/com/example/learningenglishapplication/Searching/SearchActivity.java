@@ -20,24 +20,27 @@ public class SearchActivity extends AppCompatActivity {
     private EditText etSearchKeyword;
     private Button btnSearch;
     private RecyclerView rvSearchResults;
-    private VocabularyAdapter adapter; // Tái sử dụng Adapter tuyệt vời này!
+    private VocabularyAdapter adapter;
     private VocabularyDataHelper vocabularyHelper;
     private long userId;
+    private DatabaseHelper databaseHelper; // THÊM MỚI
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_export); // Đảm bảo bạn dùng đúng layout
+        setContentView(R.layout.activity_search_export);
 
         // --- Thiết lập Toolbar ---
-        // Bạn cần thêm một Toolbar vào layout activity_search_export.xml với id: toolbar_search
         Toolbar toolbar = findViewById(R.id.toolbar_search);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Tìm kiếm Từ vựng");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Tìm kiếm Từ vựng");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         // --- Ánh xạ Views và khởi tạo ---
-        vocabularyHelper = new VocabularyDataHelper(this);
+        databaseHelper = new DatabaseHelper(this); // KHỞI TẠO DatabaseHelper
+        vocabularyHelper = new VocabularyDataHelper(databaseHelper); // TRUYỀN DatabaseHelper VÀO VocabularyDataHelper
         userId = getSharedPreferences("user_prefs", MODE_PRIVATE).getLong("userId", -1);
 
         etSearchKeyword = findViewById(R.id.et_search_keyword);
@@ -46,7 +49,7 @@ public class SearchActivity extends AppCompatActivity {
 
         // --- Thiết lập RecyclerView ---
         rvSearchResults.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new VocabularyAdapter(this, null); // Khởi tạo với cursor rỗng
+        adapter = new VocabularyAdapter(this, null);
         rvSearchResults.setAdapter(adapter);
 
         // --- Xử lý sự kiện ---
@@ -62,11 +65,10 @@ public class SearchActivity extends AppCompatActivity {
         String keyword = etSearchKeyword.getText().toString().trim();
         if (!keyword.isEmpty()) {
             Cursor cursor = vocabularyHelper.searchVocabularies(userId, keyword);
-            adapter.swapCursor(cursor); // Cập nhật kết quả lên RecyclerView
+            adapter.swapCursor(cursor);
         }
     }
 
-    // Xử lý nút quay lại trên Toolbar
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();

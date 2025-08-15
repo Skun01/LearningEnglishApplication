@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "VocabularyApp.db";
-    private static final int DATABASE_VERSION = 1; // Reset về 1 hoặc tăng lên
+    private static final int DATABASE_VERSION = 2;
 
     // ----- BẢNG USERS -----
     public static final String TABLE_USERS = "users";
@@ -39,12 +39,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_VOCAB_CATEGORY_ID = "category_id";
     public static final String COLUMN_VOCAB_WORD = "word";
     public static final String COLUMN_VOCAB_MEANING = "meaning";
+    public static final String COLUMN_VOCAB_PRONUNCIATION = "pronunciation";
+    public static final String COLUMN_VOCAB_IS_FAVORITE = "is_favorite";
+    public static final String COLUMN_VOCAB_LEARNED = "learned";
+    public static final String COLUMN_VOCAB_DATE_LEARNED = "date_learned";
+
     private static final String CREATE_TABLE_VOCABULARIES = "CREATE TABLE " + TABLE_VOCABULARIES + "("
             + COLUMN_VOCAB_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + COLUMN_VOCAB_USER_ID + " INTEGER,"
             + COLUMN_VOCAB_CATEGORY_ID + " INTEGER,"
             + COLUMN_VOCAB_WORD + " TEXT NOT NULL,"
             + COLUMN_VOCAB_MEANING + " TEXT,"
+            + COLUMN_VOCAB_PRONUNCIATION + " TEXT,"
+            + COLUMN_VOCAB_IS_FAVORITE + " INTEGER DEFAULT 0,"
+            + COLUMN_VOCAB_LEARNED + " INTEGER DEFAULT 0,"
+            + COLUMN_VOCAB_DATE_LEARNED + " TEXT,"
             + "FOREIGN KEY(" + COLUMN_VOCAB_USER_ID + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_USER_ID + "),"
             + "FOREIGN KEY(" + COLUMN_VOCAB_CATEGORY_ID + ") REFERENCES " + TABLE_CATEGORIES + "(" + COLUMN_CAT_ID + ")" + ")";
 
@@ -85,11 +94,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // Xóa các bảng cũ
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_STATISTICS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_SETTINGS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_VOCABULARIES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORIES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
+        // Tạo lại các bảng mới
         onCreate(db);
     }
 }
