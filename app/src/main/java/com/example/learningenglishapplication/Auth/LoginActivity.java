@@ -12,24 +12,28 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.learningenglishapplication.Data.DataHelper.UserDataHelper;
+import com.example.learningenglishapplication.Data.DataHelper.UserSettingDataHelper;
 import com.example.learningenglishapplication.Data.DatabaseHelper;
 import com.example.learningenglishapplication.Home.HomeActivity;
-import com.example.learningenglishapplication.R;
 import com.example.learningenglishapplication.Profile.ThemeManager;
+import com.example.learningenglishapplication.R;
 
 public class LoginActivity extends AppCompatActivity {
 
     private EditText etEmail, etPassword;
     private Button btnLogin;
     private TextView tvGoToRegister;
-    private DatabaseHelper databaseHelper;
+    private UserDataHelper userHelper;
+    private UserSettingDataHelper userSettingHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        databaseHelper = new DatabaseHelper(this);
+        userHelper = new UserDataHelper(this);
+        userSettingHelper = new UserSettingDataHelper(this);
 
         etEmail = findViewById(R.id.et_login_email);
         etPassword = findViewById(R.id.et_login_password);
@@ -60,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        long userId = databaseHelper.checkUser(email, password);
+        long userId = userHelper.checkUser(email, password);
 
         if (userId != -1) {
             Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
@@ -75,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
             editor.apply();
 
             // ÁP DỤNG THEME CỦA NGƯỜI DÙNG NGAY LẬP TỨC
-            String theme = databaseHelper.getThemeSetting(userId);
+            String theme = userSettingHelper.getThemeSetting(userId);
             ThemeManager.applyTheme(theme);
 
             // Chuyển đến màn hình chính

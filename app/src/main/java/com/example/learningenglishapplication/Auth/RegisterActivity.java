@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.learningenglishapplication.Data.DataHelper.UserDataHelper;
 import com.example.learningenglishapplication.Data.DatabaseHelper;
 import com.example.learningenglishapplication.R;
 
@@ -19,14 +20,14 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText etEmail, etPassword, etConfirmPassword;
     private Button btnRegister;
     private TextView tvGoToLogin;
-    private DatabaseHelper databaseHelper;
+    private UserDataHelper userHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        databaseHelper = new DatabaseHelper(this);
+        userHelper = new UserDataHelper(this);
 
         etEmail = findViewById(R.id.et_register_email);
         etPassword = findViewById(R.id.et_register_password);
@@ -66,7 +67,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         // Gọi phương thức addUser từ DatabaseHelper
-        boolean isAdded = databaseHelper.addUser(email, password);
+        boolean isAdded = userHelper.addUser(email, password);
 
         if (isAdded) {
             Toast.makeText(this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();

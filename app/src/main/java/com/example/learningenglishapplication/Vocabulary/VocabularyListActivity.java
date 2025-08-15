@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.Serializable;
 import java.util.List;
 
+import com.example.learningenglishapplication.Data.DataHelper.VocabularyDataHelper;
 import com.example.learningenglishapplication.Data.DatabaseHelper;
 import com.example.learningenglishapplication.R;
 import com.example.learningenglishapplication.Data.model.Vocabulary;
@@ -26,7 +27,7 @@ public class VocabularyListActivity extends AppCompatActivity implements Vocabul
 
     private RecyclerView recyclerView;
     private VocabularyAdapter adapter;
-    private DatabaseHelper databaseHelper;
+    private VocabularyDataHelper vocabularyHelper;
     private FloatingActionButton fabAddVocabulary;
     private Button btnStartFlashcard;
 
@@ -38,7 +39,7 @@ public class VocabularyListActivity extends AppCompatActivity implements Vocabul
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vocabulary_list);
 
-        databaseHelper = new DatabaseHelper(this);
+        vocabularyHelper = new VocabularyDataHelper(this);
 
         // Lấy dữ liệu ID và Tên của thể loại được truyền từ màn hình trước
         Intent intent = getIntent();
@@ -89,7 +90,7 @@ public class VocabularyListActivity extends AppCompatActivity implements Vocabul
             @Override
             public void onClick(View v) {
                 // Lấy danh sách từ vựng từ database
-                List<Vocabulary> vocabList = databaseHelper.getVocabulariesAsList(categoryId);
+                List<Vocabulary> vocabList = vocabularyHelper.getVocabulariesAsList(categoryId);
 
                 if (vocabList.isEmpty()) {
                     Toast.makeText(VocabularyListActivity.this, "Chưa có từ nào để ôn tập!", Toast.LENGTH_SHORT).show();
@@ -106,7 +107,7 @@ public class VocabularyListActivity extends AppCompatActivity implements Vocabul
 
     // Tải lại dữ liệu mỗi khi quay lại màn hình này
     private void loadVocabularies() {
-        Cursor newCursor = databaseHelper.getVocabulariesForCategory(categoryId);
+        Cursor newCursor = vocabularyHelper.getVocabulariesForCategory(categoryId);
         adapter.swapCursor(newCursor);
     }
 
@@ -147,7 +148,7 @@ public class VocabularyListActivity extends AppCompatActivity implements Vocabul
                 .setTitle("Xác nhận xóa")
                 .setMessage("Bạn có chắc chắn muốn xóa từ '" + word + "'?")
                 .setPositiveButton("Xóa", (dialog, which) -> {
-                    databaseHelper.deleteVocabulary(vocabId);
+                    vocabularyHelper.deleteVocabulary(vocabId);
                     Toast.makeText(this, "Đã xóa từ: " + word, Toast.LENGTH_SHORT).show();
                     loadVocabularies(); // Tải lại danh sách
                 })

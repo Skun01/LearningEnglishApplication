@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.learningenglishapplication.Data.DataHelper.CategoryDataHelper;
+import com.example.learningenglishapplication.Data.DataHelper.VocabularyDataHelper;
 import com.example.learningenglishapplication.Data.DatabaseHelper;
 import com.example.learningenglishapplication.R;
 import com.example.learningenglishapplication.Data.model.Vocabulary;
@@ -26,7 +28,8 @@ public class QuizSetupActivity extends AppCompatActivity {
     private Spinner spinnerCategory;
     private EditText etNumberOfQuestions;
     private Button btnStartQuiz;
-    private DatabaseHelper databaseHelper;
+    private CategoryDataHelper categoryHelper;
+    private VocabularyDataHelper vocabularyHelper;
 
     private Map<String, Long> categoryMap;
     private List<String> categoryNames;
@@ -37,7 +40,9 @@ public class QuizSetupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_setup);
 
-        databaseHelper = new DatabaseHelper(this);
+        categoryHelper = new CategoryDataHelper(this);
+        vocabularyHelper = new VocabularyDataHelper(this);
+
         userId = getSharedPreferences("user_prefs", MODE_PRIVATE).getLong("userId", -1);
 
         spinnerCategory = findViewById(R.id.spinner_quiz_category);
@@ -50,7 +55,7 @@ public class QuizSetupActivity extends AppCompatActivity {
     }
 
     private void loadCategoriesIntoSpinner() {
-        categoryMap = databaseHelper.getCategoriesForSpinner(userId);
+        categoryMap = categoryHelper.getCategoriesForSpinner(userId);
         categoryNames = new ArrayList<>(categoryMap.keySet());
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
@@ -88,7 +93,7 @@ public class QuizSetupActivity extends AppCompatActivity {
         }
 
         // Lấy danh sách từ vựng
-        List<Vocabulary> allVocabs = databaseHelper.getVocabulariesAsList(selectedCategoryId);
+        List<Vocabulary> allVocabs = vocabularyHelper.getVocabulariesAsList(selectedCategoryId);
 
         if (allVocabs.size() < 4) {
             Toast.makeText(this, "Thể loại này cần ít nhất 4 từ để tạo bài kiểm tra!", Toast.LENGTH_LONG).show();
