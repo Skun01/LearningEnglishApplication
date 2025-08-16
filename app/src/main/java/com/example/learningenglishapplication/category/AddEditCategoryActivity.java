@@ -1,6 +1,7 @@
 package com.example.learningenglishapplication.category;
 
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -50,13 +51,19 @@ public class AddEditCategoryActivity extends AppCompatActivity {
     }
 
     private void loadCategoryData() {
-        // Lấy thông tin thể loại cũ từ DB và điền vào EditText
-        // (Bạn cần thêm một phương thức trong DatabaseHelper để lấy một thể loại duy nhất)
-        // Tạm thời chúng ta sẽ bỏ qua phần này để đơn giản, bạn có thể tự thêm sau.
-        // Ví dụ: Category category = databaseHelper.getCategory(categoryIdToEdit);
-        // etName.setText(category.getName());
-        // etDescription.setText(category.getDescription());
-        Toast.makeText(this, "Chế độ sửa (chức năng tải dữ liệu cũ sẽ được thêm sau)", Toast.LENGTH_SHORT).show();
+        Cursor cursor = categoryHelper.getCategory(categoryIdToEdit);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            String name = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_CAT_NAME));
+            String description = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_CAT_DESCRIPTION));
+
+            etName.setText(name);
+            etDescription.setText(description);
+
+            cursor.close();
+        } else {
+            Toast.makeText(this, "Không tìm thấy dữ liệu để sửa", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void saveCategory() {
