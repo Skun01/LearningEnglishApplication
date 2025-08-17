@@ -11,7 +11,6 @@ import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -34,6 +33,7 @@ import com.example.learningenglishapplication.Data.DatabaseHelper;
 import com.example.learningenglishapplication.Data.DataHelper.VocabularyDataHelper;
 import com.example.learningenglishapplication.R;
 import com.example.learningenglishapplication.Data.model.Vocabulary;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class VocabularyListActivity extends AppCompatActivity implements VocabularyAdapter.OnItemInteractionListener, VocabularyAdapter.OnFavoriteClickListener {
@@ -43,7 +43,7 @@ public class VocabularyListActivity extends AppCompatActivity implements Vocabul
     private DatabaseHelper databaseHelper;
     private VocabularyDataHelper vocabularyHelper;
     private FloatingActionButton fabAddVocabulary;
-    private Button btnStartFlashcard;
+    private MaterialButton btnStartFlashcard;
     private TextView tvEmptyMessage;
     private ImageView btnFilter;
     private TextView tvVocabularyCount;

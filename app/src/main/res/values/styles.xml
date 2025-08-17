@@ -33,4 +33,31 @@
         <item name="cornerSize">50%</item> <!-- 50% làm ảnh tròn tuyệt đối -->
     </style>
 
+    <!-- Card style for consistent rounded corners and elevation -->
+    <style name="Widget.Learning.Card" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardCornerRadius">12dp</item>
+        <item name="cardElevation">2dp</item>
+    </style>
+
+    <!-- Toolbar style for a consistent app bar across screens -->
+    <style name="Widget.Learning.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="titleTextColor">?attr/colorOnPrimary</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+    </style>
+
+    <!-- Primary button style used in forms and actions -->
+    <style name="Widget.Learning.Button" parent="Widget.Material3.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetRight">0dp</item>
+    </style>
+
+    <!-- Text field style for form inputs -->
+    <style name="Widget.Learning.TextField" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
 </resources>

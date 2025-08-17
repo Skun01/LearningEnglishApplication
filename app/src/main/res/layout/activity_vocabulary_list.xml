@@ -10,10 +10,7 @@
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar_vocabulary_list"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:titleTextColor="@color/white">
+        style="@style/Widget.Learning.Toolbar">
 
         <ImageView
             android:id="@+id/btn_filter"
@@ -38,14 +35,12 @@
         android:gravity="center_vertical"
         android:text="Tổng số: 0 từ" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_start_flashcard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/Widget.Learning.Button"
         android:layout_margin="@dimen/spacing_medium"
         android:text="Ôn Tập Flashcard"
-        android:backgroundTint="?attr/colorSecondary"
-        android:textColor="@color/white" />
+        app:backgroundTint="?attr/colorSecondary" />
 
     <TextView
         android:id="@+id/tv_empty_message"

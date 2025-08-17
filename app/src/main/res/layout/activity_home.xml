@@ -4,12 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EDE9FE"
     tools:context=".Home.HomeActivity">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/top_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:title="@string/app_name"
+        android:titleTextColor="?attr/colorOnPrimary" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/top_app_bar"
         android:layout_above="@id/bottom_navigation"
         android:fillViewport="true">
 
@@ -19,53 +27,58 @@
             android:orientation="vertical"
             android:padding="@dimen/spacing_medium">
 
-            <!-- Search + Avatar -->
-            <!-- Lời chào + Avatar -->
-            <LinearLayout
+            <!-- Greeting card -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Learning.Card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="@dimen/spacing_medium"
-                android:gravity="center_vertical"
-                android:background="@drawable/bg_nen_mau_xanh">
+                android:layout_marginBottom="@dimen/spacing_medium">
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:padding="@dimen/spacing_medium"
+                    android:gravity="center_vertical">
 
-                    <TextView
-                        android:id="@+id/tv_loi_chao"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Chào mừng quay trở lại,"
-                        android:textColor="@android:color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tv_ten_nguoi_dung"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Biệt danh"
-                        android:textColor="@android:color/black"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/tv_loi_chao"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Chào mừng quay trở lại,"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_ten_nguoi_dung"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Biệt danh"
+                            android:textColor="@android:color/black"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/nut_ho_so"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:src="@drawable/avatar"
+                        android:scaleType="centerCrop"
+                        android:contentDescription="Hồ sơ"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        app:shapeAppearanceOverlay="@style/AvatarShape" />
                 </LinearLayout>
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/nut_ho_so"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:src="@drawable/avatar"
-                    android:scaleType="centerCrop"
-                    android:contentDescription="Hồ sơ"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    app:shapeAppearanceOverlay="@style/AvatarShape" />
-            </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- Chuỗi ngày học -->
             <TextView
@@ -98,20 +111,25 @@
                 tools:ignore="SpeakableTextPresentCheck" />
 
             <!-- Quote thay thế CalendarView -->
-            <TextView
-                android:id="@+id/quote_text"
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Learning.Card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Hãy cùng xem 1 vài từ mới ngày hôm nay nào  !"
-                android:textColor="@android:color/black"
-                android:textStyle="italic"
-                android:textSize="18sp"
-                android:background="@drawable/bg_nen_mau_xanh"
-                android:padding="@dimen/spacing_medium"
-                android:gravity="center"
-                android:layout_marginBottom="@dimen/spacing_medium"
-                android:clickable="true"
-                android:focusable="true" />
+                android:layout_marginBottom="@dimen/spacing_medium">
+
+                <TextView
+                    android:id="@+id/quote_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Hãy cùng xem 1 vài từ mới ngày hôm nay nào  !"
+                    android:textColor="@android:color/black"
+                    android:textStyle="italic"
+                    android:textSize="18sp"
+                    android:padding="@dimen/spacing_medium"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true" />
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- Học phần -->
             <TextView

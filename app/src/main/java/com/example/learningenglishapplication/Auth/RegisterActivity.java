@@ -3,9 +3,9 @@ package com.example.learningenglishapplication.Auth;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,8 +16,8 @@ import com.example.learningenglishapplication.R;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText etEmail, etPassword, etConfirmPassword, etNickname;
-    private Button btnRegister;
+    private TextInputEditText etEmail, etPassword, etConfirmPassword, etNickname;
+    private MaterialButton btnRegister;
     private TextView tvGoToLogin;
     private UserDataHelper userHelper;
 
@@ -25,6 +25,13 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        MaterialToolbar toolbar = findViewById(R.id.toolbar_register);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        toolbar.setNavigationOnClickListener(v -> finish());
 
         userHelper = new UserDataHelper(this);
 
@@ -36,20 +43,10 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister = findViewById(R.id.btn_register);
         tvGoToLogin = findViewById(R.id.tv_go_to_login);
 
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                registerUser();
-            }
-        });
+        btnRegister.setOnClickListener(v -> registerUser());
 
-        tvGoToLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Chuyển sang màn hình Đăng nhập
-                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-            }
-        });
+        tvGoToLogin.setOnClickListener(v ->
+                startActivity(new Intent(RegisterActivity.this, LoginActivity.class)));
     }
 
     private void registerUser() {
