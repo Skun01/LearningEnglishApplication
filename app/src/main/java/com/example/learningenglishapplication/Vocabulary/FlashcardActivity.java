@@ -5,6 +5,9 @@ import android.animation.AnimatorInflater;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.os.Bundle;
+import android.media.MediaPlayer;
+import android.net.Uri;
+import android.speech.tts.TextToSpeech;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,6 +31,7 @@ import com.example.learningenglishapplication.Data.DataHelper.StatisticsDataHelp
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Locale;
 
 public class FlashcardActivity extends AppCompatActivity {
 
@@ -40,11 +44,19 @@ public class FlashcardActivity extends AppCompatActivity {
     private FrameLayout flashcardContainer;
     private FrameLayout cardFront, cardBack;
     private TextView tvFlashcardWord, tvFlashcardPronunciation, tvFlashcardMeaning;
+    private ImageView ivFlashcardImage;
+    private ImageButton btnPlayAudio;
 
     private ImageView ivFavoriteFront, ivEditFront;
     private ImageView ivFavoriteBack, ivEditBack;
 
     private Button btnPrev, btnNext;
+    private Button btnAgain, btnGood, btnEasy;
+
+    private Vocabulary currentVocab;
+
+    private TextToSpeech textToSpeech;
+    private MediaPlayer mediaPlayer;
 
     private Animator flipOutAnimator;
     private Animator flipInAnimator;
@@ -91,15 +103,27 @@ public class FlashcardActivity extends AppCompatActivity {
         tvFlashcardWord = findViewById(R.id.tv_flashcard_word);
         tvFlashcardPronunciation = findViewById(R.id.tv_flashcard_pronunciation);
         tvFlashcardMeaning = findViewById(R.id.tv_flashcard_meaning);
+        ivFlashcardImage = findViewById(R.id.iv_flashcard_image);
+        btnPlayAudio = findViewById(R.id.btn_play_audio);
         btnPrev = findViewById(R.id.btn_prev_card);
         btnNext = findViewById(R.id.btn_next_card);
         Button btnComplete = findViewById(R.id.btn_complete);
         btnComplete.setVisibility(View.GONE);
 
+        btnAgain = findViewById(R.id.btn_again);
+        btnGood = findViewById(R.id.btn_good);
+        btnEasy = findViewById(R.id.btn_easy);
+
         ivFavoriteFront = findViewById(R.id.iv_favorite_front);
         ivEditFront = findViewById(R.id.iv_edit_front);
         ivFavoriteBack = findViewById(R.id.iv_favorite_back);
         ivEditBack = findViewById(R.id.iv_edit_back);
+
+        textToSpeech = new TextToSpeech(this, status -> {
+            if (status == TextToSpeech.SUCCESS) {
+                textToSpeech.setLanguage(Locale.US);
+            }
+        });
 
         loadAnimations();
         showCurrentCard();
@@ -107,6 +131,10 @@ public class FlashcardActivity extends AppCompatActivity {
         flashcardContainer.setOnClickListener(v -> flipCard());
         btnNext.setOnClickListener(v -> showNextCard());
         btnPrev.setOnClickListener(v -> showPreviousCard());
+        btnPlayAudio.setOnClickListener(v -> playAudio());
+        btnAgain.setOnClickListener(v -> handleAnswer(0));
+        btnGood.setOnClickListener(v -> handleAnswer(1));
+        btnEasy.setOnClickListener(v -> handleAnswer(2));
 
         gestureDetector = new GestureDetectorCompat(this, new MyGestureListener());
         flashcardContainer.setOnTouchListener((v, event) -> {
@@ -150,10 +178,17 @@ public class FlashcardActivity extends AppCompatActivity {
         }
 
         if (currentCardIndex < vocabularyList.size()) {
-            Vocabulary currentVocab = vocabularyList.get(currentCardIndex);
+            currentVocab = vocabularyList.get(currentCardIndex);
             tvFlashcardWord.setText(currentVocab.getWord());
             tvFlashcardPronunciation.setText(currentVocab.getPronunciation());
             tvFlashcardMeaning.setText(currentVocab.getMeaning());
+
+            if (currentVocab.getImageUri() != null && !currentVocab.getImageUri().isEmpty()) {
+                ivFlashcardImage.setVisibility(View.VISIBLE);
+                ivFlashcardImage.setImageURI(Uri.parse(currentVocab.getImageUri()));
+            } else {
+                ivFlashcardImage.setVisibility(View.GONE);
+            }
 
             updateFavoriteIcons(currentVocab.isFavorite());
 
@@ -198,6 +233,26 @@ public class FlashcardActivity extends AppCompatActivity {
         }
     }
 
+    private void playAudio() {
+        if (currentVocab == null) return;
+        String audio = currentVocab.getAudioUri();
+        if (audio != null && !audio.isEmpty()) {
+            try {
+                if (mediaPlayer != null) {
+                    mediaPlayer.release();
+                }
+                mediaPlayer = MediaPlayer.create(this, Uri.parse(audio));
+                if (mediaPlayer != null) {
+                    mediaPlayer.start();
+                }
+            } catch (Exception e) {
+                Toast.makeText(this, "Không thể phát âm thanh", Toast.LENGTH_SHORT).show();
+            }
+        } else if (textToSpeech != null) {
+            textToSpeech.speak(currentVocab.getWord(), TextToSpeech.QUEUE_FLUSH, null, null);
+        }
+    }
+
     private void showNextCard() {
         if (currentCardIndex < vocabularyList.size() - 1) {
             currentCardIndex++;
@@ -236,21 +291,59 @@ public class FlashcardActivity extends AppCompatActivity {
         Toast.makeText(this, "Đã bỏ qua từ này", Toast.LENGTH_SHORT).show();
     }
 
-    private void handleSwipe(float diffX) {
+    private long calculateNextReview(int box) {
+        long now = System.currentTimeMillis();
+        switch (box) {
+            case 1:
+                return now + 60 * 1000; // 1 minute
+            case 2:
+                return now + 5 * 60 * 1000; // 5 minutes
+            case 3:
+                return now + 60 * 60 * 1000; // 1 hour
+            case 4:
+                return now + 24 * 60 * 60 * 1000; // 1 day
+            case 5:
+                return now + 7 * 24 * 60 * 60 * 1000; // 1 week
+            default:
+                return now;
+        }
+    }
+
+    private void handleAnswer(int quality) {
         if (currentCardIndex < vocabularyList.size()) {
-            if (diffX < 0) {
-                markCardAsLearned(vocabularyList.get(currentCardIndex));
+            Vocabulary vocab = vocabularyList.get(currentCardIndex);
+            int box = vocab.getBox();
+            if (quality == 0) {
+                box = 1;
+                markCardAsUnlearned(vocab);
+            } else if (quality == 1) {
+                box = Math.min(5, box + 1);
+                markCardAsLearned(vocab);
             } else {
-                markCardAsUnlearned(vocabularyList.get(currentCardIndex));
+                box = Math.min(5, box + 2);
+                markCardAsLearned(vocab);
             }
+            long nextReview = calculateNextReview(box);
+            vocab.setBox(box);
+            vocab.setNextReview(nextReview);
+            vocabularyDataHelper.updateReviewSchedule(vocab.getId(), box, nextReview);
 
             currentCardIndex++;
-
             if (currentCardIndex < vocabularyList.size()) {
                 showCurrentCard();
             } else {
                 Toast.makeText(this, "Bạn đã hoàn thành ôn tập!", Toast.LENGTH_SHORT).show();
                 finish();
+            }
+        }
+    }
+
+    private void handleSwipe(float diffX) {
+        if (currentCardIndex < vocabularyList.size()) {
+            if (diffX < 0) {
+                handleAnswer(1);
+            } else {
+                handleAnswer(0);
             }
         }
         resetCardState();
@@ -279,6 +372,17 @@ public class FlashcardActivity extends AppCompatActivity {
     private void resetCardBorderColor() {
         cardFront.setBackgroundResource(R.drawable.item_background);
         cardBack.setBackgroundResource(R.drawable.item_background);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (textToSpeech != null) {
+            textToSpeech.shutdown();
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+        }
     }
 
     @Override

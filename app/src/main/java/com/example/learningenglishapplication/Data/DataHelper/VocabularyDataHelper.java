@@ -37,6 +37,10 @@ public class VocabularyDataHelper {
         values.put(DatabaseHelper.COLUMN_VOCAB_IS_FAVORITE, 0);
         values.put(DatabaseHelper.COLUMN_VOCAB_LEARNED, 0);
         values.put(DatabaseHelper.COLUMN_VOCAB_DATE_LEARNED, (String) null);
+        values.put(DatabaseHelper.COLUMN_VOCAB_IMAGE_URI, (String) null);
+        values.put(DatabaseHelper.COLUMN_VOCAB_AUDIO_URI, (String) null);
+        values.put(DatabaseHelper.COLUMN_VOCAB_BOX, 1);
+        values.put(DatabaseHelper.COLUMN_VOCAB_NEXT_REVIEW, 0);
 
         long newRowId = db.insert(DatabaseHelper.TABLE_VOCABULARIES, null, values);
         db.close();
@@ -105,8 +109,12 @@ public class VocabularyDataHelper {
             int isFavorite = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_IS_FAVORITE));
             int learned = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_LEARNED));
             String dateLearned = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_DATE_LEARNED));
+            String imageUri = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_IMAGE_URI));
+            String audioUri = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_AUDIO_URI));
+            int box = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_BOX));
+            long nextReview = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_NEXT_REVIEW));
 
-            vocabulary = new Vocabulary(id, word, meaning, pronunciation, isFavorite, learned, dateLearned);
+            vocabulary = new Vocabulary(id, word, meaning, pronunciation, isFavorite, learned, dateLearned, imageUri, audioUri, box, nextReview);
         }
 
         if (cursor != null) {
@@ -285,8 +293,12 @@ public class VocabularyDataHelper {
                 String meaning = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_MEANING));
                 String pronunciation = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_PRONUNCIATION));
                 int isFavorite = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_IS_FAVORITE));
+                String imageUri = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_IMAGE_URI));
+                String audioUri = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_AUDIO_URI));
+                int box = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_BOX));
+                long nextReview = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_NEXT_REVIEW));
 
-                vocabularyList.add(new Vocabulary(id, word, meaning, pronunciation, isFavorite));
+                vocabularyList.add(new Vocabulary(id, word, meaning, pronunciation, isFavorite, 0, null, imageUri, audioUri, box, nextReview));
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -312,8 +324,11 @@ public class VocabularyDataHelper {
     public List<Vocabulary> getVocabulariesForFlashcard(long categoryId) {
         List<Vocabulary> vocabularies = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
+        long now = System.currentTimeMillis();
         Cursor cursor = db.rawQuery("SELECT * FROM " + DatabaseHelper.TABLE_VOCABULARIES +
-                " WHERE " + DatabaseHelper.COLUMN_VOCAB_CATEGORY_ID + " = ? ORDER BY " + DatabaseHelper.COLUMN_VOCAB_LEARNED + " ASC", new String[]{String.valueOf(categoryId)});
+                " WHERE " + DatabaseHelper.COLUMN_VOCAB_CATEGORY_ID + " = ? AND (" +
+                DatabaseHelper.COLUMN_VOCAB_NEXT_REVIEW + " IS NULL OR " + DatabaseHelper.COLUMN_VOCAB_NEXT_REVIEW + " <= ?) ORDER BY " + DatabaseHelper.COLUMN_VOCAB_NEXT_REVIEW + " ASC",
+                new String[]{String.valueOf(categoryId), String.valueOf(now)});
 
         if (cursor.moveToFirst()) {
             do {
@@ -324,8 +339,12 @@ public class VocabularyDataHelper {
                 int isFavorite = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_IS_FAVORITE));
                 int learned = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_LEARNED));
                 String dateLearned = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_DATE_LEARNED));
+                String imageUri = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_IMAGE_URI));
+                String audioUri = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_AUDIO_URI));
+                int box = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_BOX));
+                long nextReview = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_NEXT_REVIEW));
 
-                vocabularies.add(new Vocabulary(id, word, meaning, pronunciation, isFavorite, learned, dateLearned));
+                vocabularies.add(new Vocabulary(id, word, meaning, pronunciation, isFavorite, learned, dateLearned, imageUri, audioUri, box, nextReview));
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -396,5 +415,15 @@ public class VocabularyDataHelper {
             db.close();
         }
         return exists;
+    }
+
+    // --- Spaced repetition helpers ---
+    public void updateReviewSchedule(long vocabId, int box, long nextReview) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.COLUMN_VOCAB_BOX, box);
+        values.put(DatabaseHelper.COLUMN_VOCAB_NEXT_REVIEW, nextReview);
+        db.update(DatabaseHelper.TABLE_VOCABULARIES, values, DatabaseHelper.COLUMN_VOCAB_ID + " = ?", new String[]{String.valueOf(vocabId)});
+        db.close();
     }
 }

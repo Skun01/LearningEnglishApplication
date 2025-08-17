@@ -13,6 +13,14 @@ public class Vocabulary implements Serializable {
     private int learned;
     private String dateLearned;
 
+    // Optional resources
+    private String imageUri;
+    private String audioUri;
+
+    // Spaced repetition fields
+    private int box; // Leitner box
+    private long nextReview; // timestamp in millis
+
 
     public Vocabulary(long id, String word, String meaning, String pronunciation) {
         this.id = id;
@@ -22,6 +30,10 @@ public class Vocabulary implements Serializable {
         this.isFavorite = 0;
         this.learned = 0;
         this.dateLearned = null;
+        this.imageUri = null;
+        this.audioUri = null;
+        this.box = 1;
+        this.nextReview = 0;
     }
 
     public Vocabulary(long id, String word, String meaning, String pronunciation, int isFavorite) {
@@ -32,10 +44,15 @@ public class Vocabulary implements Serializable {
         this.isFavorite = isFavorite;
         this.learned = 0;
         this.dateLearned = null;
+        this.imageUri = null;
+        this.audioUri = null;
+        this.box = 1;
+        this.nextReview = 0;
     }
 
 
-    public Vocabulary(long id, String word, String meaning, String pronunciation, int isFavorite, int learned, String dateLearned) {
+    public Vocabulary(long id, String word, String meaning, String pronunciation, int isFavorite, int learned, String dateLearned,
+                      String imageUri, String audioUri, int box, long nextReview) {
         this.id = id;
         this.word = word;
         this.meaning = meaning;
@@ -43,6 +60,10 @@ public class Vocabulary implements Serializable {
         this.isFavorite = isFavorite;
         this.learned = learned;
         this.dateLearned = dateLearned;
+        this.imageUri = imageUri;
+        this.audioUri = audioUri;
+        this.box = box;
+        this.nextReview = nextReview;
     }
 
 
@@ -70,6 +91,22 @@ public class Vocabulary implements Serializable {
         return pronunciation;
     }
 
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public String getAudioUri() {
+        return audioUri;
+    }
+
+    public int getBox() {
+        return box;
+    }
+
+    public long getNextReview() {
+        return nextReview;
+    }
+
     // Getter mới cho trạng thái đã học
     public int getLearned() {
         return learned;
@@ -83,6 +120,22 @@ public class Vocabulary implements Serializable {
 
     public void setPronunciation(String pronunciation) {
         this.pronunciation = pronunciation;
+    }
+
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
+    }
+
+    public void setAudioUri(String audioUri) {
+        this.audioUri = audioUri;
+    }
+
+    public void setBox(int box) {
+        this.box = box;
+    }
+
+    public void setNextReview(long nextReview) {
+        this.nextReview = nextReview;
     }
 
     public void setIsFavorite(int favorite) {
