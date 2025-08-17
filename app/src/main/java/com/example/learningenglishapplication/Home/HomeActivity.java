@@ -17,6 +17,7 @@ import com.example.learningenglishapplication.Data.DataHelper.UserDataHelper;
 import com.example.learningenglishapplication.Profile.ProfileSettingsActivity;
 import com.example.learningenglishapplication.Quiz.QuizSetupActivity;
 import com.example.learningenglishapplication.R;
+import com.example.learningenglishapplication.Utils.ActivityTransitionManager;
 import com.example.learningenglishapplication.Vocabulary.VocabularyListActivity;
 import com.example.learningenglishapplication.category.CategoryAdapter;
 import com.example.learningenglishapplication.category.CategoryManagementActivity;
@@ -96,7 +97,7 @@ public class HomeActivity extends AppCompatActivity implements CategoryAdapter.O
         // Xử lý click avatar → mở AchievementsActivity
         ivAvatar.setOnClickListener(v -> {
             Intent intent = new Intent(HomeActivity.this, AchievementsActivity.class);
-            startActivity(intent);
+            ActivityTransitionManager.startActivityWithTransition(this, intent, ActivityTransitionManager.TRANSITION_FADE);
         });
 
         // RecyclerView
@@ -137,13 +138,16 @@ public class HomeActivity extends AppCompatActivity implements CategoryAdapter.O
             if (itemId == R.id.nav_home) {
                 return true;
             } else if (itemId == R.id.nav_categories) {
-                startActivity(new Intent(HomeActivity.this, CategoryManagementActivity.class));
+                Intent intent = new Intent(HomeActivity.this, CategoryManagementActivity.class);
+                ActivityTransitionManager.startActivityWithTransition(this, intent, ActivityTransitionManager.TRANSITION_SLIDE);
                 return true;
             } else if (itemId == R.id.nav_quiz) {
-                startActivity(new Intent(HomeActivity.this, QuizSetupActivity.class));
+                Intent intent = new Intent(HomeActivity.this, QuizSetupActivity.class);
+                ActivityTransitionManager.startActivityWithTransition(this, intent, ActivityTransitionManager.TRANSITION_SLIDE);
                 return true;
             } else if (itemId == R.id.nav_profile) {
-                startActivity(new Intent(HomeActivity.this, ProfileSettingsActivity.class));
+                Intent intent = new Intent(HomeActivity.this, ProfileSettingsActivity.class);
+                ActivityTransitionManager.startActivityWithTransition(this, intent, ActivityTransitionManager.TRANSITION_SLIDE);
                 return true;
             }
             return false;
@@ -155,7 +159,7 @@ public class HomeActivity extends AppCompatActivity implements CategoryAdapter.O
         Intent intent = new Intent(this, VocabularyListActivity.class);
         intent.putExtra("CATEGORY_ID", categoryId);
         intent.putExtra("CATEGORY_NAME", categoryName);
-        startActivity(intent);
+        ActivityTransitionManager.startActivityWithTransition(this, intent, ActivityTransitionManager.TRANSITION_ZOOM);
     }
 
     @Override

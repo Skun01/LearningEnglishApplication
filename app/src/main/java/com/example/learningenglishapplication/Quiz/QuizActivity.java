@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.learningenglishapplication.R;
 import com.example.learningenglishapplication.Data.model.Vocabulary;
+import com.example.learningenglishapplication.Utils.ActivityTransitionManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -149,7 +150,12 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent = new Intent(this, QuizResultActivity.class);
         intent.putExtra("SCORE", score);
         intent.putExtra("TOTAL_QUESTIONS", quizQuestions.size());
-        startActivity(intent);
-        finish(); // Đóng màn hình quiz
+        ActivityTransitionManager.startActivityWithTransition(this, intent, ActivityTransitionManager.TRANSITION_FADE);
+        ActivityTransitionManager.finishWithTransition(this, ActivityTransitionManager.TRANSITION_FADE);
+    }
+    
+    @Override
+    public void onBackPressed() {
+        ActivityTransitionManager.finishWithTransition(this, ActivityTransitionManager.TRANSITION_SLIDE);
     }
 }

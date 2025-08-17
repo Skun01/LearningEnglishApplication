@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?attr/colorSurfaceContainerLowest"
+    android:padding="@dimen/spacing_medium"
+    tools:context=".Quiz.QuizActivity">
+
+    <!-- Thanh tiến trình và thông tin -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <TextView
+            android:id="@+id/tv_question_counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="?attr/colorOnSurface"
+            tools:text="Câu 5/20"/>
+        <ProgressBar
+            android:id="@+id/pb_quiz_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:max="100"
+            android:progress="25"
+            android:layout_marginStart="@dimen/spacing_medium"
+            android:layout_marginEnd="@dimen/spacing_medium"
+            android:progressTint="?attr/colorPrimary"/>
+        <TextView
+            android:id="@+id/tv_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorSecondary"
+            tools:text="Điểm: 4"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/spacing_medium">
+
+        <!-- Khung câu hỏi -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"
+            style="@style/ElevatedCard"
+            android:layout_marginEnd="@dimen/spacing_medium">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="@dimen/spacing_medium">
+
+                <TextView
+                    android:id="@+id/tv_question_word"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="32sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:gravity="center"
+                    tools:text="Phenomenon"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Các lựa chọn trả lời -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.6"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_answer_1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginBottom="@dimen/spacing_small"
+                style="@style/PrimaryButton"
+                tools:text="Hiện tượng"/>
+                
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_answer_2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginBottom="@dimen/spacing_small"
+                style="@style/PrimaryButton"
+                tools:text="Cơ hội"/>
+                
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_answer_3"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginBottom="@dimen/spacing_small"
+                style="@style/PrimaryButton"
+                tools:text="Chính phủ"/>
+                
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_answer_4"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                style="@style/PrimaryButton"
+                tools:text="Môi trường"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

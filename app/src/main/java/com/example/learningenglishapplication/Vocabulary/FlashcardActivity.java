@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GestureDetectorCompat;
@@ -28,6 +29,8 @@ import com.example.learningenglishapplication.Data.model.Vocabulary;
 import com.example.learningenglishapplication.Data.DatabaseHelper;
 import com.example.learningenglishapplication.Data.DataHelper.VocabularyDataHelper;
 import com.example.learningenglishapplication.Data.DataHelper.StatisticsDataHelper;
+import com.example.learningenglishapplication.Utils.ActivityTransitionManager;
+import com.google.android.material.button.MaterialButton;
 
 import java.io.Serializable;
 import java.util.List;
@@ -45,7 +48,7 @@ public class FlashcardActivity extends AppCompatActivity {
     private FrameLayout cardFront, cardBack;
     private TextView tvFlashcardWord, tvFlashcardPronunciation, tvFlashcardMeaning;
     private ImageView ivFlashcardImage;
-    private ImageButton btnPlayAudio;
+    private MaterialButton btnPlayAudio;
 
     private ImageView ivFavoriteFront, ivEditFront;
     private ImageView ivFavoriteBack, ivEditBack;
@@ -85,7 +88,7 @@ public class FlashcardActivity extends AppCompatActivity {
         userId = getSharedPreferences("user_prefs", MODE_PRIVATE).getLong("userId", -1);
 
         ImageButton btnBack = findViewById(R.id.btn_back);
-        btnBack.setOnClickListener(v -> finish());
+        btnBack.setOnClickListener(v -> ActivityTransitionManager.finishWithTransition(this, ActivityTransitionManager.TRANSITION_SLIDE));
 
         Intent intent = getIntent();
         vocabularyList = (List<Vocabulary>) intent.getSerializableExtra("VOCAB_LIST");
@@ -93,7 +96,7 @@ public class FlashcardActivity extends AppCompatActivity {
 
         if (vocabularyList == null || vocabularyList.isEmpty()) {
             Toast.makeText(this, "Không có từ vựng để ôn tập!", Toast.LENGTH_SHORT).show();
-            finish();
+            ActivityTransitionManager.finishWithTransition(this, ActivityTransitionManager.TRANSITION_SLIDE);
             return;
         }
 
@@ -143,6 +146,13 @@ public class FlashcardActivity extends AppCompatActivity {
                 resetCardState();
             }
             return true;
+        });
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true /* enabled */) {
+            @Override
+            public void handleOnBackPressed() {
+                ActivityTransitionManager.finishWithTransition(FlashcardActivity.this, ActivityTransitionManager.TRANSITION_SLIDE);
+            }
         });
     }
 
@@ -209,13 +219,14 @@ public class FlashcardActivity extends AppCompatActivity {
                 Intent editIntent = new Intent(FlashcardActivity.this, AddEditVocabularyActivity.class);
                 editIntent.putExtra("VOCAB_ID", currentVocab.getId());
                 editIntent.putExtra("CATEGORY_ID", currentCategoryId);
+                ActivityTransitionManager.startActivityWithTransition(this, editIntent, ActivityTransitionManager.TRANSITION_SLIDE);
                 startActivityForResult(editIntent, REQUEST_CODE_EDIT_VOCABULARY);
             };
             ivEditFront.setOnClickListener(editClickListener);
             ivEditBack.setOnClickListener(editClickListener);
         } else {
             Toast.makeText(this, "Bạn đã hoàn thành ôn tập!", Toast.LENGTH_SHORT).show();
-            finish();
+            ActivityTransitionManager.finishWithTransition(this, ActivityTransitionManager.TRANSITION_SLIDE);
         }
     }
 
@@ -259,7 +270,7 @@ public class FlashcardActivity extends AppCompatActivity {
             showCurrentCard();
         } else {
             Toast.makeText(this, "Bạn đã hoàn thành ôn tập!", Toast.LENGTH_SHORT).show();
-            finish();
+            ActivityTransitionManager.finishWithTransition(this, ActivityTransitionManager.TRANSITION_SLIDE);
         }
     }
 
@@ -333,7 +344,7 @@ public class FlashcardActivity extends AppCompatActivity {
                 showCurrentCard();
             } else {
                 Toast.makeText(this, "Bạn đã hoàn thành ôn tập!", Toast.LENGTH_SHORT).show();
-                finish();
+                ActivityTransitionManager.finishWithTransition(this, ActivityTransitionManager.TRANSITION_SLIDE);
             }
         }
     }

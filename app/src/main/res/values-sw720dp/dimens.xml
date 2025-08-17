@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Kích thước cho màn hình tablet lớn (720dp và lớn hơn) -->
+    <dimen name="activity_horizontal_margin">32dp</dimen>
+    <dimen name="activity_vertical_margin">32dp</dimen>
+    <dimen name="fab_margin">32dp</dimen>
+    <dimen name="app_bar_height">280dp</dimen>
+    <dimen name="text_margin">32dp</dimen>
+
+    <!-- Material spacing scale -->
+    <dimen name="spacing_small">16dp</dimen>
+    <dimen name="spacing_medium">32dp</dimen>
+    <dimen name="spacing_large">48dp</dimen>
+    <dimen name="spacing_extra_large">64dp</dimen>
+    
+    <!-- Kích thước text -->
+    <dimen name="text_size_small">18sp</dimen>
+    <dimen name="text_size_medium">22sp</dimen>
+    <dimen name="text_size_large">26sp</dimen>
+    <dimen name="text_size_extra_large">32sp</dimen>
+</resources>

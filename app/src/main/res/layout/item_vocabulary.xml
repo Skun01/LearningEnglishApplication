@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/spacing_small"
-    app:cardElevation="2dp"
-    app:cardCornerRadius="8dp">
+    style="@style/ModernCard"
+    android:clickable="true"
+    android:focusable="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,24 +27,29 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Word"
-                android:textSize="18sp"
-                android:textColor="@color/text_color_primary"
-                android:textStyle="bold"/>
+                style="@style/CardTitle"
+                tools:text="Vocabulary"/>
 
             <TextView
                 android:id="@+id/tv_meaning"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Meaning"
-                android:textSize="14sp"
-                android:textColor="@color/text_color_secondary"
-                android:layout_marginTop="@dimen/spacing_small"/>
+                style="@style/CardSubtitle"
+                android:layout_marginTop="@dimen/spacing_small"
+                tools:text="Từ vựng"/>
         </LinearLayout>
 
         <ImageView
             android:id="@+id/iv_favorite"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_favorite_border" />
+            android:src="@drawable/ic_favorite_border"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="2dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:tint="?attr/colorPrimary"
+            android:contentDescription="Yêu thích" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

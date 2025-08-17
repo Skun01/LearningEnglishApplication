@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/spacing_small"
-    app:cardElevation="2dp"
-    app:cardCornerRadius="8dp">
+    style="@style/ModernCard"
+    android:clickable="true"
+    android:focusable="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,44 +20,65 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tên Thể Loại"
-            android:textSize="18sp"
-            android:textColor="@color/text_color_primary"
-            android:textStyle="bold"/>
+            style="@style/CardTitle"
+            tools:text="Từ vựng về động vật"/>
 
         <TextView
             android:id="@+id/description_vocabulary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Miêu tả"
-            android:textSize="14sp"
-            android:textColor="@color/text_color_secondary"
-            android:layout_marginTop="@dimen/spacing_small"/>
+            style="@style/CardSubtitle"
+            android:layout_marginTop="@dimen/spacing_small"
+            tools:text="Các từ vựng về động vật hoang dã và thú cưng"/>
 
         <TextView
             android:id="@+id/tv_word_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Số từ: 20"
-            android:textSize="14sp"
-            android:textColor="@color/text_color_secondary"
-            android:layout_marginTop="@dimen/spacing_small"/>
+            style="@style/CardSubtitle"
+            android:layout_marginTop="@dimen/spacing_small"
+            tools:text="Số từ: 42"/>
 
-        <ProgressBar
-            android:id="@+id/progress_category"
-            style="?android:attr/progressBarStyleHorizontal"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:layout_marginTop="6dp"
-            android:max="100" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/spacing_small">
+            
+            <ProgressBar
+                android:id="@+id/progress_category"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="8dp"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:progressTint="?attr/colorPrimary"
+                android:progressBackgroundTint="?attr/colorSurfaceVariant"
+                android:max="100"
+                tools:progress="65" />
 
-        <TextView
-            android:id="@+id/tv_progress_percent"
+            <TextView
+                android:id="@+id/tv_progress_percent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0%"
+                android:textSize="14sp"
+                android:layout_marginStart="@dimen/spacing_small"
+                android:textColor="?attr/colorPrimary"
+                android:textStyle="bold"
+                tools:text="65%"/>
+        </LinearLayout>
+        
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_start_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0%"
-            android:textSize="12sp"
+            android:text="Học ngay"
+            android:layout_gravity="end"
             android:layout_marginTop="@dimen/spacing_small"
-            android:textColor="@color/text_color_secondary"/>
+            style="@style/TextButton"/>
 
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

@@ -11,4 +11,10 @@
     <dimen name="spacing_medium">16dp</dimen>
     <dimen name="spacing_large">24dp</dimen>
     <dimen name="spacing_extra_large">32dp</dimen>
+    
+    <!-- Kích thước text -->
+    <dimen name="text_size_small">14sp</dimen>
+    <dimen name="text_size_medium">16sp</dimen>
+    <dimen name="text_size_large">18sp</dimen>
+    <dimen name="text_size_extra_large">24sp</dimen>
 </resources>

@@ -34,6 +34,7 @@ import com.example.learningenglishapplication.Data.DatabaseHelper;
 import com.example.learningenglishapplication.Data.DataHelper.VocabularyDataHelper;
 import com.example.learningenglishapplication.R;
 import com.example.learningenglishapplication.Data.model.Vocabulary;
+import com.example.learningenglishapplication.Utils.ActivityTransitionManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class VocabularyListActivity extends AppCompatActivity implements VocabularyAdapter.OnItemInteractionListener, VocabularyAdapter.OnFavoriteClickListener {
@@ -106,7 +107,7 @@ public class VocabularyListActivity extends AppCompatActivity implements Vocabul
             } else {
                 Intent flashcardIntent = new Intent(VocabularyListActivity.this, FlashcardActivity.class);
                 flashcardIntent.putExtra("VOCAB_LIST", (Serializable) vocabList);
-                startActivity(flashcardIntent);
+                ActivityTransitionManager.startActivityWithTransition(this, flashcardIntent, ActivityTransitionManager.TRANSITION_ZOOM);
             }
         });
 
@@ -231,7 +232,7 @@ public class VocabularyListActivity extends AppCompatActivity implements Vocabul
     public void onItemClick(long vocabId) {
         Intent intent = new Intent(VocabularyListActivity.this, VocabularyDetailActivity.class);
         intent.putExtra("VOCAB_ID", vocabId);
-        startActivity(intent);
+        ActivityTransitionManager.startActivityWithTransition(this, intent, ActivityTransitionManager.TRANSITION_FADE);
     }
 
     @Override
@@ -244,7 +245,7 @@ public class VocabularyListActivity extends AppCompatActivity implements Vocabul
                 Intent intent = new Intent(VocabularyListActivity.this, AddEditVocabularyActivity.class);
                 intent.putExtra("VOCAB_ID", vocabId);
                 intent.putExtra("CATEGORY_ID", categoryId);
-                startActivity(intent);
+                ActivityTransitionManager.startActivityWithTransition(this, intent, ActivityTransitionManager.TRANSITION_SLIDE);
             } else if (options[item].equals("Xóa")) {
                 showDeleteConfirmationDialog(vocabId, word);
             } else if (options[item].equals("Đánh dấu đã học")) {
@@ -289,7 +290,7 @@ public class VocabularyListActivity extends AppCompatActivity implements Vocabul
                 Intent intent = new Intent(VocabularyListActivity.this, AddEditVocabularyActivity.class);
                 intent.putExtra("VOCAB_ID", vocabId);
                 intent.putExtra("CATEGORY_ID", categoryId);
-                startActivity(intent);
+                ActivityTransitionManager.startActivityWithTransition(VocabularyListActivity.this, intent, ActivityTransitionManager.TRANSITION_SLIDE);
             }
             adapter.notifyItemChanged(position);
         }
@@ -363,9 +364,14 @@ public class VocabularyListActivity extends AppCompatActivity implements Vocabul
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            finish();
+            ActivityTransitionManager.finishWithTransition(this, ActivityTransitionManager.TRANSITION_SLIDE);
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    
+    @Override
+    public void onBackPressed() {
+        ActivityTransitionManager.finishWithTransition(this, ActivityTransitionManager.TRANSITION_SLIDE);
     }
 }

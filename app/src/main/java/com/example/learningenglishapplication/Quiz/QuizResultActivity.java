@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.learningenglishapplication.Home.HomeActivity;
 import com.example.learningenglishapplication.R;
+import com.example.learningenglishapplication.Utils.ActivityTransitionManager;
 
 public class QuizResultActivity extends AppCompatActivity {
 
@@ -34,15 +35,20 @@ public class QuizResultActivity extends AppCompatActivity {
 
         btnRetryQuiz.setOnClickListener(v -> {
             // Quay lại màn hình thiết lập Quiz
-            finish(); // Chỉ cần đóng màn hình kết quả
+            ActivityTransitionManager.finishWithTransition(this, ActivityTransitionManager.TRANSITION_SLIDE);
         });
 
         btnBackToHome.setOnClickListener(v -> {
             Intent intent = new Intent(this, HomeActivity.class);
             // Xóa hết các activity cũ trên stack và tạo HomeActivity mới
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish();
+            ActivityTransitionManager.startActivityWithTransition(this, intent, ActivityTransitionManager.TRANSITION_FADE);
+            ActivityTransitionManager.finishWithTransition(this, ActivityTransitionManager.TRANSITION_FADE);
         });
     }
+    
+    @Override
+     public void onBackPressed() {
+         ActivityTransitionManager.finishWithTransition(this, ActivityTransitionManager.TRANSITION_SLIDE);
+     }
 }
