@@ -3,4 +3,11 @@
     <string name="category_progress_label">%1$d/%2$d từ</string>
     <string name="category_progress_percent">%1$d%%</string>
 
+    <string name="score_format">Score: %1$d/%2$d</string>
+    <string name="final_score_format">Completed! Score: %1$d/%2$d</string>
+    <string name="correct">Correct!</string>
+    <string name="incorrect">Incorrect!</string>
+    <string name="correct_answer">Correct answer: %1$s</string>
+    <string name="question_counter_format">Question %1$d/%2$d</string>
+
 </resources>

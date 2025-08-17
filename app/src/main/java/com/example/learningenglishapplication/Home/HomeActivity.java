@@ -99,6 +99,7 @@ public class HomeActivity extends AppCompatActivity implements CategoryAdapter.O
             startActivity(intent);
         });
 
+
         // RecyclerView
         recyclerView = findViewById(R.id.rv_home_categories);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
