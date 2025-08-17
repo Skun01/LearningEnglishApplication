@@ -68,8 +68,27 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="@dimen/spacing_small">
-            <RadioButton android:id="@+id/rb_multiple_choice" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Trắc nghiệm (chọn nghĩa)" android:checked="true"/>
-            <RadioButton android:id="@+id/rb_fill_in_blank" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Điền từ (chọn từ)"/>
+            <RadioButton
+                android:id="@+id/rb_quiz"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kiểm tra (trắc nghiệm)"
+                android:checked="true" />
+            <RadioButton
+                android:id="@+id/rb_learn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Học (trắc nghiệm)" />
+            <RadioButton
+                android:id="@+id/rb_match"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ghép nghĩa" />
+            <RadioButton
+                android:id="@+id/rb_test"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Điền từ" />
         </RadioGroup>
 
         <View

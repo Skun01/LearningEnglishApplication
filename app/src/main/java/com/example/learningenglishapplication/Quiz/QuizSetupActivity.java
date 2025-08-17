@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -16,6 +17,9 @@ import com.example.learningenglishapplication.Data.DataHelper.VocabularyDataHelp
 import com.example.learningenglishapplication.Data.DatabaseHelper;
 import com.example.learningenglishapplication.Data.model.Vocabulary;
 import com.example.learningenglishapplication.R;
+import com.example.learningenglishapplication.Quiz.LearnModeActivity;
+import com.example.learningenglishapplication.Quiz.MatchModeActivity;
+import com.example.learningenglishapplication.Quiz.TestModeActivity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,6 +32,7 @@ public class QuizSetupActivity extends AppCompatActivity {
     private Spinner spinnerCategory;
     private EditText etNumberOfQuestions;
     private Button btnStartQuiz;
+    private RadioGroup rgQuizType;
     private DatabaseHelper databaseHelper;
     private VocabularyDataHelper vocabularyDataHelper; // Sửa tên lớp
     private CategoryDataHelper categoryDataHelper; // Sửa tên lớp
@@ -52,6 +57,7 @@ public class QuizSetupActivity extends AppCompatActivity {
         spinnerCategory = findViewById(R.id.spinner_quiz_category);
         etNumberOfQuestions = findViewById(R.id.et_number_of_questions);
         btnStartQuiz = findViewById(R.id.btn_start_quiz);
+        rgQuizType = findViewById(R.id.rg_quiz_type);
 
         loadCategoriesIntoSpinner();
 
@@ -113,9 +119,23 @@ public class QuizSetupActivity extends AppCompatActivity {
         Collections.shuffle(allVocabs);
         List<Vocabulary> quizQuestions = new ArrayList<>(allVocabs.subList(0, numberOfQuestions));
 
-        Intent intent = new Intent(this, QuizActivity.class);
+        Class<?> target;
+        int selectedType = rgQuizType.getCheckedRadioButtonId();
+        if (selectedType == R.id.rb_learn) {
+            target = LearnModeActivity.class;
+        } else if (selectedType == R.id.rb_match) {
+            target = MatchModeActivity.class;
+        } else if (selectedType == R.id.rb_test) {
+            target = TestModeActivity.class;
+        } else {
+            target = QuizActivity.class;
+        }
+
+        Intent intent = new Intent(this, target);
         intent.putExtra("QUIZ_QUESTIONS", (Serializable) quizQuestions);
-        intent.putExtra("ALL_VOCABS", (Serializable) allVocabs);
+        if (target == QuizActivity.class) {
+            intent.putExtra("ALL_VOCABS", (Serializable) allVocabs);
+        }
         startActivity(intent);
     }
 }

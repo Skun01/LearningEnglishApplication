@@ -307,6 +307,43 @@ public class VocabularyDataHelper {
     }
 
     /**
+     * Lấy danh sách từ vựng cho một người dùng.
+     * Nếu favoritesOnly = true thì chỉ lấy các từ được đánh dấu yêu thích.
+     */
+    public List<Vocabulary> getVocabulariesForUser(long userId, boolean favoritesOnly) {
+        List<Vocabulary> vocabularyList = new ArrayList<>();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String selection = DatabaseHelper.COLUMN_VOCAB_USER_ID + "=?";
+        if (favoritesOnly) {
+            selection += " AND " + DatabaseHelper.COLUMN_VOCAB_IS_FAVORITE + "=1";
+        }
+        Cursor cursor = db.query(DatabaseHelper.TABLE_VOCABULARIES, null, selection,
+                new String[]{String.valueOf(userId)}, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                long id = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_ID));
+                String word = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_WORD));
+                String meaning = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_MEANING));
+                String pronunciation = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_PRONUNCIATION));
+                int isFavorite = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_IS_FAVORITE));
+                int learned = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_LEARNED));
+                String dateLearned = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_DATE_LEARNED));
+                String imageUri = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_IMAGE_URI));
+                String audioUri = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_AUDIO_URI));
+                int box = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_BOX));
+                long nextReview = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_NEXT_REVIEW));
+
+                vocabularyList.add(new Vocabulary(id, word, meaning, pronunciation, isFavorite, learned, dateLearned,
+                        imageUri, audioUri, box, nextReview));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return vocabularyList;
+    }
+
+    /**
      * Tìm kiếm từ vựng theo từ khóa cho một người dùng.
      * Tìm trong cả cột 'word' và 'meaning'.
      */
