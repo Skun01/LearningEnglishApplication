@@ -15,7 +15,14 @@
         android:textSize="18sp"
         android:textColor="@color/text_color_primary"
         android:textStyle="bold"/>
-
+    <TextView
+        android:id="@+id/description_vocabulary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Miêu tả"
+        android:textSize="14sp"
+        android:textColor="@color/text_color_secondary"
+        android:layout_marginTop="4dp"/>
     <TextView
         android:id="@+id/tv_word_count"
         android:layout_width="wrap_content"
@@ -24,4 +31,24 @@
         android:textSize="14sp"
         android:textColor="@color/text_color_secondary"
         android:layout_marginTop="4dp"/>
+    <!-- Thanh tiến độ học từ -->
+    <ProgressBar
+        android:id="@+id/progress_category"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_marginTop="6dp"
+        android:max="100" />
+
+    <!-- Nhãn phần trăm (tuỳ chọn) -->
+    <TextView
+        android:id="@+id/tv_progress_percent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0%"
+        android:textSize="12sp"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/text_color_secondary"/>
+
+
 </LinearLayout>

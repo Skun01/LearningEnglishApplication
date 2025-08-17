@@ -5,10 +5,12 @@ import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.learningenglishapplication.Data.DataHelper.VocabularyDataHelper;
 import com.example.learningenglishapplication.Data.DatabaseHelper;
 import com.example.learningenglishapplication.R;
 
@@ -16,6 +18,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     private Context mContext;
     private Cursor mCursor;
+    private final VocabularyDataHelper vocabularyDataHelper;
 
     private OnItemClickListener listener;
 
@@ -31,16 +34,24 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     public CategoryAdapter(Context context, Cursor cursor) {
         mContext = context;
         mCursor = cursor;
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
+        vocabularyDataHelper = new VocabularyDataHelper(dbHelper);
     }
 
     public static class CategoryViewHolder extends RecyclerView.ViewHolder {
         public TextView nameTextView;
+        public TextView descriptionTextView;
         public TextView countTextView; // Bạn có thể thêm logic để đếm số từ sau
+        public ProgressBar progressBar;
+        public TextView progressPercentTextView;
 
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.tv_category_name);
+            descriptionTextView=itemView.findViewById(R.id.description_vocabulary);
             countTextView = itemView.findViewById(R.id.tv_word_count);
+            progressBar = itemView.findViewById(R.id.progress_category);
+            progressPercentTextView = itemView.findViewById(R.id.tv_progress_percent);
         }
     }
 
@@ -63,7 +74,32 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         long id = mCursor.getLong(mCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_CAT_ID));
 
         holder.nameTextView.setText(name);
-        holder.countTextView.setText(description);
+        holder.descriptionTextView.setText(description);
+        int learnedVocabulary=vocabularyDataHelper.countLearnedVocabularies(id);
+        int notLearnedVoc=vocabularyDataHelper.countUnlearnedVocabularies(id);
+        int total = learnedVocabulary + notLearnedVoc;
+        holder.countTextView.setText(
+                mContext.getString(R.string.category_progress_label, learnedVocabulary, total)
+        );
+
+// Set thanh tiến độ
+        if (total > 0) {
+            holder.progressBar.setMax(total);
+            holder.progressBar.setProgress(learnedVocabulary);
+
+            int percent = Math.round(learnedVocabulary * 100f / total);
+            holder.progressPercentTextView.setText(
+                    mContext.getString(R.string.category_progress_percent, percent)
+            );
+        } else {
+            holder.progressBar.setMax(1);
+            holder.progressBar.setProgress(0);
+            holder.progressPercentTextView.setText(
+                    mContext.getString(R.string.category_progress_percent, 0)
+            );
+        }
+//        String res=learnedVocabulary+"/"+(learnedVocabulary+notLearnedVoc)+" số từ đã học";
+//        holder.countTextView.setText(res);
 
         // Sự kiện click ngắn (giữ nguyên)
         holder.itemView.setOnClickListener(v -> {
