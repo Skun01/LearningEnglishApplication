@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "VocabularyApp.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     // ----- BẢNG USERS -----
     public static final String TABLE_USERS = "users";
@@ -48,6 +48,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_VOCAB_IS_FAVORITE = "is_favorite";
     public static final String COLUMN_VOCAB_LEARNED = "learned";
     public static final String COLUMN_VOCAB_DATE_LEARNED = "date_learned";
+    public static final String COLUMN_VOCAB_IMAGE_URI = "image_uri";
+    public static final String COLUMN_VOCAB_AUDIO_URI = "audio_uri";
+    public static final String COLUMN_VOCAB_BOX = "box";
+    public static final String COLUMN_VOCAB_NEXT_REVIEW = "next_review";
 
     private static final String CREATE_TABLE_VOCABULARIES = "CREATE TABLE " + TABLE_VOCABULARIES + "("
             + COLUMN_VOCAB_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -56,9 +60,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + COLUMN_VOCAB_WORD + " TEXT NOT NULL,"
             + COLUMN_VOCAB_MEANING + " TEXT,"
             + COLUMN_VOCAB_PRONUNCIATION + " TEXT,"
-            + COLUMN_VOCAB_IS_FAVORITE + " INTEGER DEFAULT 0,"
-            + COLUMN_VOCAB_LEARNED + " INTEGER DEFAULT 0,"
-            + COLUMN_VOCAB_DATE_LEARNED + " TEXT,"
+            + COLUMN_VOCAB_IS_FAVORITE + " INTEGER DEFAULT 0," 
+            + COLUMN_VOCAB_LEARNED + " INTEGER DEFAULT 0," 
+            + COLUMN_VOCAB_DATE_LEARNED + " TEXT," 
+            + COLUMN_VOCAB_IMAGE_URI + " TEXT," 
+            + COLUMN_VOCAB_AUDIO_URI + " TEXT," 
+            + COLUMN_VOCAB_BOX + " INTEGER DEFAULT 1," 
+            + COLUMN_VOCAB_NEXT_REVIEW + " INTEGER," 
             + "FOREIGN KEY(" + COLUMN_VOCAB_USER_ID + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_USER_ID + "),"
             + "FOREIGN KEY(" + COLUMN_VOCAB_CATEGORY_ID + ") REFERENCES " + TABLE_CATEGORIES + "(" + COLUMN_CAT_ID + ")" + ")";
 

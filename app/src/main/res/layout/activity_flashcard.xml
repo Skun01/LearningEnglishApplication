@@ -60,6 +60,23 @@
                     android:textSize="20sp"
                     android:textColor="@color/text_color_secondary"
                     android:layout_marginTop="@dimen/spacing_small" />
+
+                <ImageButton
+                    android:id="@+id/btn_play_audio"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="@dimen/spacing_small"
+                    android:src="@drawable/ic_volume_up"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Phát âm" />
+
+                <ImageView
+                    android:id="@+id/iv_flashcard_image"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="@dimen/spacing_small"
+                    android:visibility="gone"
+                    android:scaleType="centerCrop" />
             </LinearLayout>
 
             <LinearLayout
@@ -168,5 +185,37 @@
             android:text="Hoàn thành"
             android:visibility="gone"
             android:layout_marginTop="@dimen/spacing_medium" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_confidence_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/spacing_medium"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btn_again"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Again" />
+
+        <Button
+            android:id="@+id/btn_good"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/spacing_small"
+            android:text="Good" />
+
+        <Button
+            android:id="@+id/btn_easy"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/spacing_small"
+            android:text="Easy" />
     </LinearLayout>
 </LinearLayout>
