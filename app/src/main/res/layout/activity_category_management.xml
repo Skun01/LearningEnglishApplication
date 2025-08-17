@@ -8,15 +8,13 @@
     android:background="@color/background_color"
     tools:context=".category.CategoryManagementActivity">
 
-    <!-- THAY THẾ THANH TIÊU ĐỀ CŨ BẰNG TOOLBAR NÀY -->
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar_category"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
+        android:background="?attr/colorPrimary"
         app:title="Thể Loại Từ Vựng"
-        app:titleTextColor="@color/white"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+        app:titleTextColor="@color/white"/>
 
     <!-- Danh sách thể loại (Giữ nguyên) -->
     <androidx.recyclerview.widget.RecyclerView
@@ -24,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="8dp"/>
+        android:padding="@dimen/spacing_small"/>
 
     <!-- Nút thêm thể loại mới (Giữ nguyên) -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -32,8 +30,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/spacing_medium"
         android:src="@android:drawable/ic_input_add"
-        app:backgroundTint="@color/colorAccent"/>
+        app:backgroundTint="?attr/colorSecondary"/>
 
 </LinearLayout>

@@ -1,20 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
-
     <!-- Style cho LinearLayout bên trong thẻ chức năng -->
     <style name="FeatureCard">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">vertical</item>
         <item name="android:gravity">center</item>
-        <item name="android:padding">16dp</item>
+        <item name="android:padding">@dimen/spacing_medium</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
         <item name="android:background">?android:attr/selectableItemBackground</item>
@@ -24,15 +16,15 @@
     <style name="FeatureIcon">
         <item name="android:layout_width">40dp</item>
         <item name="android:layout_height">40dp</item>
-        <item name="android:layout_marginBottom">8dp</item>
-        <item name="android:tint">@color/colorPrimary</item>
+        <item name="android:layout_marginBottom">@dimen/spacing_small</item>
+        <item name="android:tint">?attr/colorPrimary</item>
     </style>
 
     <!-- Style cho Tiêu đề trong thẻ chức năng -->
     <style name="FeatureTitle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/text_color_primary</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
         <item name="android:textSize">14sp</item>
     </style>
 

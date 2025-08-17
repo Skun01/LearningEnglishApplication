@@ -7,7 +7,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import com.google.android.material.appbar.MaterialToolbar;
 
 import com.example.learningenglishapplication.Data.DatabaseHelper;
 import com.example.learningenglishapplication.Data.DataHelper.VocabularyDataHelper; // SỬA: Sử dụng VocabularyDataHelper
@@ -26,7 +26,7 @@ public class VocabularyDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_vocabulary_detail);
 
         // Ánh xạ và thiết lập Toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar_detail);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar_detail);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

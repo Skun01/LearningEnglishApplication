@@ -21,7 +21,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
+import com.google.android.material.appbar.MaterialToolbar;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -72,7 +72,7 @@ public class VocabularyListActivity extends AppCompatActivity implements Vocabul
             return;
         }
 
-        Toolbar toolbar = findViewById(R.id.toolbar_vocabulary_list);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar_vocabulary_list);
         setSupportActionBar(toolbar);
 
         if (getSupportActionBar() != null) {

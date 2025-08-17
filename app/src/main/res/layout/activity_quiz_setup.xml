@@ -12,8 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Tạo Bài Kiểm Tra"
-        android:padding="16dp"
-        android:background="@color/colorPrimary"
+        android:padding="@dimen/spacing_medium"
+        android:background="?attr/colorPrimary"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="@dimen/spacing_medium">
 
         <!-- Chọn thể loại -->
         <TextView
@@ -36,14 +36,14 @@
             android:id="@+id/spinner_quiz_category"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginTop="@dimen/spacing_small"/>
 
         <!-- Số lượng câu hỏi -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Số lượng câu hỏi"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/spacing_medium"
             android:textColor="@color/text_color_primary"
             android:textSize="16sp"/>
         <EditText
@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/spacing_small"
             android:hint="Ví dụ: 20"/>
 
         <!-- Dạng bài tập -->
@@ -59,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Dạng bài tập"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/spacing_medium"
             android:textColor="@color/text_color_primary"
             android:textSize="16sp"/>
         <RadioGroup
@@ -67,7 +67,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="@dimen/spacing_small">
             <RadioButton android:id="@+id/rb_multiple_choice" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Trắc nghiệm (chọn nghĩa)" android:checked="true"/>
             <RadioButton android:id="@+id/rb_fill_in_blank" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Điền từ (chọn từ)"/>
         </RadioGroup>
@@ -83,9 +83,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:text="Bắt đầu"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="@dimen/spacing_extra_large"
             android:padding="12dp"
-            android:backgroundTint="@color/colorAccent"
+            android:backgroundTint="?attr/colorSecondary"
             android:textColor="@color/white"/>
     </LinearLayout>
 </LinearLayout>
