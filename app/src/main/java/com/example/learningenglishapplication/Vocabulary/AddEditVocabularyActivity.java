@@ -10,7 +10,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import com.google.android.material.appbar.MaterialToolbar;
 
 import com.example.learningenglishapplication.Data.DataHelper.StatisticsDataHelper;
 import com.example.learningenglishapplication.Data.DataHelper.VocabularyDataHelper;
@@ -48,7 +48,7 @@ public class AddEditVocabularyActivity extends AppCompatActivity {
         btnSave = findViewById(R.id.btn_save_vocabulary);
 
         // Cài đặt Toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar_add_edit_vocabulary);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar_add_edit_vocabulary);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

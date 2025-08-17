@@ -7,19 +7,18 @@
     android:orientation="vertical"
     tools:context=".Vocabulary.VocabularyDetailActivity">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar_detail"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        app:titleTextColor="@color/white"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+        android:background="?attr/colorPrimary"
+        app:titleTextColor="@color/white" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="16dp"
+        android:padding="@dimen/spacing_medium"
         android:gravity="center_horizontal">
 
         <TextView
@@ -30,7 +29,7 @@
             android:textSize="32sp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:layout_marginTop="32dp"/>
+            android:layout_marginTop="@dimen/spacing_extra_large"/>
 
         <TextView
             android:id="@+id/tv_detail_pronunciation"
@@ -39,7 +38,7 @@
             android:text="[prəˌnʌnsiˈeɪʃən]"
             android:textSize="20sp"
             android:textColor="@android:color/darker_gray"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginTop="@dimen/spacing_small"/>
 
         <TextView
             android:id="@+id/tv_detail_meaning"
@@ -48,7 +47,7 @@
             android:text="Nghĩa của từ vựng"
             android:textSize="24sp"
             android:textColor="@color/black"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/spacing_medium"
             android:gravity="center"/>
     </LinearLayout>
 

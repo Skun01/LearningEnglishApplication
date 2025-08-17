@@ -8,30 +8,29 @@
     android:background="@color/background_color"
     tools:context=".Vocabulary.VocabularyListActivity">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar_vocabulary_list"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        app:titleTextColor="@color/white"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:background="?attr/colorPrimary"
+        app:titleTextColor="@color/white">
 
         <ImageView
             android:id="@+id/btn_filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="@dimen/spacing_medium"
             android:src="@drawable/ic_filter_list"
             android:contentDescription="Lọc danh sách" />
 
-    </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.MaterialToolbar>
 
     <TextView
         android:id="@+id/tv_vocabulary_count"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
+        android:padding="@dimen/spacing_small"
         android:background="@color/divider_color"
         android:textColor="@color/text_color_primary"
         android:textSize="16sp"
@@ -43,9 +42,9 @@
         android:id="@+id/btn_start_flashcard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/spacing_medium"
         android:text="Ôn Tập Flashcard"
-        android:backgroundTint="@color/colorAccent"
+        android:backgroundTint="?attr/colorSecondary"
         android:textColor="@color/white" />
 
     <TextView
@@ -54,7 +53,7 @@
         android:layout_height="wrap_content"
         android:text="Hãy thêm từ mới"
         android:layout_gravity="center"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="@dimen/spacing_extra_large"
         android:textSize="18sp"
         android:textColor="@android:color/black"
         android:visibility="gone" />
@@ -64,15 +63,15 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="8dp" />
+        android:padding="@dimen/spacing_small" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_vocabulary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/spacing_medium"
         android:src="@android:drawable/ic_input_add"
-        app:backgroundTint="@color/colorAccent" />
+        app:backgroundTint="?attr/colorSecondary" />
 
 </LinearLayout>

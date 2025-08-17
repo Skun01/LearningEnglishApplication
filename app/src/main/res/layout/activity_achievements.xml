@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#FFFFFF"
-    android:padding="16dp">
+    android:padding="@dimen/spacing_medium">
 
     <TextView
         android:layout_width="match_parent"
@@ -13,7 +13,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         android:gravity="center"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="@dimen/spacing_medium" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_achievements"

@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import com.google.android.material.appbar.MaterialToolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,7 +31,7 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search_export);
 
         // --- Thiết lập Toolbar ---
-        Toolbar toolbar = findViewById(R.id.toolbar_search);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar_search);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Tìm kiếm Từ vựng");
