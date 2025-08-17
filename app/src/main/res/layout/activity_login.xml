@@ -1,99 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
-    android:padding="@dimen/spacing_large"
     android:background="@color/background_color"
     tools:context=".Auth.LoginActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Chào mừng trở lại!"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:textColor="?attr/colorPrimary"/>
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar_login"
+        style="@style/Widget.Learning.Toolbar"
+        app:title="Đăng Nhập" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Đăng nhập để tiếp tục"
-        android:textSize="16sp"
-        android:layout_marginTop="@dimen/spacing_small"
-        android:textColor="@color/text_color_secondary"/>
-
-    <!-- Form đăng nhập -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="48dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Email"
-            android:textColor="@color/text_color_primary"/>
-
-        <EditText
-            android:id="@+id/et_login_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_small"
-            android:hint="nhapemail@gmail.com"
-            android:inputType="textEmailAddress"
-            android:background="@drawable/item_background"
-            android:padding="12dp"/>
+        android:padding="@dimen/spacing_large">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mật khẩu"
-            android:layout_marginTop="@dimen/spacing_medium"
-            android:textColor="@color/text_color_primary"/>
-
-        <EditText
-            android:id="@+id/et_login_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_small"
-            android:hint="Nhập mật khẩu của bạn"
-            android:inputType="textPassword"
-            android:background="@drawable/item_background"
-            android:padding="12dp"/>
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btn_login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_extra_large"
-        android:text="Đăng Nhập"
-        android:padding="12dp"
-        android:backgroundTint="?attr/colorPrimary"
-        android:textColor="@color/white"/>
-
-    <!-- Link sang màn hình đăng ký -->
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/spacing_large">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Chưa có tài khoản? "
-            android:textColor="@color/text_color_secondary"/>
-
-        <TextView
-            android:id="@+id/tv_go_to_register"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Đăng ký ngay"
+            android:text="Chào mừng trở lại!"
+            android:textSize="28sp"
             android:textStyle="bold"
-            android:textColor="?attr/colorSecondary"/>
+            android:textColor="?attr/colorPrimary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đăng nhập để tiếp tục"
+            android:textSize="16sp"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:textColor="@color/text_color_secondary" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Learning.TextField"
+            android:layout_marginTop="@dimen/spacing_extra_large">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_login_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="nhapemail@gmail.com"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Learning.TextField"
+            android:layout_marginTop="@dimen/spacing_medium">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_login_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nhập mật khẩu của bạn"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_login"
+            style="@style/Widget.Learning.Button"
+            android:layout_marginTop="@dimen/spacing_extra_large"
+            android:text="Đăng Nhập" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/spacing_large"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chưa có tài khoản? "
+                android:textColor="@color/text_color_secondary" />
+
+            <TextView
+                android:id="@+id/tv_go_to_register"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đăng ký ngay"
+                android:textStyle="bold"
+                android:textColor="?attr/colorSecondary" />
+        </LinearLayout>
     </LinearLayout>
+
 </LinearLayout>
+

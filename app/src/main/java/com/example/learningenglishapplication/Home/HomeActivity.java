@@ -20,6 +20,7 @@ import com.example.learningenglishapplication.R;
 import com.example.learningenglishapplication.Vocabulary.VocabularyListActivity;
 import com.example.learningenglishapplication.category.CategoryAdapter;
 import com.example.learningenglishapplication.category.CategoryManagementActivity;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.Random;
@@ -36,6 +37,7 @@ public class HomeActivity extends AppCompatActivity implements CategoryAdapter.O
     private TextView quoteTextView;
     private TextView tvLoiChao, tvTenNguoiDung;
     private ImageView ivAvatar;
+    private MaterialToolbar topAppBar;
 
     private final String[][] quotes = {
             {"Achieve", "Đạt được"},
@@ -66,6 +68,8 @@ public class HomeActivity extends AppCompatActivity implements CategoryAdapter.O
         setContentView(R.layout.activity_home);
 
         // Ánh xạ view
+        topAppBar = findViewById(R.id.top_app_bar);
+        setSupportActionBar(topAppBar);
         tvLoiChao = findViewById(R.id.tv_loi_chao);
         tvTenNguoiDung = findViewById(R.id.tv_ten_nguoi_dung);
         ivAvatar = findViewById(R.id.nut_ho_so);
