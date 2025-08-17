@@ -36,6 +36,9 @@
         <activity android:name=".Profile.ProfileSettingsActivity" />
         <activity android:name=".Vocabulary.VocabularyDetailActivity" />
         <activity android:name=".Achivements.AchievementsActivity" />
+        <activity android:name=".Game.LearnActivity" />
+        <activity android:name=".Game.MatchActivity" />
+        <activity android:name=".Game.TestActivity" />
     </application>
 
 </manifest>

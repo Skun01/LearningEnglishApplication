@@ -113,6 +113,46 @@
                 android:clickable="true"
                 android:focusable="true" />
 
+            <!-- Chế độ luyện tập -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chế độ học"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginBottom="@dimen/spacing_small" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginBottom="@dimen/spacing_large">
+
+                <Button
+                    android:id="@+id/btn_learn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Learn" />
+
+                <Button
+                    android:id="@+id/btn_match"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:text="Match" />
+
+                <Button
+                    android:id="@+id/btn_test"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:text="Test" />
+            </LinearLayout>
+
             <!-- Học phần -->
             <TextView
                 android:layout_width="wrap_content"

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,6 +17,9 @@ import com.example.learningenglishapplication.Data.DataHelper.CategoryDataHelper
 import com.example.learningenglishapplication.Data.DataHelper.UserDataHelper;
 import com.example.learningenglishapplication.Profile.ProfileSettingsActivity;
 import com.example.learningenglishapplication.Quiz.QuizSetupActivity;
+import com.example.learningenglishapplication.Game.LearnActivity;
+import com.example.learningenglishapplication.Game.MatchActivity;
+import com.example.learningenglishapplication.Game.TestActivity;
 import com.example.learningenglishapplication.R;
 import com.example.learningenglishapplication.Vocabulary.VocabularyListActivity;
 import com.example.learningenglishapplication.category.CategoryAdapter;
@@ -69,6 +73,9 @@ public class HomeActivity extends AppCompatActivity implements CategoryAdapter.O
         tvLoiChao = findViewById(R.id.tv_loi_chao);
         tvTenNguoiDung = findViewById(R.id.tv_ten_nguoi_dung);
         ivAvatar = findViewById(R.id.nut_ho_so);
+        Button btnLearn = findViewById(R.id.btn_learn);
+        Button btnMatch = findViewById(R.id.btn_match);
+        Button btnTest = findViewById(R.id.btn_test);
 
         // Lấy thông tin đăng nhập
         SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
@@ -98,6 +105,10 @@ public class HomeActivity extends AppCompatActivity implements CategoryAdapter.O
             Intent intent = new Intent(HomeActivity.this, AchievementsActivity.class);
             startActivity(intent);
         });
+
+        btnLearn.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, LearnActivity.class)));
+        btnMatch.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, MatchActivity.class)));
+        btnTest.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, TestActivity.class)));
 
         // RecyclerView
         recyclerView = findViewById(R.id.rv_home_categories);
