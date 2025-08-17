@@ -20,7 +20,7 @@ import com.example.learningenglishapplication.R;
 import com.example.learningenglishapplication.Vocabulary.VocabularyListActivity;
 import com.example.learningenglishapplication.category.CategoryAdapter;
 import com.example.learningenglishapplication.category.CategoryManagementActivity;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.Random;
 
@@ -32,7 +32,7 @@ public class HomeActivity extends AppCompatActivity implements CategoryAdapter.O
     private UserDataHelper userDataHelper;
     private long currentUserId;
     private String currentUserEmail;
-    private BottomNavigationView bottomNavigation;
+    private NavigationBarView bottomNavigation;
     private TextView quoteTextView;
     private TextView tvLoiChao, tvTenNguoiDung;
     private ImageView ivAvatar;

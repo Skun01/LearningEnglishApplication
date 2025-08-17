@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
-import androidx.appcompat.widget.Toolbar;
+import com.google.android.material.appbar.MaterialToolbar;
 import android.view.MenuItem;
 import android.view.Menu;
 import androidx.appcompat.widget.SearchView;
@@ -29,7 +29,7 @@ public class CategoryManagementActivity extends AppCompatActivity implements Cat
     private CategoryDataHelper categoryHelper;
     private FloatingActionButton fabAddCategory;
     private long currentUserId;
-    private Toolbar toolbar;
+    private MaterialToolbar toolbar;
 
 
     @Override

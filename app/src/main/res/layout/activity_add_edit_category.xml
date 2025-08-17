@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="@dimen/spacing_medium"
     android:background="@color/background_color">
 
     <TextView
@@ -17,7 +17,7 @@
         android:id="@+id/et_category_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/spacing_small"
         android:hint="Ví dụ: Động từ bất quy tắc"
         android:inputType="text"/>
 
@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Mô tả"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/spacing_medium"
         android:textColor="@color/text_color_primary"
         android:textSize="16sp"/>
 
@@ -33,7 +33,7 @@
         android:id="@+id/et_category_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/spacing_small"
         android:hint="Mô tả ngắn gọn về thể loại"
         android:inputType="textMultiLine"
         android:minLines="3"/>
@@ -42,8 +42,8 @@
         android:id="@+id/btn_save_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="@dimen/spacing_extra_large"
         android:text="Lưu"
-        android:backgroundTint="@color/colorPrimary"
+        android:backgroundTint="?attr/colorPrimary"
         android:textColor="@color/white"/>
 </LinearLayout>
