@@ -34,8 +34,8 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/iv_star"
+        android:id="@+id/iv_favorite"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:src="@android:drawable/btn_star_big_off"/> <!-- Tạo 2 icon star và star_border -->
+        android:src="@drawable/ic_favorite_border" />
 </LinearLayout>

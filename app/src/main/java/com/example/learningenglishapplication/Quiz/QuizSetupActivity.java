@@ -11,11 +11,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.learningenglishapplication.Data.DataHelper.CategoryDataHelper;
-import com.example.learningenglishapplication.Data.DataHelper.VocabularyDataHelper;
+import com.example.learningenglishapplication.Data.DataHelper.CategoryDataHelper; // Cập nhật import
+import com.example.learningenglishapplication.Data.DataHelper.VocabularyDataHelper; // Cập nhật import
 import com.example.learningenglishapplication.Data.DatabaseHelper;
-import com.example.learningenglishapplication.R;
 import com.example.learningenglishapplication.Data.model.Vocabulary;
+import com.example.learningenglishapplication.R;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,8 +28,9 @@ public class QuizSetupActivity extends AppCompatActivity {
     private Spinner spinnerCategory;
     private EditText etNumberOfQuestions;
     private Button btnStartQuiz;
-    private CategoryDataHelper categoryHelper;
-    private VocabularyDataHelper vocabularyHelper;
+    private DatabaseHelper databaseHelper;
+    private VocabularyDataHelper vocabularyDataHelper; // Sửa tên lớp
+    private CategoryDataHelper categoryDataHelper; // Sửa tên lớp
 
     private Map<String, Long> categoryMap;
     private List<String> categoryNames;
@@ -40,8 +41,11 @@ public class QuizSetupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_setup);
 
-        categoryHelper = new CategoryDataHelper(this);
-        vocabularyHelper = new VocabularyDataHelper(this);
+        // Khởi tạo DatabaseHelper
+        databaseHelper = new DatabaseHelper(this);
+        // Khởi tạo các DataHelper mới
+        vocabularyDataHelper = new VocabularyDataHelper(databaseHelper);
+        categoryDataHelper = new CategoryDataHelper(this); // CategoryDataHelper cần Context
 
         userId = getSharedPreferences("user_prefs", MODE_PRIVATE).getLong("userId", -1);
 
@@ -55,7 +59,7 @@ public class QuizSetupActivity extends AppCompatActivity {
     }
 
     private void loadCategoriesIntoSpinner() {
-        categoryMap = categoryHelper.getCategoriesForSpinner(userId);
+        categoryMap = categoryDataHelper.getCategoriesForSpinner(userId); // Sử dụng CategoryDataHelper
         categoryNames = new ArrayList<>(categoryMap.keySet());
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
@@ -92,8 +96,8 @@ public class QuizSetupActivity extends AppCompatActivity {
             return;
         }
 
-        // Lấy danh sách từ vựng
-        List<Vocabulary> allVocabs = vocabularyHelper.getVocabulariesAsList(selectedCategoryId);
+        // SỬA ĐỔI: Lấy danh sách từ vựng thông qua VocabularyDataHelper
+        List<Vocabulary> allVocabs = vocabularyDataHelper.getVocabulariesAsList(selectedCategoryId);
 
         if (allVocabs.size() < 4) {
             Toast.makeText(this, "Thể loại này cần ít nhất 4 từ để tạo bài kiểm tra!", Toast.LENGTH_LONG).show();
