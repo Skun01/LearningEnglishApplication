@@ -32,6 +32,7 @@
         <activity android:name=".Quiz.QuizActivity" />
         <activity android:name=".Quiz.QuizResultActivity" />
         <activity android:name=".Profile.ProfileSettingsActivity" />
+        <activity android:name=".Achivements.AchievementsActivity" />
     </application>
 
 </manifest>

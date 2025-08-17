@@ -1,16 +1,19 @@
 package com.example.learningenglishapplication.Profile;
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.database.Cursor;
-import android.graphics.Color;
-
-import com.example.learningenglishapplication.Data.DataHelper.StatisticsDataHelper;
+import com.example.learningenglishapplication.Auth.LoginActivity;
 import com.example.learningenglishapplication.Data.DataHelper.UserSettingDataHelper;
 import com.example.learningenglishapplication.Data.DatabaseHelper;
 import com.example.learningenglishapplication.R;
@@ -25,40 +28,47 @@ import java.util.ArrayList;
 
 public class ProfileSettingsActivity extends AppCompatActivity {
 
-    private StatisticsDataHelper statisticsHelper;
-    private UserSettingDataHelper userSettingHelper;
+    private UserSettingDataHelper userSettingDataHelper;
     private long userId;
     private BarChart barChart;
 
     private LinearLayout layoutTheme;
     private TextView tvCurrentTheme;
+    private Button btnLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_settings);
 
-        statisticsHelper = new StatisticsDataHelper(this);
-        userSettingHelper = new UserSettingDataHelper(this);
+        // Khởi tạo helper
+        userSettingDataHelper = new UserSettingDataHelper(this);
 
-        userId = getSharedPreferences("user_prefs", MODE_PRIVATE).getLong("userId", -1);
+        userId = getSharedPreferences("user_prefs", MODE_PRIVATE)
+                .getLong("userId", -1);
 
-        layoutTheme = findViewById(R.id.layout_theme_setting); // Thêm ID này vào layout
-        tvCurrentTheme = findViewById(R.id.tv_theme); // Dùng ID cũ
+        layoutTheme = findViewById(R.id.layout_theme_setting);
+        tvCurrentTheme = findViewById(R.id.tv_theme);
+        btnLogout = findViewById(R.id.btn_logout);
+        barChart = findViewById(R.id.bar_chart_stats);
 
-        // Tải và hiển thị cài đặt theme hiện tại
-        String currentTheme = userSettingHelper.getThemeSetting(userId);
+        // Tải và hiển thị theme hiện tại
+        String currentTheme = userSettingDataHelper.getThemeSetting(userId);
         tvCurrentTheme.setText(currentTheme);
-        // Áp dụng theme ngay khi activity được tạo
         ThemeManager.applyTheme(currentTheme);
 
+        // Xử lý đổi theme
         layoutTheme.setOnClickListener(v -> showThemeChooserDialog());
-        barChart = findViewById(R.id.bar_chart_stats);
+
+        // Setup thống kê
         setupStatisticsChart();
+
+        // Xử lý nút đăng xuất
+        btnLogout.setOnClickListener(v -> showLogoutDialog());
     }
 
     private void setupStatisticsChart() {
-        Cursor cursor = statisticsHelper.getWeeklyStats(userId);
+        Cursor cursor = userSettingDataHelper.getWeeklyStats(userId);
         ArrayList<BarEntry> entries = new ArrayList<>();
         ArrayList<String> labels = new ArrayList<>();
         int i = 0;
@@ -67,8 +77,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
             do {
                 int wordsLearned = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_STAT_WORDS_LEARNED));
                 String date = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_STAT_DATE));
-                // Lấy 5 ký tự cuối (ví dụ: 07-28)
-                String shortDate = date.substring(5);
+                String shortDate = date.substring(5); // cắt yyyy- chỉ còn MM-dd
 
                 entries.add(new BarEntry(i, wordsLearned));
                 labels.add(shortDate);
@@ -83,28 +92,30 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         }
 
         BarDataSet dataSet = new BarDataSet(entries, "Số từ đã học");
-        dataSet.setColor(Color.parseColor("#03DAC5")); // Màu colorAccent
+        dataSet.setColor(Color.parseColor("#03DAC5"));
 
         BarData barData = new BarData(dataSet);
         barChart.setData(barData);
 
-        // Tùy chỉnh biểu đồ
-        barChart.getDescription().setEnabled(false); // Tắt mô tả
-        barChart.getLegend().setEnabled(false); // Tắt chú thích
-        barChart.setFitBars(true); // Làm cho các cột vừa với khung
+        barChart.getDescription().setEnabled(false);
+        barChart.getLegend().setEnabled(false);
+        barChart.setFitBars(true);
 
-        // Tùy chỉnh trục X (ngày)
         XAxis xAxis = barChart.getXAxis();
         xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setGranularity(1f);
         xAxis.setDrawGridLines(false);
 
-        barChart.invalidate(); // Vẽ lại biểu đồ
+        barChart.invalidate();
     }
 
     private void showThemeChooserDialog() {
-        final String[] themes = {ThemeManager.LIGHT_MODE, ThemeManager.DARK_MODE, ThemeManager.SYSTEM_MODE};
+        final String[] themes = {
+                ThemeManager.LIGHT_MODE,
+                ThemeManager.DARK_MODE,
+                ThemeManager.SYSTEM_MODE
+        };
 
         new AlertDialog.Builder(this)
                 .setTitle("Chọn Giao Diện")
@@ -112,14 +123,32 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String selectedTheme = themes[which];
-                        // Lưu cài đặt mới vào DB
-                        userSettingHelper.saveThemeSetting(userId, selectedTheme);
-                        // Cập nhật text hiển thị
+                        userSettingDataHelper.saveThemeSetting(userId, selectedTheme);
                         tvCurrentTheme.setText(selectedTheme);
-                        // Áp dụng theme ngay lập tức
                         ThemeManager.applyTheme(selectedTheme);
                     }
                 })
                 .show();
+    }
+
+    private void showLogoutDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Xác nhận đăng xuất")
+                .setMessage("Bạn có chắc chắn muốn đăng xuất?")
+                .setPositiveButton("Có", (dialog, which) -> logoutUser())
+                .setNegativeButton("Không", null)
+                .show();
+    }
+
+    private void logoutUser() {
+        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+
+        Intent intent = new Intent(ProfileSettingsActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }

@@ -1,0 +1,6 @@
+<!-- res/drawable/bg_nen_mau_xanh.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#EDE9FE" /> <!-- Xanh ngọc nhạt -->
+    <corners android:radius="12dp" />
+</shape>
