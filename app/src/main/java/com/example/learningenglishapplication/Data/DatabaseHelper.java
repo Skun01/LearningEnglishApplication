@@ -14,10 +14,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_USER_ID = "id";
     public static final String COLUMN_USER_EMAIL = "email";
     public static final String COLUMN_USER_PASSWORD = "password_hash";
+    public static final String COLUMN_USER_NICKNAME = "nickname"; // thêm cột biệt danh
+
     private static final String CREATE_TABLE_USERS = "CREATE TABLE " + TABLE_USERS + "("
             + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + COLUMN_USER_EMAIL + " TEXT UNIQUE NOT NULL,"
-            + COLUMN_USER_PASSWORD + " TEXT NOT NULL" + ")";
+            + COLUMN_USER_PASSWORD + " TEXT NOT NULL,"
+            + COLUMN_USER_NICKNAME + " TEXT" + // cột biệt danh, có thể NULL
+            ")";
+
 
     // ----- BẢNG CATEGORIES -----
     public static final String TABLE_CATEGORIES = "categories";

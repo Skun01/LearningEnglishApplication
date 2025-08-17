@@ -35,9 +35,7 @@
         <activity android:name=".Quiz.QuizResultActivity" />
         <activity android:name=".Profile.ProfileSettingsActivity" />
         <activity android:name=".Vocabulary.VocabularyDetailActivity" />
-
-
-
+        <activity android:name=".Achivements.AchievementsActivity" />
     </application>
 
 </manifest>

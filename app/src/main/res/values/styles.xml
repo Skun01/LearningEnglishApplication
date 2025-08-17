@@ -35,4 +35,10 @@
         <item name="android:textColor">@color/text_color_primary</item>
         <item name="android:textSize">14sp</item>
     </style>
+
+    <style name="AvatarShape">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item> <!-- 50% làm ảnh tròn tuyệt đối -->
+    </style>
+
 </resources>

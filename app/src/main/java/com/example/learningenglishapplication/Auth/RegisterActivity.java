@@ -12,12 +12,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.learningenglishapplication.Data.DataHelper.UserDataHelper;
-import com.example.learningenglishapplication.Data.DatabaseHelper;
 import com.example.learningenglishapplication.R;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText etEmail, etPassword, etConfirmPassword;
+    private EditText etEmail, etPassword, etConfirmPassword, etNickname;
     private Button btnRegister;
     private TextView tvGoToLogin;
     private UserDataHelper userHelper;
@@ -29,6 +28,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         userHelper = new UserDataHelper(this);
 
+        // Ánh xạ các view
+        etNickname = findViewById(R.id.et_register_nickname);
         etEmail = findViewById(R.id.et_register_email);
         etPassword = findViewById(R.id.et_register_password);
         etConfirmPassword = findViewById(R.id.et_register_confirm_password);
@@ -52,11 +53,13 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerUser() {
+        String nickname = etNickname.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
         String confirmPassword = etConfirmPassword.getText().toString().trim();
 
-        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword)) {
+        if (TextUtils.isEmpty(nickname) || TextUtils.isEmpty(email) ||
+                TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword)) {
             Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -66,8 +69,7 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        // Gọi phương thức addUser từ DatabaseHelper
-        boolean isAdded = userHelper.addUser(email, password);
+        boolean isAdded = userHelper.addUser(email, password, nickname);
 
         if (isAdded) {
             Toast.makeText(this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
