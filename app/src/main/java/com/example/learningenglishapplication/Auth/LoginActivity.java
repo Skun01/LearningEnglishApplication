@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.learningenglishapplication.Data.DataHelper.UserDataHelper;
 import com.example.learningenglishapplication.Data.DataHelper.UserSettingDataHelper;
-import com.example.learningenglishapplication.Data.DatabaseHelper;
 import com.example.learningenglishapplication.Home.HomeActivity;
 import com.example.learningenglishapplication.Profile.ThemeManager;
 import com.example.learningenglishapplication.R;
@@ -40,19 +39,10 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btn_login);
         tvGoToRegister = findViewById(R.id.tv_go_to_register);
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loginUser();
-            }
-        });
+        btnLogin.setOnClickListener(v -> loginUser());
 
-        tvGoToRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-            }
-        });
+        tvGoToRegister.setOnClickListener(v ->
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class)));
     }
 
     private void loginUser() {
@@ -69,23 +59,21 @@ public class LoginActivity extends AppCompatActivity {
         if (userId != -1) {
             Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
 
-            // Lưu trạng thái đăng nhập và User ID
-            // SharedPreferences là một cách đơn giản để lưu dữ liệu nhỏ
+            // Lưu trạng thái đăng nhập
             SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean("isLoggedIn", true);
             editor.putLong("userId", userId);
-            editor.putString("userEmail", email);
+            editor.putString("userEmail", email); // Lưu email để dùng getNickname
             editor.apply();
 
-            // ÁP DỤNG THEME CỦA NGƯỜI DÙNG NGAY LẬP TỨC
+            // Áp dụng theme người dùng
             String theme = userSettingHelper.getThemeSetting(userId);
             ThemeManager.applyTheme(theme);
 
-            // Chuyển đến màn hình chính
-            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-            startActivity(intent);
-            finish(); // Đóng màn hình đăng nhập
+            // Chuyển sang Home
+            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+            finish();
         } else {
             Toast.makeText(this, "Email hoặc mật khẩu không đúng", Toast.LENGTH_SHORT).show();
         }
