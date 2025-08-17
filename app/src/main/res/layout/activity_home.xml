@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="@dimen/spacing_medium">
 
             <!-- Search + Avatar -->
             <!-- Lời chào + Avatar -->
@@ -25,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="16dp"
+                android:padding="@dimen/spacing_medium"
                 android:gravity="center_vertical"
                 android:background="@drawable/bg_nen_mau_xanh">
 
@@ -74,7 +74,7 @@
                 android:text="Chuỗi ngày học"
                 android:textStyle="bold"
                 android:textSize="16sp"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginBottom="@dimen/spacing_small" />
 
             <TextView
                 android:id="@+id/thong_bao_chuoi"
@@ -91,7 +91,7 @@
                 android:id="@+id/imageButton2"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="@dimen/spacing_medium"
                 android:background="@android:color/transparent"
                 android:scaleType="centerInside"
                 app:srcCompat="@drawable/streak"
@@ -107,9 +107,9 @@
                 android:textStyle="italic"
                 android:textSize="18sp"
                 android:background="@drawable/bg_nen_mau_xanh"
-                android:padding="16dp"
+                android:padding="@dimen/spacing_medium"
                 android:gravity="center"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="@dimen/spacing_medium"
                 android:clickable="true"
                 android:focusable="true" />
 
@@ -120,24 +120,26 @@
                 android:text="Học Phần"
                 android:textStyle="bold"
                 android:textSize="16sp"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginBottom="@dimen/spacing_small" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_home_categories"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="@dimen/spacing_large"
                 android:nestedScrollingEnabled="false"
                 tools:listitem="@layout/item_category" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
+    <com.google.android.material.navigation.NavigationBarView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="?android:attr/windowBackground"
         app:menu="@menu/bottom_nav_menu"
+        app:itemIconTint="@color/nav_item_color"
+        app:itemTextColor="@color/nav_item_color"
         app:labelVisibilityMode="labeled" />
 </RelativeLayout>

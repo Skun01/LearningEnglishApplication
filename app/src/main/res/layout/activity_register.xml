@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="24dp"
+    android:padding="@dimen/spacing_large"
     android:background="@color/background_color"
     tools:context=".Auth.RegisterActivity">
 
@@ -15,21 +15,21 @@
         android:text="Tạo tài khoản mới"
         android:textSize="28sp"
         android:textStyle="bold"
-        android:textColor="@color/colorPrimary"/>
+        android:textColor="?attr/colorPrimary"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Bắt đầu hành trình học từ vựng của bạn"
         android:textSize="16sp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/spacing_small"
         android:textColor="@color/text_color_secondary"/>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="32dp">
+        android:layout_marginTop="@dimen/spacing_extra_large">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -46,7 +46,7 @@
                 android:id="@+id/et_register_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/spacing_small"
                 android:hint="nhapemail@gmail.com"
                 android:inputType="textEmailAddress"
                 android:background="@drawable/item_background"
@@ -57,13 +57,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Biệt danh"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/spacing_medium"
                 android:textColor="@color/text_color_primary"/>
             <EditText
                 android:id="@+id/et_register_nickname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/spacing_small"
                 android:hint="Nhập biệt danh"
                 android:inputType="textPersonName"
                 android:background="@drawable/item_background"
@@ -74,13 +74,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Mật khẩu"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/spacing_medium"
                 android:textColor="@color/text_color_primary"/>
             <EditText
                 android:id="@+id/et_register_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/spacing_small"
                 android:hint="Tối thiểu 6 ký tự"
                 android:inputType="textPassword"
                 android:background="@drawable/item_background"
@@ -91,13 +91,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Xác nhận mật khẩu"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/spacing_medium"
                 android:textColor="@color/text_color_primary"/>
             <EditText
                 android:id="@+id/et_register_confirm_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/spacing_small"
                 android:hint="Nhập lại mật khẩu"
                 android:inputType="textPassword"
                 android:background="@drawable/item_background"
@@ -110,17 +110,17 @@
         android:id="@+id/btn_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="@dimen/spacing_large"
         android:text="Đăng Ký"
         android:padding="12dp"
-        android:backgroundTint="@color/colorPrimary"
+        android:backgroundTint="?attr/colorPrimary"
         android:textColor="@color/white"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="24dp">
+        android:layout_marginTop="@dimen/spacing_large">
 
         <TextView
             android:layout_width="wrap_content"
@@ -134,7 +134,7 @@
             android:layout_height="wrap_content"
             android:text="Đăng nhập"
             android:textStyle="bold"
-            android:textColor="@color/colorAccent"/>
+            android:textColor="?attr/colorSecondary"/>
     </LinearLayout>
 
 </LinearLayout>

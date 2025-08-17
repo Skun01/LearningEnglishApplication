@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="@dimen/spacing_medium"
     android:background="@color/background_color">
 
     <LinearLayout
@@ -59,7 +59,7 @@
                     android:text="/pronunciation/"
                     android:textSize="20sp"
                     android:textColor="@color/text_color_secondary"
-                    android:layout_marginTop="8dp" />
+                    android:layout_marginTop="@dimen/spacing_small" />
             </LinearLayout>
 
             <LinearLayout
@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_gravity="top|end"
-                android:layout_margin="16dp">
+                android:layout_margin="@dimen/spacing_medium">
 
                 <ImageView
                     android:id="@+id/iv_edit_front"
@@ -83,7 +83,7 @@
                     android:layout_height="32dp"
                     android:src="@drawable/ic_favorite_border"
                     android:padding="4dp"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="@dimen/spacing_small"
                     android:contentDescription="Yêu thích"/>
             </LinearLayout>
         </FrameLayout>
@@ -116,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_gravity="top|end"
-                android:layout_margin="16dp">
+                android:layout_margin="@dimen/spacing_medium">
 
                 <ImageView
                     android:id="@+id/iv_edit_back"
@@ -132,7 +132,7 @@
                     android:layout_height="32dp"
                     android:src="@drawable/ic_favorite_border"
                     android:padding="4dp"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="@dimen/spacing_small"
                     android:contentDescription="Yêu thích"/>
             </LinearLayout>
         </FrameLayout>
@@ -142,7 +142,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="@dimen/spacing_extra_large"
         android:gravity="center">
 
         <Button
@@ -151,7 +151,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Trước"
-            android:layout_marginEnd="8dp" />
+            android:layout_marginEnd="@dimen/spacing_small" />
 
         <Button
             android:id="@+id/btn_next_card"
@@ -159,7 +159,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Tiếp"
-            android:layout_marginStart="8dp" />
+            android:layout_marginStart="@dimen/spacing_small" />
 
         <Button
             android:id="@+id/btn_complete"
@@ -167,6 +167,6 @@
             android:layout_height="wrap_content"
             android:text="Hoàn thành"
             android:visibility="gone"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="@dimen/spacing_medium" />
     </LinearLayout>
 </LinearLayout>
