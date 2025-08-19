@@ -101,14 +101,35 @@ public class VocabularyListActivity extends AppCompatActivity implements Vocabul
 
         btnStartFlashcard = findViewById(R.id.btn_start_flashcard);
         btnStartFlashcard.setOnClickListener(v -> {
-            List<Vocabulary> vocabList = vocabularyHelper.getVocabulariesAsList(categoryId);
-            if (vocabList.isEmpty()) {
-                Toast.makeText(VocabularyListActivity.this, "Chưa có từ nào để ôn tập!", Toast.LENGTH_SHORT).show();
-            } else {
-                Intent flashcardIntent = new Intent(VocabularyListActivity.this, FlashcardActivity.class);
-                flashcardIntent.putExtra("VOCAB_LIST", (Serializable) vocabList);
-                ActivityTransitionManager.startActivityWithTransition(this, flashcardIntent, ActivityTransitionManager.TRANSITION_ZOOM);
-            }
+            // Hiển thị dialog cho phép người dùng chọn loại từ vựng để học
+            final CharSequence[] options = {"Tất cả từ vựng", "Từ vựng chưa học", "Từ vựng cần ôn tập", "Từ vựng yêu thích"};
+            androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+            builder.setTitle("Chọn từ vựng để học");
+            builder.setItems(options, (dialog, item) -> {
+                List<Vocabulary> vocabList;
+                
+                if (options[item].equals("Tất cả từ vựng")) {
+                    vocabList = vocabularyHelper.getVocabulariesAsList(categoryId);
+                } else if (options[item].equals("Từ vựng chưa học")) {
+                    vocabList = vocabularyHelper.getVocabulariesForFlashcard(categoryId);
+                } else if (options[item].equals("Từ vựng cần ôn tập")) {
+                    vocabList = vocabularyHelper.getVocabulariesForFlashcard(categoryId);
+                } else if (options[item].equals("Từ vựng yêu thích")) {
+                    vocabList = vocabularyHelper.getFavoriteVocabulariesAsList(categoryId);
+                } else {
+                    vocabList = vocabularyHelper.getVocabulariesAsList(categoryId);
+                }
+                
+                if (vocabList.isEmpty()) {
+                    Toast.makeText(VocabularyListActivity.this, "Chưa có từ nào để ôn tập!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent flashcardIntent = new Intent(VocabularyListActivity.this, FlashcardActivity.class);
+                    flashcardIntent.putExtra("VOCAB_LIST", (Serializable) vocabList);
+                    flashcardIntent.putExtra("LEARNING_MODE", options[item].toString());
+                    ActivityTransitionManager.startActivityWithTransition(this, flashcardIntent, ActivityTransitionManager.TRANSITION_ZOOM);
+                }
+            });
+            builder.show();
         });
 
         tvEmptyMessage = findViewById(R.id.tv_empty_message);

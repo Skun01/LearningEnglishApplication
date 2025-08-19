@@ -426,4 +426,34 @@ public class VocabularyDataHelper {
         db.update(DatabaseHelper.TABLE_VOCABULARIES, values, DatabaseHelper.COLUMN_VOCAB_ID + " = ?", new String[]{String.valueOf(vocabId)});
         db.close();
     }
+    
+    /**
+     * Lấy danh sách từ vựng yêu thích của một thể loại dưới dạng List<Vocabulary>
+     */
+    public List<Vocabulary> getFavoriteVocabulariesAsList(long categoryId) {
+        List<Vocabulary> vocabularyList = new ArrayList<>();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String selection = DatabaseHelper.COLUMN_VOCAB_CATEGORY_ID + " = ? AND " + DatabaseHelper.COLUMN_VOCAB_IS_FAVORITE + " = 1";
+        String[] selectionArgs = {String.valueOf(categoryId)};
+        Cursor cursor = db.query(DatabaseHelper.TABLE_VOCABULARIES, null, selection, selectionArgs, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                long id = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_ID));
+                String word = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_WORD));
+                String meaning = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_MEANING));
+                String pronunciation = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_PRONUNCIATION));
+                int isFavorite = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_IS_FAVORITE));
+                String imageUri = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_IMAGE_URI));
+                String audioUri = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_AUDIO_URI));
+                int box = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_BOX));
+                long nextReview = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_NEXT_REVIEW));
+
+                vocabularyList.add(new Vocabulary(id, word, meaning, pronunciation, isFavorite, 0, null, imageUri, audioUri, box, nextReview));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return vocabularyList;
+    }
 }

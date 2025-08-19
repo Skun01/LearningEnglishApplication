@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -41,6 +42,7 @@ public class FlashcardActivity extends AppCompatActivity {
     private List<Vocabulary> vocabularyList;
     private int currentCardIndex = 0;
     private long currentCategoryId;
+    private String learningMode;
 
     private static final int REQUEST_CODE_EDIT_VOCABULARY = 100;
 
@@ -93,6 +95,7 @@ public class FlashcardActivity extends AppCompatActivity {
         Intent intent = getIntent();
         vocabularyList = (List<Vocabulary>) intent.getSerializableExtra("VOCAB_LIST");
         currentCategoryId = intent.getLongExtra("CATEGORY_ID", -1);
+        learningMode = intent.getStringExtra("LEARNING_MODE");
 
         if (vocabularyList == null || vocabularyList.isEmpty()) {
             Toast.makeText(this, "Không có từ vựng để ôn tập!", Toast.LENGTH_SHORT).show();
@@ -100,6 +103,15 @@ public class FlashcardActivity extends AppCompatActivity {
             return;
         }
 
+        initializeViews();
+        setupTextToSpeech();
+        loadAnimations();
+        showCurrentCard();
+        setupGestureDetector();
+        setupBackPressHandler();
+    }
+
+    private void initializeViews() {
         flashcardContainer = findViewById(R.id.fl_flashcard_container);
         cardFront = findViewById(R.id.ll_card_front);
         cardBack = findViewById(R.id.ll_card_back);
@@ -110,6 +122,7 @@ public class FlashcardActivity extends AppCompatActivity {
         btnPlayAudio = findViewById(R.id.btn_play_audio);
         btnPrev = findViewById(R.id.btn_prev_card);
         btnNext = findViewById(R.id.btn_next_card);
+
         Button btnComplete = findViewById(R.id.btn_complete);
         btnComplete.setVisibility(View.GONE);
 
@@ -122,33 +135,38 @@ public class FlashcardActivity extends AppCompatActivity {
         ivFavoriteBack = findViewById(R.id.iv_favorite_back);
         ivEditBack = findViewById(R.id.iv_edit_back);
 
-        textToSpeech = new TextToSpeech(this, status -> {
-            if (status == TextToSpeech.SUCCESS) {
-                textToSpeech.setLanguage(Locale.US);
-            }
-        });
-
-        loadAnimations();
-        showCurrentCard();
-
-        flashcardContainer.setOnClickListener(v -> flipCard());
+        // Setup button listeners
         btnNext.setOnClickListener(v -> showNextCard());
         btnPrev.setOnClickListener(v -> showPreviousCard());
         btnPlayAudio.setOnClickListener(v -> playAudio());
         btnAgain.setOnClickListener(v -> handleAnswer(0));
         btnGood.setOnClickListener(v -> handleAnswer(1));
         btnEasy.setOnClickListener(v -> handleAnswer(2));
+    }
 
+    private void setupTextToSpeech() {
+        textToSpeech = new TextToSpeech(this, status -> {
+            if (status == TextToSpeech.SUCCESS) {
+                textToSpeech.setLanguage(Locale.US);
+            }
+        });
+    }
+
+    private void setupGestureDetector() {
         gestureDetector = new GestureDetectorCompat(this, new MyGestureListener());
         flashcardContainer.setOnTouchListener((v, event) -> {
             gestureDetector.onTouchEvent(event);
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                resetCardState();
+                if (!isFlipping) {
+                    resetCardState();
+                }
             }
             return true;
         });
+    }
 
-        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true /* enabled */) {
+    private void setupBackPressHandler() {
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 ActivityTransitionManager.finishWithTransition(FlashcardActivity.this, ActivityTransitionManager.TRANSITION_SLIDE);
@@ -158,40 +176,104 @@ public class FlashcardActivity extends AppCompatActivity {
 
     private void loadAnimations() {
         float scale = getResources().getDisplayMetrics().density;
-        flashcardContainer.setCameraDistance(8000 * scale);
+        flashcardContainer.setCameraDistance(12000 * scale);
 
         flipOutAnimator = AnimatorInflater.loadAnimator(this, R.animator.card_flip_out);
         flipInAnimator = AnimatorInflater.loadAnimator(this, R.animator.card_flip_in);
 
         flipOutAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                isFlipping = true;
+                flashcardContainer.setClickable(false);
+            }
+
+            @Override
             public void onAnimationEnd(Animator animation) {
+                // Chuyển đổi view
                 if (isFront) {
                     cardFront.setVisibility(View.GONE);
                     cardBack.setVisibility(View.VISIBLE);
+                    flipInAnimator.setTarget(cardBack);
                 } else {
                     cardBack.setVisibility(View.GONE);
                     cardFront.setVisibility(View.VISIBLE);
+                    flipInAnimator.setTarget(cardFront);
                 }
                 flipInAnimator.start();
+            }
+        });
+
+        flipInAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
                 isFront = !isFront;
                 isFlipping = false;
+                flashcardContainer.setClickable(true);
             }
         });
     }
 
-    private void showCurrentCard() {
+    private void flipCard() {
+        // Kiểm tra điều kiện trước khi lật
+        if (isFlipping) {
+            return;
+        }
+
+        // Reset về trạng thái ban đầu trước khi lật
+        resetCardState();
+
+        // Đợi một chút để reset animation hoàn thành
+        new Handler().postDelayed(() -> {
+            if (!isFlipping) {
+                isFlipping = true;
+
+                // Set target cho animation dựa trên trạng thái hiện tại
+                if (isFront) {
+                    flipOutAnimator.setTarget(cardFront);
+                } else {
+                    flipOutAnimator.setTarget(cardBack);
+                }
+
+                flipOutAnimator.start();
+            }
+        }, 100);
+    }
+
+    private void resetCardToFront() {
         if (!isFront) {
-            isFront = true;
             cardBack.setVisibility(View.GONE);
             cardFront.setVisibility(View.VISIBLE);
+            isFront = true;
         }
+        isFlipping = false;
+        flashcardContainer.setClickable(true);
+    }
+
+    private void showCurrentCard() {
+        // Đảm bảo card ở mặt trước khi hiển thị từ mới
+        resetCardToFront();
 
         if (currentCardIndex < vocabularyList.size()) {
             currentVocab = vocabularyList.get(currentCardIndex);
             tvFlashcardWord.setText(currentVocab.getWord());
             tvFlashcardPronunciation.setText(currentVocab.getPronunciation());
             tvFlashcardMeaning.setText(currentVocab.getMeaning());
+
+            // Cập nhật tiến trình học tập
+            TextView tvProgress = findViewById(R.id.tv_progress);
+            tvProgress.setText((currentCardIndex + 1) + "/" + vocabularyList.size());
+
+            // Hiển thị chế độ học tập nếu có
+            TextView tvLearningMode = findViewById(R.id.tv_learning_mode);
+            if (learningMode != null && !learningMode.isEmpty()) {
+                tvLearningMode.setText(learningMode);
+                tvLearningMode.setVisibility(View.VISIBLE);
+            } else {
+                tvLearningMode.setVisibility(View.GONE);
+            }
 
             if (currentVocab.getImageUri() != null && !currentVocab.getImageUri().isEmpty()) {
                 ivFlashcardImage.setVisibility(View.VISIBLE);
@@ -201,33 +283,39 @@ public class FlashcardActivity extends AppCompatActivity {
             }
 
             updateFavoriteIcons(currentVocab.isFavorite());
-
-            View.OnClickListener favoriteClickListener = v -> {
-                boolean isCurrentlyFavorite = currentVocab.isFavorite();
-                int newFavoriteStatus = isCurrentlyFavorite ? 0 : 1;
-
-                vocabularyDataHelper.updateFavoriteStatus(currentVocab.getId(), newFavoriteStatus);
-                currentVocab.setFavorite(!isCurrentlyFavorite);
-
-                // Chỉ cập nhật biểu tượng yêu thích
-                updateFavoriteIcons(currentVocab.isFavorite());
-            };
-            ivFavoriteFront.setOnClickListener(favoriteClickListener);
-            ivFavoriteBack.setOnClickListener(favoriteClickListener);
-
-            View.OnClickListener editClickListener = v -> {
-                Intent editIntent = new Intent(FlashcardActivity.this, AddEditVocabularyActivity.class);
-                editIntent.putExtra("VOCAB_ID", currentVocab.getId());
-                editIntent.putExtra("CATEGORY_ID", currentCategoryId);
-                ActivityTransitionManager.startActivityWithTransition(this, editIntent, ActivityTransitionManager.TRANSITION_SLIDE);
-                startActivityForResult(editIntent, REQUEST_CODE_EDIT_VOCABULARY);
-            };
-            ivEditFront.setOnClickListener(editClickListener);
-            ivEditBack.setOnClickListener(editClickListener);
+            setupClickListeners();
         } else {
             Toast.makeText(this, "Bạn đã hoàn thành ôn tập!", Toast.LENGTH_SHORT).show();
             ActivityTransitionManager.finishWithTransition(this, ActivityTransitionManager.TRANSITION_SLIDE);
         }
+    }
+
+    private void setupClickListeners() {
+        View.OnClickListener favoriteClickListener = v -> {
+            if (isFlipping) return;
+
+            boolean isCurrentlyFavorite = currentVocab.isFavorite();
+            int newFavoriteStatus = isCurrentlyFavorite ? 0 : 1;
+
+            vocabularyDataHelper.updateFavoriteStatus(currentVocab.getId(), newFavoriteStatus);
+            currentVocab.setFavorite(!isCurrentlyFavorite);
+            updateFavoriteIcons(currentVocab.isFavorite());
+        };
+
+        View.OnClickListener editClickListener = v -> {
+            if (isFlipping) return;
+
+            Intent editIntent = new Intent(FlashcardActivity.this, AddEditVocabularyActivity.class);
+            editIntent.putExtra("VOCAB_ID", currentVocab.getId());
+            editIntent.putExtra("CATEGORY_ID", currentCategoryId);
+            ActivityTransitionManager.startActivityWithTransition(this, editIntent, ActivityTransitionManager.TRANSITION_SLIDE);
+            startActivityForResult(editIntent, REQUEST_CODE_EDIT_VOCABULARY);
+        };
+
+        ivFavoriteFront.setOnClickListener(favoriteClickListener);
+        ivFavoriteBack.setOnClickListener(favoriteClickListener);
+        ivEditFront.setOnClickListener(editClickListener);
+        ivEditBack.setOnClickListener(editClickListener);
     }
 
     private void updateFavoriteIcons(boolean isFavorite) {
@@ -281,15 +369,6 @@ public class FlashcardActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Bạn đang ở từ đầu tiên!", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private void flipCard() {
-        if (isFlipping) return;
-        isFlipping = true;
-
-        flipOutAnimator.setTarget(isFront ? cardFront : cardBack);
-        flipInAnimator.setTarget(isFront ? cardBack : cardFront);
-        flipOutAnimator.start();
     }
 
     private void markCardAsLearned(Vocabulary vocab) {
@@ -361,11 +440,28 @@ public class FlashcardActivity extends AppCompatActivity {
     }
 
     private void handleDrag(float deltaX) {
+        if (isFlipping) return; // Không cho phép kéo khi đang lật
+
         float newTranslationX = flashcardContainer.getTranslationX() + deltaX;
         flashcardContainer.setTranslationX(newTranslationX);
 
+        // Thêm hiệu ứng xoay nhẹ khi kéo
+        float rotationFactor = 0.05f;
+        float maxRotation = 5f;
+        float rotation = Math.min(Math.abs(newTranslationX) * rotationFactor, maxRotation);
+        if (newTranslationX < 0) rotation = -rotation;
+        flashcardContainer.setRotation(rotation);
+
+        // Thêm hiệu ứng thu nhỏ khi kéo
+        float scaleFactor = 0.0005f;
+        float minScale = 0.95f;
+        float scale = Math.max(1 - Math.abs(newTranslationX) * scaleFactor, minScale);
+        flashcardContainer.setScaleX(scale);
+        flashcardContainer.setScaleY(scale);
+
         FrameLayout currentCardView = isFront ? cardFront : cardBack;
 
+        // Thay đổi màu viền dựa trên hướng kéo
         if (newTranslationX > 0) {
             currentCardView.setBackgroundResource(R.drawable.card_border_red);
         } else if (newTranslationX < 0) {
@@ -376,7 +472,13 @@ public class FlashcardActivity extends AppCompatActivity {
     }
 
     private void resetCardState() {
-        flashcardContainer.animate().translationX(0).setDuration(200).start();
+        flashcardContainer.animate()
+                .translationX(0)
+                .rotation(0)
+                .scaleX(1f)
+                .scaleY(1f)
+                .setDuration(200)
+                .start();
         resetCardBorderColor();
     }
 
@@ -415,16 +517,30 @@ public class FlashcardActivity extends AppCompatActivity {
     }
 
     private class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+        private boolean isDragging = false;
+        private boolean isLongPress = false;
 
         @Override
-        public boolean onSingleTapUp(MotionEvent e) {
-            flipCard();
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            // Chỉ lật thẻ khi không đang kéo và không đang trong quá trình lật
+            if (!isDragging && !isLongPress && !isFlipping) {
+                flipCard();
+            }
             return true;
         }
 
         @Override
+        public void onLongPress(MotionEvent e) {
+            isLongPress = true;
+            flashcardContainer.performHapticFeedback(android.view.HapticFeedbackConstants.LONG_PRESS);
+        }
+
+        @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            if (Math.abs(distanceX) > Math.abs(distanceY)) {
+            if (isFlipping) return false;
+
+            isDragging = true;
+            if (Math.abs(distanceX) > Math.abs(distanceY) * 1.5) {
                 handleDrag(-distanceX);
                 return true;
             }
@@ -433,9 +549,14 @@ public class FlashcardActivity extends AppCompatActivity {
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            float diffX = e2.getX() - e1.getX();
+            if (isFlipping) return false;
 
-            if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+            float diffX = e2.getX() - e1.getX();
+            float diffY = e2.getY() - e1.getY();
+
+            if (Math.abs(diffX) > SWIPE_THRESHOLD &&
+                    Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD &&
+                    Math.abs(diffX) > Math.abs(diffY) * 1.5) {
                 handleSwipe(diffX);
             } else {
                 resetCardState();
@@ -445,6 +566,8 @@ public class FlashcardActivity extends AppCompatActivity {
 
         @Override
         public boolean onDown(MotionEvent e) {
+            isDragging = false;
+            isLongPress = false;
             return true;
         }
     }
