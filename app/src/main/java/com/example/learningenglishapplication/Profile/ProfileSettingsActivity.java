@@ -34,7 +34,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
 
     private LinearLayout layoutTheme;
     private TextView tvCurrentTheme;
-    private Button btnLogout;
+    private LinearLayout layoutLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
 
         layoutTheme = findViewById(R.id.layout_theme_setting);
         tvCurrentTheme = findViewById(R.id.tv_theme);
-        btnLogout = findViewById(R.id.btn_logout);
+        layoutLogout = findViewById(R.id.layout_logout);
         barChart = findViewById(R.id.bar_chart_stats);
 
         // Tải và hiển thị theme hiện tại
@@ -64,7 +64,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         setupStatisticsChart();
 
         // Xử lý nút đăng xuất
-        btnLogout.setOnClickListener(v -> showLogoutDialog());
+        layoutLogout.setOnClickListener(v -> showLogoutDialog());
     }
 
     private void setupStatisticsChart() {

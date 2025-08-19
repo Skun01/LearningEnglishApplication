@@ -69,7 +69,8 @@
             android:orientation="vertical"
             android:layout_marginTop="@dimen/spacing_small">
             <RadioButton android:id="@+id/rb_multiple_choice" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Trắc nghiệm (chọn nghĩa)" android:checked="true"/>
-            <RadioButton android:id="@+id/rb_fill_in_blank" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Điền từ (chọn từ)"/>
+            <RadioButton android:id="@+id/rb_meaning_quiz" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Trắc nghiệm (chọn từ)"/>
+            <RadioButton android:id="@+id/rb_matching" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ghép từ và nghĩa"/>
         </RadioGroup>
 
         <View

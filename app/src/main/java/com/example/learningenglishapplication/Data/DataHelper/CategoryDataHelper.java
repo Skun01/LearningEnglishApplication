@@ -95,7 +95,34 @@ public class CategoryDataHelper {
             } while (cursor.moveToNext());
         }
         cursor.close();
-        db.close();
+        // Không đóng database ở đây để tránh lỗi SQLiteConnectionPool.close()
+        // db.close();
         return categoryMap;
+    }
+    
+    /**
+     * Lấy danh sách ID của tất cả các danh mục thuộc về một người dùng
+     * @param userId ID của người dùng
+     * @return Danh sách các ID danh mục
+     */
+    public List<Long> getAllCategoryIds(long userId) {
+        List<Long> categoryIds = new ArrayList<>();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_CATEGORIES,
+                new String[]{COLUMN_CAT_ID},
+                DatabaseHelper.COLUMN_CAT_USER_ID + "=?",
+                new String[]{String.valueOf(userId)},
+                null, null, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                long id = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_CAT_ID));
+                categoryIds.add(id);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        // Không đóng database ở đây để tránh lỗi SQLiteConnectionPool.close()
+        // db.close();
+        return categoryIds;
     }
 }

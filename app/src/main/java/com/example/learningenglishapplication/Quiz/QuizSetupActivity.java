@@ -6,6 +6,8 @@ import android.text.TextUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -27,6 +29,10 @@ public class QuizSetupActivity extends AppCompatActivity {
 
     private Spinner spinnerCategory;
     private EditText etNumberOfQuestions;
+    private RadioGroup rgQuizType;
+    private RadioButton rbMultipleChoice;
+    private RadioButton rbMeaningQuiz;
+    private RadioButton rbMatching;
     private Button btnStartQuiz;
     private DatabaseHelper databaseHelper;
     private VocabularyDataHelper vocabularyDataHelper; // Sửa tên lớp
@@ -51,6 +57,10 @@ public class QuizSetupActivity extends AppCompatActivity {
 
         spinnerCategory = findViewById(R.id.spinner_quiz_category);
         etNumberOfQuestions = findViewById(R.id.et_number_of_questions);
+        rgQuizType = findViewById(R.id.rg_quiz_type);
+        rbMultipleChoice = findViewById(R.id.rb_multiple_choice);
+        rbMeaningQuiz = findViewById(R.id.rb_meaning_quiz);
+        rbMatching = findViewById(R.id.rb_matching);
         btnStartQuiz = findViewById(R.id.btn_start_quiz);
 
         loadCategoriesIntoSpinner();
@@ -113,7 +123,16 @@ public class QuizSetupActivity extends AppCompatActivity {
         Collections.shuffle(allVocabs);
         List<Vocabulary> quizQuestions = new ArrayList<>(allVocabs.subList(0, numberOfQuestions));
 
-        Intent intent = new Intent(this, QuizActivity.class);
+        // Xác định loại quiz được chọn
+        Intent intent;
+        if (rbMatching.isChecked()) {
+            intent = new Intent(this, MatchingQuizActivity.class);
+        } else if (rbMeaningQuiz.isChecked()) {
+            intent = new Intent(this, MeaningQuizActivity.class);
+        } else {
+            intent = new Intent(this, QuizActivity.class);
+        }
+        
         intent.putExtra("QUIZ_QUESTIONS", (Serializable) quizQuestions);
         intent.putExtra("ALL_VOCABS", (Serializable) allVocabs);
         startActivity(intent);

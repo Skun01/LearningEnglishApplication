@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_color"
+    android:padding="@dimen/spacing_medium"
+    tools:context=".Quiz.MatchingQuizActivity">
+
+    <!-- Thanh tiến trình và thông tin -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <TextView
+            android:id="@+id/tv_matching_question_counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/text_color_primary"
+            tools:text="Vòng 1/5"/>
+        <ProgressBar
+            android:id="@+id/pb_matching_quiz_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:max="100"
+            android:progress="20"
+            android:layout_marginStart="@dimen/spacing_medium"
+            android:layout_marginEnd="@dimen/spacing_medium"/>
+        <TextView
+            android:id="@+id/tv_matching_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorSecondary"
+            tools:text="Điểm: 4"/>
+    </LinearLayout>
+
+    <!-- Hướng dẫn -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ghép từ với nghĩa tương ứng"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/spacing_medium"
+        android:layout_marginBottom="@dimen/spacing_medium"
+        android:textColor="@color/text_color_secondary"/>
+
+    <!-- Danh sách từ -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Từ vựng"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_color_primary"
+        android:layout_marginTop="@dimen/spacing_small"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_words"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="@dimen/spacing_small"
+        tools:listitem="@layout/item_matching_word"
+        tools:itemCount="4"/>
+
+    <!-- Danh sách nghĩa -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nghĩa"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_color_primary"
+        android:layout_marginTop="@dimen/spacing_medium"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_meanings"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="@dimen/spacing_small"
+        tools:listitem="@layout/item_matching_meaning"
+        tools:itemCount="4"/>
+
+    <!-- Nút kiểm tra -->
+    <Button
+        android:id="@+id/btn_check_matches"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Kiểm tra"
+        android:layout_marginTop="@dimen/spacing_large"
+        android:padding="12dp"
+        android:backgroundTint="?attr/colorSecondary"
+        android:textColor="@color/white"
+        android:enabled="false"/>
+
+</LinearLayout>
