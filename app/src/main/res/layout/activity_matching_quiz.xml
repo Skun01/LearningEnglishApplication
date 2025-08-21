@@ -9,12 +9,22 @@
     android:padding="@dimen/spacing_medium"
     tools:context=".Quiz.MatchingQuizActivity">
 
+    <!-- Nút quay lại -->
+    <ImageView
+        android:id="@+id/btn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_back"
+        android:padding="@dimen/spacing_small"
+        android:contentDescription="Quay lại" />
+
     <!-- Thanh tiến trình và thông tin -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/spacing_small">
         <TextView
             android:id="@+id/tv_matching_question_counter"
             android:layout_width="wrap_content"
@@ -44,9 +54,10 @@
 
     <!-- Hướng dẫn -->
     <TextView
+        android:id="@+id/tv_matching_instructions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ghép từ với nghĩa tương ứng"
+        android:text="Ghép từng từ với nghĩa tương ứng bằng cách chạm vào chúng"
         android:textSize="16sp"
         android:textStyle="italic"
         android:gravity="center"
@@ -54,54 +65,24 @@
         android:layout_marginBottom="@dimen/spacing_medium"
         android:textColor="@color/text_color_secondary"/>
 
-    <!-- Danh sách từ -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Từ vựng"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="@color/text_color_primary"
-        android:layout_marginTop="@dimen/spacing_small"/>
-
+    <!-- Danh sách các item ghép đôi -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_words"
+        android:id="@+id/rv_matching_items"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="@dimen/spacing_small"
-        tools:listitem="@layout/item_matching_word"
-        tools:itemCount="4"/>
+        android:layout_marginTop="@dimen/spacing_medium"
+        tools:listitem="@layout/item_matching"
+        tools:itemCount="10"/>
 
-    <!-- Danh sách nghĩa -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Nghĩa"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="@color/text_color_primary"
-        android:layout_marginTop="@dimen/spacing_medium"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_meanings"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginTop="@dimen/spacing_small"
-        tools:listitem="@layout/item_matching_meaning"
-        tools:itemCount="4"/>
-
-    <!-- Nút kiểm tra -->
+    <!-- Nút tiếp tục -->
     <Button
-        android:id="@+id/btn_check_matches"
+        android:id="@+id/btn_next_round"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Kiểm tra"
-        android:layout_marginTop="@dimen/spacing_large"
-        android:padding="12dp"
-        android:backgroundTint="?attr/colorSecondary"
-        android:textColor="@color/white"
-        android:enabled="false"/>
+        android:text="Tiếp tục"
+        android:layout_marginTop="@dimen/spacing_medium"
+        android:visibility="gone"
+        tools:visibility="visible"/>
 
 </LinearLayout>

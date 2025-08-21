@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GestureDetectorCompat;
@@ -77,6 +79,8 @@ public class FlashcardActivity extends AppCompatActivity {
     private StatisticsDataHelper statisticsDataHelper;
 
     private long userId;
+    private SharedPreferences prefs;
+    private boolean hasShownFlashcardGuide;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +92,10 @@ public class FlashcardActivity extends AppCompatActivity {
         statisticsDataHelper = new StatisticsDataHelper(this);
 
         userId = getSharedPreferences("user_prefs", MODE_PRIVATE).getLong("userId", -1);
+        
+        // Kiểm tra xem đã hiển thị hướng dẫn flashcard chưa
+        prefs = getSharedPreferences("app_prefs", MODE_PRIVATE);
+        hasShownFlashcardGuide = prefs.getBoolean("has_shown_flashcard_guide_" + userId, false);
 
         ImageButton btnBack = findViewById(R.id.btn_back);
         btnBack.setOnClickListener(v -> ActivityTransitionManager.finishWithTransition(this, ActivityTransitionManager.TRANSITION_SLIDE));
@@ -109,6 +117,40 @@ public class FlashcardActivity extends AppCompatActivity {
         showCurrentCard();
         setupGestureDetector();
         setupBackPressHandler();
+        
+        // Hiển thị hướng dẫn nếu chưa hiển thị trước đó
+        if (!hasShownFlashcardGuide) {
+            showFlashcardGuideDialog();
+            // Đánh dấu đã hiển thị
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("has_shown_flashcard_guide_" + userId, true);
+            editor.apply();
+        }
+    }
+    
+    private void showFlashcardGuideDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Hướng dẫn học Flashcard");
+        
+        StringBuilder message = new StringBuilder();
+        message.append("Hệ thống Flashcard sử dụng phương pháp lặp lại ngắt quãng (Spaced Repetition) để giúp bạn ghi nhớ từ vựng hiệu quả.\n\n");
+        message.append("Cách hoạt động:\n");
+        message.append("• Mỗi từ vựng được phân loại vào 5 hộp (Box) tùy theo mức độ bạn nhớ từ đó.\n");
+        message.append("• Sau khi xem từ vựng, bạn đánh giá mức độ nhớ của mình:\n");
+        message.append("  - AGAIN (Lại): Từ khó, bạn chưa nhớ được. Từ sẽ quay lại hộp 1.\n");
+        message.append("  - GOOD (Tốt): Bạn nhớ được từ này. Từ sẽ được nâng lên 1 hộp.\n");
+        message.append("  - EASY (Dễ): Từ rất dễ nhớ. Từ sẽ được nâng lên 2 hộp.\n\n");
+        message.append("Thời gian ôn tập:\n");
+        message.append("• Hộp 1: Ôn tập sau 1 phút\n");
+        message.append("• Hộp 2: Ôn tập sau 5 phút\n");
+        message.append("• Hộp 3: Ôn tập sau 1 giờ\n");
+        message.append("• Hộp 4: Ôn tập sau 1 ngày\n");
+        message.append("• Hộp 5: Ôn tập sau 1 tuần\n\n");
+        message.append("Từ vựng được đánh dấu là đã học khi bạn chọn GOOD hoặc EASY.");
+        
+        builder.setMessage(message.toString());
+        builder.setPositiveButton("Đã hiểu", (dialog, which) -> dialog.dismiss());
+        builder.show();
     }
 
     private void initializeViews() {
@@ -142,6 +184,10 @@ public class FlashcardActivity extends AppCompatActivity {
         btnAgain.setOnClickListener(v -> handleAnswer(0));
         btnGood.setOnClickListener(v -> handleAnswer(1));
         btnEasy.setOnClickListener(v -> handleAnswer(2));
+        
+        // Kiểm tra xem đã hiển thị hướng dẫn flashcard chưa
+        SharedPreferences prefs = getSharedPreferences("app_prefs", MODE_PRIVATE);
+        boolean hasShownFlashcardGuide = prefs.getBoolean("has_shown_flashcard_guide_" + userId, false);
     }
 
     private void setupTextToSpeech() {
@@ -274,6 +320,17 @@ public class FlashcardActivity extends AppCompatActivity {
             } else {
                 tvLearningMode.setVisibility(View.GONE);
             }
+            
+            // Hiển thị trạng thái học tập và độ khó
+            TextView tvLearningStatus = findViewById(R.id.tv_learning_status);
+            if (currentVocab.getLearned() == 1) {
+                String statusText = "Đã học • Hộp " + currentVocab.getBox() + "/5";
+                tvLearningStatus.setText(statusText);
+                tvLearningStatus.setVisibility(View.VISIBLE);
+            } else {
+                tvLearningStatus.setText("Chưa học");
+                tvLearningStatus.setVisibility(View.VISIBLE);
+            }
 
             if (currentVocab.getImageUri() != null && !currentVocab.getImageUri().isEmpty()) {
                 ivFlashcardImage.setVisibility(View.VISIBLE);
@@ -403,20 +460,28 @@ public class FlashcardActivity extends AppCompatActivity {
         if (currentCardIndex < vocabularyList.size()) {
             Vocabulary vocab = vocabularyList.get(currentCardIndex);
             int box = vocab.getBox();
-            if (quality == 0) {
+            String message = "";
+            
+            if (quality == 0) { // Lại (Again)
                 box = 1;
                 markCardAsUnlearned(vocab);
-            } else if (quality == 1) {
+                message = "Từ này sẽ xuất hiện sớm hơn để bạn ôn tập lại";
+            } else if (quality == 1) { // Tốt (Good)
                 box = Math.min(5, box + 1);
                 markCardAsLearned(vocab);
-            } else {
+                message = "Từ này đã được đưa vào hộp " + box + "/5. Bạn sẽ ôn tập lại sau " + getReviewTimeText(box);
+            } else { // Dễ (Easy)
                 box = Math.min(5, box + 2);
                 markCardAsLearned(vocab);
+                message = "Từ này đã được đưa vào hộp " + box + "/5. Bạn sẽ ôn tập lại sau " + getReviewTimeText(box);
             }
+            
             long nextReview = calculateNextReview(box);
             vocab.setBox(box);
             vocab.setNextReview(nextReview);
             vocabularyDataHelper.updateReviewSchedule(vocab.getId(), box, nextReview);
+            
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
             currentCardIndex++;
             if (currentCardIndex < vocabularyList.size()) {
@@ -425,6 +490,23 @@ public class FlashcardActivity extends AppCompatActivity {
                 Toast.makeText(this, "Bạn đã hoàn thành ôn tập!", Toast.LENGTH_SHORT).show();
                 ActivityTransitionManager.finishWithTransition(this, ActivityTransitionManager.TRANSITION_SLIDE);
             }
+        }
+    }
+    
+    private String getReviewTimeText(int box) {
+        switch (box) {
+            case 1:
+                return "1 phút";
+            case 2:
+                return "5 phút";
+            case 3:
+                return "1 giờ";
+            case 4:
+                return "1 ngày";
+            case 5:
+                return "1 tuần";
+            default:
+                return "";
         }
     }
 

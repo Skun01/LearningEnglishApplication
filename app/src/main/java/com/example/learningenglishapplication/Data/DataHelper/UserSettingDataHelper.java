@@ -16,6 +16,22 @@ public class UserSettingDataHelper extends DatabaseHelper {
     public UserSettingDataHelper(Context context) {
         super(context);
     }
+    
+    /**
+     * Khởi tạo cài đặt mặc định cho người dùng mới
+     */
+    public void initDefaultSettings(long userId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_SETTING_USER_ID, userId);
+        values.put(COLUMN_SETTING_THEME, "System");
+        values.put(COLUMN_SETTING_DAILY_GOAL, 10); // Mặc định 10 từ mỗi ngày
+        values.put(COLUMN_SETTING_NOTIFICATIONS, 1); // Mặc định bật thông báo
+        
+        // replace() sẽ insert mới hoặc update dựa trên primary key
+        db.replace(TABLE_USER_SETTINGS, null, values);
+        db.close();
+    }
 
     /**
      * Lưu theme cho user. Nếu chưa có thì INSERT, có rồi thì UPDATE.
@@ -106,5 +122,148 @@ public class UserSettingDataHelper extends DatabaseHelper {
                         " AND " + COLUMN_STAT_DATE + " >= date('now', '-6 days')" +
                         " ORDER BY " + COLUMN_STAT_DATE + " ASC";
         return db.rawQuery(query, new String[]{String.valueOf(userId)});
+    }
+    
+    /**
+     * Lấy mục tiêu học tập hằng ngày của người dùng
+     * @return Số từ mục tiêu, mặc định là 10 nếu chưa được thiết lập
+     */
+    public int getDailyGoal(long userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(
+                TABLE_USER_SETTINGS,
+                new String[]{COLUMN_SETTING_DAILY_GOAL},
+                COLUMN_SETTING_USER_ID + "=?",
+                new String[]{String.valueOf(userId)},
+                null, null, null
+        );
+
+        int dailyGoal = 10; // Mặc định là 10 từ
+        if (cursor.moveToFirst()) {
+            dailyGoal = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SETTING_DAILY_GOAL));
+        }
+        cursor.close();
+        db.close();
+        return dailyGoal;
+    }
+    
+    /**
+     * Cập nhật mục tiêu học tập hằng ngày
+     */
+    public void saveDailyGoal(long userId, int dailyGoal) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_SETTING_USER_ID, userId);
+        values.put(COLUMN_SETTING_DAILY_GOAL, dailyGoal);
+
+        // Kiểm tra xem đã có bản ghi chưa
+        Cursor cursor = db.query(
+                TABLE_USER_SETTINGS,
+                new String[]{COLUMN_SETTING_USER_ID},
+                COLUMN_SETTING_USER_ID + "=?",
+                new String[]{String.valueOf(userId)},
+                null, null, null
+        );
+        
+        if (cursor.moveToFirst()) {
+            // Đã có bản ghi, cập nhật
+            db.update(
+                    TABLE_USER_SETTINGS,
+                    values,
+                    COLUMN_SETTING_USER_ID + "=?",
+                    new String[]{String.valueOf(userId)}
+            );
+        } else {
+            // Chưa có, thêm mới với các giá trị mặc định
+            values.put(COLUMN_SETTING_THEME, "System");
+            values.put(COLUMN_SETTING_NOTIFICATIONS, 1);
+            db.insert(TABLE_USER_SETTINGS, null, values);
+        }
+        
+        cursor.close();
+        db.close();
+    }
+    
+    /**
+     * Kiểm tra xem thông báo nhắc nhở có được bật không
+     */
+    public boolean isNotificationsEnabled(long userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(
+                TABLE_USER_SETTINGS,
+                new String[]{COLUMN_SETTING_NOTIFICATIONS},
+                COLUMN_SETTING_USER_ID + "=?",
+                new String[]{String.valueOf(userId)},
+                null, null, null
+        );
+
+        boolean enabled = true; // Mặc định là bật
+        if (cursor.moveToFirst()) {
+            enabled = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SETTING_NOTIFICATIONS)) == 1;
+        }
+        cursor.close();
+        db.close();
+        return enabled;
+    }
+    
+    /**
+     * Cập nhật trạng thái thông báo nhắc nhở
+     */
+    public void saveNotificationSetting(long userId, boolean enabled) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_SETTING_USER_ID, userId);
+        values.put(COLUMN_SETTING_NOTIFICATIONS, enabled ? 1 : 0);
+
+        // Kiểm tra xem đã có bản ghi chưa
+        Cursor cursor = db.query(
+                TABLE_USER_SETTINGS,
+                new String[]{COLUMN_SETTING_USER_ID},
+                COLUMN_SETTING_USER_ID + "=?",
+                new String[]{String.valueOf(userId)},
+                null, null, null
+        );
+        
+        if (cursor.moveToFirst()) {
+            // Đã có bản ghi, cập nhật
+            db.update(
+                    TABLE_USER_SETTINGS,
+                    values,
+                    COLUMN_SETTING_USER_ID + "=?",
+                    new String[]{String.valueOf(userId)}
+            );
+        } else {
+            // Chưa có, thêm mới với các giá trị mặc định
+            values.put(COLUMN_SETTING_THEME, "System");
+            values.put(COLUMN_SETTING_DAILY_GOAL, 10);
+            db.insert(TABLE_USER_SETTINGS, null, values);
+        }
+        
+        cursor.close();
+        db.close();
+    }
+    
+    /**
+     * Lấy số từ đã học trong ngày hôm nay
+     */
+    public int getTodayLearnedWords(long userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String todayDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        
+        Cursor cursor = db.query(
+                TABLE_STATISTICS,
+                new String[]{COLUMN_STAT_WORDS_LEARNED},
+                COLUMN_STAT_USER_ID + "=? AND " + COLUMN_STAT_DATE + "=?",
+                new String[]{String.valueOf(userId), todayDate},
+                null, null, null
+        );
+
+        int count = 0;
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_STAT_WORDS_LEARNED));
+        }
+        cursor.close();
+        db.close();
+        return count;
     }
 }

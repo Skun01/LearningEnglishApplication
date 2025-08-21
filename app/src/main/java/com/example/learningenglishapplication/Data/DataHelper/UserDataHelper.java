@@ -69,4 +69,31 @@ public class UserDataHelper extends DatabaseHelper {
 
         return nickname;
     }
+    
+    // Lấy thông tin user theo userId
+    public Cursor getUserById(long userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        
+        return db.query(TABLE_USERS,
+                null,
+                COLUMN_USER_ID + "=?",
+                new String[]{String.valueOf(userId)},
+                null, null, null);
+    }
+    
+    // Cập nhật thông tin người dùng
+    public boolean updateUserInfo(long userId, String nickname, String email) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_USER_NICKNAME, nickname);
+        values.put(COLUMN_USER_EMAIL, email);
+        
+        int rowsAffected = db.update(TABLE_USERS, values, 
+                COLUMN_USER_ID + "=?", 
+                new String[]{String.valueOf(userId)});
+        
+        db.close();
+        return rowsAffected > 0;
+    }
 }

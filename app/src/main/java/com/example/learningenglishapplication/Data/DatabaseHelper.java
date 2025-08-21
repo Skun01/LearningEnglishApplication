@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "VocabularyApp.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     // ----- BẢNG USERS -----
     public static final String TABLE_USERS = "users";
@@ -74,9 +74,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_USER_SETTINGS = "user_settings";
     public static final String COLUMN_SETTING_USER_ID = "user_id";
     public static final String COLUMN_SETTING_THEME = "theme";
+    public static final String COLUMN_SETTING_DAILY_GOAL = "daily_goal";
+    public static final String COLUMN_SETTING_NOTIFICATIONS = "notifications_enabled";
     private static final String CREATE_TABLE_USER_SETTINGS = "CREATE TABLE " + TABLE_USER_SETTINGS + "("
             + COLUMN_SETTING_USER_ID + " INTEGER PRIMARY KEY,"
             + COLUMN_SETTING_THEME + " TEXT,"
+            + COLUMN_SETTING_DAILY_GOAL + " INTEGER DEFAULT 10,"
+            + COLUMN_SETTING_NOTIFICATIONS + " INTEGER DEFAULT 1,"
             + "FOREIGN KEY(" + COLUMN_SETTING_USER_ID + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_USER_ID + ")" + ")";
 
     // ----- BẢNG STATISTICS -----
@@ -107,13 +111,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Xóa các bảng cũ
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_STATISTICS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_SETTINGS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_VOCABULARIES);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORIES);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
-        // Tạo lại các bảng mới
-        onCreate(db);
+        if (oldVersion < 3) {
+            // Xóa các bảng cũ
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_STATISTICS);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_SETTINGS);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_VOCABULARIES);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORIES);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
+            // Tạo lại các bảng mới
+            onCreate(db);
+        } else if (oldVersion == 3 && newVersion == 4) {
+            // Kiểm tra xem cột daily_goal đã tồn tại chưa
+            try {
+                db.execSQL("SELECT daily_goal FROM " + TABLE_USER_SETTINGS + " LIMIT 1");
+            } catch (Exception e) {
+                // Cột chưa tồn tại, thêm vào
+                db.execSQL("ALTER TABLE " + TABLE_USER_SETTINGS + " ADD COLUMN " + 
+                           COLUMN_SETTING_DAILY_GOAL + " INTEGER DEFAULT 10");
+            }
+            
+            // Kiểm tra xem cột notifications_enabled đã tồn tại chưa
+            try {
+                db.execSQL("SELECT notifications_enabled FROM " + TABLE_USER_SETTINGS + " LIMIT 1");
+            } catch (Exception e) {
+                // Cột chưa tồn tại, thêm vào
+                db.execSQL("ALTER TABLE " + TABLE_USER_SETTINGS + " ADD COLUMN " + 
+                           COLUMN_SETTING_NOTIFICATIONS + " INTEGER DEFAULT 1");
+            }
+        }
     }
 }

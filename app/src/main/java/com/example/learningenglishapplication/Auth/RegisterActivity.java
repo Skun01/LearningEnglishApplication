@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.learningenglishapplication.Data.DataHelper.UserDataHelper;
+import com.example.learningenglishapplication.Data.DataHelper.UserSettingDataHelper;
 import com.example.learningenglishapplication.R;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -20,6 +21,7 @@ public class RegisterActivity extends AppCompatActivity {
     private Button btnRegister;
     private TextView tvGoToLogin;
     private UserDataHelper userHelper;
+    private UserSettingDataHelper settingHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         userHelper = new UserDataHelper(this);
+        settingHelper = new UserSettingDataHelper(this);
 
         // Ánh xạ các view
         etNickname = findViewById(R.id.et_register_nickname);
@@ -72,6 +75,14 @@ public class RegisterActivity extends AppCompatActivity {
         boolean isAdded = userHelper.addUser(email, password, nickname);
 
         if (isAdded) {
+            // Lấy userId của người dùng vừa đăng ký
+            long userId = userHelper.checkUser(email, password);
+            
+            // Khởi tạo cài đặt mặc định cho người dùng mới
+            if (userId != -1) {
+                settingHelper.initDefaultSettings(userId);
+            }
+            
             Toast.makeText(this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
             // Chuyển đến màn hình đăng nhập sau khi đăng ký
             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);

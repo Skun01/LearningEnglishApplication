@@ -76,6 +76,43 @@ public class QuizSetupActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_item, categoryNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategory.setAdapter(adapter);
+        
+        // Thêm listener để cập nhật số lượng câu hỏi khi chọn thể loại
+        spinnerCategory.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(android.widget.AdapterView<?> parent, android.view.View view, int position, long id) {
+                updateQuestionCount();
+            }
+
+            @Override
+            public void onNothingSelected(android.widget.AdapterView<?> parent) {
+                // Không làm gì
+            }
+        });
+        
+        // Cập nhật số lượng câu hỏi ban đầu nếu có thể loại
+        if (!categoryNames.isEmpty()) {
+            updateQuestionCount();
+        }
+    }
+    
+    private void updateQuestionCount() {
+        if (categoryNames.isEmpty()) return;
+        
+        String selectedCategoryName = spinnerCategory.getSelectedItem().toString();
+        long selectedCategoryId = categoryMap.get(selectedCategoryName);
+        
+        // Lấy danh sách từ vựng trong thể loại
+        List<Vocabulary> vocabsInCategory = vocabularyDataHelper.getVocabulariesAsList(selectedCategoryId);
+        int vocabCount = vocabsInCategory.size();
+        
+        // Cập nhật số lượng câu hỏi bằng số lượng từ vựng
+        etNumberOfQuestions.setText(String.valueOf(vocabCount));
+        
+        // Hiển thị thông báo nếu không đủ từ vựng
+        if (vocabCount < 4) {
+            Toast.makeText(this, "Thể loại này cần ít nhất 4 từ để tạo bài kiểm tra!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void startQuiz() {

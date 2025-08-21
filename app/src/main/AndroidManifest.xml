@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
     <application
         android:name=".Home.MyApplication"
         android:allowBackup="true"
@@ -38,6 +41,11 @@
         <activity android:name=".Achivements.AchievementsActivity" />
         <activity android:name=".Quiz.MatchingQuizActivity" />
         <activity android:name=".Quiz.MeaningQuizActivity" />
+        <!-- Đăng ký BroadcastReceiver cho thông báo nhắc nhở học tập -->
+        <receiver
+            android:name=".Receivers.NotificationReceiver"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>
