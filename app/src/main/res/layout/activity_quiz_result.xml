@@ -37,7 +37,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tổng điểm"
+            android:text="Thời gian hoàn thành"
             android:layout_gravity="center_horizontal"
             android:textColor="@color/text_color_secondary"/>
 
@@ -68,13 +68,13 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="Số câu đúng:"
+                android:text="Số cặp ghép đúng:"
                 android:textSize="16sp"/>
             <TextView
                 android:id="@+id/tv_correct_answers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="18"
+                tools:text="5"
                 android:textStyle="bold"
                 android:textSize="16sp"/>
         </LinearLayout>
@@ -87,13 +87,13 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="Số câu sai:"
+                android:text="Số cặp ghép sai:"
                 android:textSize="16sp"/>
             <TextView
                 android:id="@+id/tv_wrong_answers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="2"
+                tools:text="0"
                 android:textStyle="bold"
                 android:textSize="16sp"/>
         </LinearLayout>

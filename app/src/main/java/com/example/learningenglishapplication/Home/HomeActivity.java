@@ -185,12 +185,12 @@ public class HomeActivity extends AppCompatActivity implements CategoryAdapter.O
             if (itemId == R.id.nav_home) {
                 return true;
             } else if (itemId == R.id.nav_categories) {
-                Intent intent = new Intent(HomeActivity.this, CategoryManagementActivity.class);
-                ActivityTransitionManager.startActivityWithTransition(this, intent, ActivityTransitionManager.TRANSITION_SLIDE);
+                ActivityTransitionManager.startActivityWithSlideTransition(
+                        this, CategoryManagementActivity.class);
                 return true;
             } else if (itemId == R.id.nav_quiz) {
-                Intent intent = new Intent(HomeActivity.this, QuizSetupActivity.class);
-                ActivityTransitionManager.startActivityWithTransition(this, intent, ActivityTransitionManager.TRANSITION_SLIDE);
+                ActivityTransitionManager.startActivityWithSlideTransition(
+                        this, QuizSetupActivity.class);
                 return true;
             // Đã xóa xử lý cho tab cá nhân và tích hợp vào icon ở trang chủ
             }

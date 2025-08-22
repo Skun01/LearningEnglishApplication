@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -29,7 +30,7 @@ import java.util.Map;
 
 public class MatchingQuizActivity extends AppCompatActivity implements MatchingItemAdapter.OnItemClickListener {
 
-    private TextView tvQuestionCounter, tvScore, tvInstructions;
+    private TextView tvQuestionCounter, tvScore, tvInstructions, tvTimer;
     private ProgressBar pbQuizProgress;
     private RecyclerView rvMatchingItems;
     private Button btnNextRound;
@@ -44,11 +45,19 @@ public class MatchingQuizActivity extends AppCompatActivity implements MatchingI
     private int totalRounds = 0;
     private int score = 0;
     private int correctPairsInRound = 0;
+    private int totalPairsInRound = 0;
     private long userId;
     private UserSettingDataHelper userSettingDataHelper;
     
     private MatchingItem selectedItem = null;
+    private MatchingItem lastIncorrectMatch = null;
     private final Handler handler = new Handler();
+    
+    // Biến đếm thời gian
+    private long startTime = 0L;
+    private long timeInMilliseconds = 0L;
+    private final Handler timerHandler = new Handler();
+    private Runnable timerRunnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +87,7 @@ public class MatchingQuizActivity extends AppCompatActivity implements MatchingI
         rvMatchingItems = findViewById(R.id.rv_matching_items);
         btnNextRound = findViewById(R.id.btn_next_round);
         btnBack = findViewById(R.id.btn_back);
+        tvTimer = findViewById(R.id.tv_timer);
 
         // Khởi tạo RecyclerView
         rvMatchingItems.setLayoutManager(new GridLayoutManager(this, 2));
@@ -88,6 +98,19 @@ public class MatchingQuizActivity extends AppCompatActivity implements MatchingI
         
         btnNextRound.setVisibility(View.GONE);
         tvInstructions.setText("Ghép từng từ với nghĩa tương ứng bằng cách chạm vào chúng");
+        
+        // Khởi tạo timer
+        timerRunnable = new Runnable() {
+            @Override
+            public void run() {
+                timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
+                int seconds = (int) (timeInMilliseconds / 1000);
+                int minutes = seconds / 60;
+                seconds = seconds % 60;
+                tvTimer.setText(String.format("%d:%02d", minutes, seconds));
+                timerHandler.postDelayed(this, 1000);
+            }
+        };
     }
 
     private void setupListeners() {
@@ -97,6 +120,8 @@ public class MatchingQuizActivity extends AppCompatActivity implements MatchingI
         });
         
         btnBack.setOnClickListener(v -> {
+            // Dừng timer trước khi thoát
+            timerHandler.removeCallbacks(timerRunnable);
             finish();
         });
     }
@@ -107,15 +132,16 @@ public class MatchingQuizActivity extends AppCompatActivity implements MatchingI
             return;
         }
 
-        // Cập nhật UI
-        tvQuestionCounter.setText("Vòng " + (currentRound + 1) + "/" + totalRounds);
-        tvScore.setText("Điểm: " + score);
-        pbQuizProgress.setProgress((currentRound * 100) / totalRounds);
-        btnNextRound.setVisibility(View.GONE);
-        correctPairsInRound = 0;
+        // Bắt đầu đếm thời gian nếu là vòng đầu tiên
+        if (currentRound == 0) {
+            startTime = SystemClock.uptimeMillis();
+            timerHandler.postDelayed(timerRunnable, 0);
+        }
 
         // Xóa dữ liệu cũ
         matchingItems.clear();
+        correctPairsInRound = 0;
+        lastIncorrectMatch = null;
 
         // Lấy 5 từ vựng cho vòng hiện tại (hoặc ít hơn nếu là vòng cuối)
         int startIndex = currentRound * 5;
@@ -132,6 +158,15 @@ public class MatchingQuizActivity extends AppCompatActivity implements MatchingI
 
         // Trộn ngẫu nhiên các item để tăng độ khó
         Collections.shuffle(matchingItems);
+        
+        // Cập nhật số cặp trong vòng hiện tại
+        totalPairsInRound = currentRoundVocabs.size();
+
+        // Cập nhật UI
+        tvQuestionCounter.setText(correctPairsInRound + "/" + totalPairsInRound);
+        tvScore.setText("Điểm: " + score);
+        pbQuizProgress.setProgress((correctPairsInRound * 100) / totalPairsInRound);
+        btnNextRound.setVisibility(View.GONE);
 
         // Cập nhật adapter
         adapter.notifyDataSetChanged();
@@ -142,6 +177,12 @@ public class MatchingQuizActivity extends AppCompatActivity implements MatchingI
         // Nếu item đã được ghép đúng, không làm gì cả
         if (item.isMatched()) {
             return;
+        }
+        
+        // Xóa trạng thái ghép sai trước đó
+        if (lastIncorrectMatch != null) {
+            lastIncorrectMatch.setIncorrect(false);
+            lastIncorrectMatch = null;
         }
         
         if (selectedItem == null) {
@@ -162,9 +203,15 @@ public class MatchingQuizActivity extends AppCompatActivity implements MatchingI
                 correctPairsInRound++;
                 tvScore.setText("Điểm: " + score);
                 
+                // Cập nhật hiển thị số cặp đã ghép đúng
+                tvQuestionCounter.setText(correctPairsInRound + "/" + totalPairsInRound);
+                pbQuizProgress.setProgress((correctPairsInRound * 100) / totalPairsInRound);
+                
                 // Kiểm tra xem đã hoàn thành vòng chưa
-                int totalPairsInRound = matchingItems.size() / 2;
                 if (correctPairsInRound >= totalPairsInRound) {
+                    // Dừng timer
+                    timerHandler.removeCallbacks(timerRunnable);
+                    
                     // Đã hoàn thành vòng
                     if (currentRound < totalRounds - 1) {
                         btnNextRound.setVisibility(View.VISIBLE);
@@ -175,7 +222,10 @@ public class MatchingQuizActivity extends AppCompatActivity implements MatchingI
                     }
                 }
             } else {
-                // Ghép sai, bỏ chọn cả hai
+                // Ghép sai, đánh dấu cả hai item là ghép sai
+                selectedItem.setIncorrect(true);
+                item.setIncorrect(true);
+                lastIncorrectMatch = item; // Lưu lại item ghép sai gần nhất
                 selectedItem.setSelected(false);
             }
             
@@ -186,16 +236,23 @@ public class MatchingQuizActivity extends AppCompatActivity implements MatchingI
     }
 
     private void showResults() {
+        // Dừng timer
+        timerHandler.removeCallbacks(timerRunnable);
+        
         // Ghi nhận từ đã học
         for (int i = 0; i < quizQuestions.size(); i++) {
             userSettingDataHelper.logWordLearned(userId);
         }
+        
+        // Tính thời gian hoàn thành (đổi từ milliseconds sang seconds)
+        int completionTimeSeconds = (int) (timeInMilliseconds / 1000);
         
         // Chuyển đến màn hình kết quả
         Intent intent = new Intent(this, QuizResultActivity.class);
         intent.putExtra("SCORE", score);
         intent.putExtra("TOTAL_QUESTIONS", quizQuestions.size());
         intent.putExtra("USER_ID", userId);
+        intent.putExtra("COMPLETION_TIME", completionTimeSeconds);
         startActivity(intent);
         finish();
     }
@@ -210,6 +267,7 @@ public class MatchingQuizActivity extends AppCompatActivity implements MatchingI
         private int type; // Loại: từ hoặc nghĩa
         private boolean isSelected;
         private boolean isMatched;
+        private boolean isIncorrect; // Trạng thái ghép sai
         
         public MatchingItem(String text, int id, int type) {
             this.text = text;
@@ -217,6 +275,7 @@ public class MatchingQuizActivity extends AppCompatActivity implements MatchingI
             this.type = type;
             this.isSelected = false;
             this.isMatched = false;
+            this.isIncorrect = false;
         }
         
         public String getText() {
@@ -245,6 +304,14 @@ public class MatchingQuizActivity extends AppCompatActivity implements MatchingI
         
         public void setMatched(boolean matched) {
             isMatched = matched;
+        }
+        
+        public boolean isIncorrect() {
+            return isIncorrect;
+        }
+        
+        public void setIncorrect(boolean incorrect) {
+            isIncorrect = incorrect;
         }
     }
 }

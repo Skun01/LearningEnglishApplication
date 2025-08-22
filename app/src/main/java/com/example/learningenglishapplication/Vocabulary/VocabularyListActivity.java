@@ -37,7 +37,7 @@ import com.example.learningenglishapplication.Data.model.Vocabulary;
 import com.example.learningenglishapplication.Utils.ActivityTransitionManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class VocabularyListActivity extends AppCompatActivity implements VocabularyAdapter.OnItemInteractionListener, VocabularyAdapter.OnFavoriteClickListener {
+public class VocabularyListActivity extends AppCompatActivity implements VocabularyAdapter.OnItemInteractionListener, VocabularyAdapter.OnFavoriteClickListener, AddVocabularyDialog.OnVocabularySavedListener {
 
     private RecyclerView recyclerView;
     private VocabularyAdapter adapter;
@@ -81,6 +81,11 @@ public class VocabularyListActivity extends AppCompatActivity implements Vocabul
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setTitle(categoryName);
         }
+        
+        // Thiết lập sự kiện cho nút quay lại
+        toolbar.setNavigationOnClickListener(v -> {
+            onBackPressed();
+        });
 
         recyclerView = findViewById(R.id.rv_vocabularies);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -94,9 +99,7 @@ public class VocabularyListActivity extends AppCompatActivity implements Vocabul
 
         fabAddVocabulary = findViewById(R.id.fab_add_vocabulary);
         fabAddVocabulary.setOnClickListener(v -> {
-            Intent addIntent = new Intent(VocabularyListActivity.this, AddEditVocabularyActivity.class);
-            addIntent.putExtra("CATEGORY_ID", categoryId);
-            startActivityForResult(addIntent, ADD_EDIT_VOCABULARY_REQUEST);
+            showAddVocabularyDialog();
         });
 
         btnStartFlashcard = findViewById(R.id.btn_start_flashcard);
@@ -142,21 +145,18 @@ public class VocabularyListActivity extends AppCompatActivity implements Vocabul
         loadVocabularies();
     }
 
+    private void showAddVocabularyDialog() {
+        AddVocabularyDialog dialog = AddVocabularyDialog.newInstance(categoryId);
+        dialog.show(getSupportFragmentManager(), "AddVocabularyDialog");
+    }
+    
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ADD_EDIT_VOCABULARY_REQUEST) {
-            if (resultCode == RESULT_OK && data != null) {
-                // Nhận ID của từ vựng được làm nổi bật từ Intent
-                long highlightedVocabId = data.getLongExtra("HIGHLIGHT_VOCAB_ID", -1);
-
-                // Chuyển về chế độ lọc "Tất cả" và làm mới danh sách
-                setFilter("ALL");
-
-                // Đặt ID cần làm nổi bật cho adapter
-                adapter.setHighlightedVocabId(highlightedVocabId);
-            }
-        }
+    public void onVocabularySaved(long vocabId) {
+        // Chuyển về chế độ lọc "Tất cả" và làm mới danh sách
+        setFilter("ALL");
+        
+        // Đặt ID cần làm nổi bật cho adapter
+        adapter.setHighlightedVocabId(vocabId);
     }
 
     private void showFilterMenu(View v) {
@@ -385,7 +385,7 @@ public class VocabularyListActivity extends AppCompatActivity implements Vocabul
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            ActivityTransitionManager.finishWithTransition(this, ActivityTransitionManager.TRANSITION_SLIDE);
+            onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -393,6 +393,7 @@ public class VocabularyListActivity extends AppCompatActivity implements Vocabul
     
     @Override
     public void onBackPressed() {
-        ActivityTransitionManager.finishWithTransition(this, ActivityTransitionManager.TRANSITION_SLIDE);
+        super.onBackPressed();
+        ActivityTransitionManager.applyTransition(this, ActivityTransitionManager.TRANSITION_SLIDE, true);
     }
 }

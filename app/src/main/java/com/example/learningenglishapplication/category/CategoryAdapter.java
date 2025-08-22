@@ -1,6 +1,7 @@
 package com.example.learningenglishapplication.category;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +45,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         public TextView countTextView; // Bạn có thể thêm logic để đếm số từ sau
         public ProgressBar progressBar;
         public TextView progressPercentTextView;
+        public com.google.android.material.button.MaterialButton btnStartCategory;
 
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -52,6 +54,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             countTextView = itemView.findViewById(R.id.tv_word_count);
             progressBar = itemView.findViewById(R.id.progress_category);
             progressPercentTextView = itemView.findViewById(R.id.tv_progress_percent);
+            btnStartCategory = itemView.findViewById(R.id.btn_start_category);
         }
     }
 
@@ -115,6 +118,18 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                 return true; // Trả về true để báo rằng sự kiện đã được xử lý
             }
             return false;
+        });
+        
+        // Thêm sự kiện click cho nút "Học ngay"
+        holder.btnStartCategory.setOnClickListener(v -> {
+            if (listener != null) {
+                // Chuyển đến QuizSetupActivity với category đã chọn
+                Intent intent = new Intent(mContext, com.example.learningenglishapplication.Quiz.QuizSetupActivity.class);
+                // Thêm thông tin category vào intent
+                intent.putExtra("SELECTED_CATEGORY_ID", id);
+                intent.putExtra("SELECTED_CATEGORY_NAME", name);
+                mContext.startActivity(intent);
+            }
         });
     }
 

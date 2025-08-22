@@ -42,7 +42,7 @@ public class ActivityTransitionManager {
      * @param transitionType Kiểu hiệu ứng chuyển tiếp
      * @param isReturning true nếu đang quay lại Activity trước đó, false nếu đang chuyển đến Activity mới
      */
-    private static void applyTransition(Activity activity, int transitionType, boolean isReturning) {
+    public static void applyTransition(Activity activity, int transitionType, boolean isReturning) {
         switch (transitionType) {
             case TRANSITION_SLIDE:
                 if (isReturning) {
@@ -58,5 +58,16 @@ public class ActivityTransitionManager {
                 activity.overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
                 break;
         }
+    }
+    
+    /**
+     * Khởi chạy một Activity mới với hiệu ứng chuyển tiếp slide
+     * @param currentActivity Activity hiện tại
+     * @param targetActivityClass Class của Activity đích
+     */
+    public static void startActivityWithSlideTransition(Activity currentActivity, Class<?> targetActivityClass) {
+        Intent intent = new Intent(currentActivity, targetActivityClass);
+        currentActivity.startActivity(intent);
+        currentActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 }

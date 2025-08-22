@@ -22,6 +22,7 @@ public class QuizResultActivity extends AppCompatActivity {
 
         int score = getIntent().getIntExtra("SCORE", 0);
         int totalQuestions = getIntent().getIntExtra("TOTAL_QUESTIONS", 0);
+        int completionTime = getIntent().getIntExtra("COMPLETION_TIME", 0);
 
         tvFinalScore = findViewById(R.id.tv_final_score);
         tvCorrectAnswers = findViewById(R.id.tv_correct_answers);
@@ -29,9 +30,14 @@ public class QuizResultActivity extends AppCompatActivity {
         btnRetryQuiz = findViewById(R.id.btn_retry_quiz);
         btnBackToHome = findViewById(R.id.btn_back_to_home);
 
-        tvFinalScore.setText(score + "/" + totalQuestions);
-        tvCorrectAnswers.setText(String.valueOf(score));
-        tvWrongAnswers.setText(String.valueOf(totalQuestions - score));
+        // Hiển thị thời gian hoàn thành thay vì điểm số
+        int minutes = completionTime / 60;
+        int seconds = completionTime % 60;
+        tvFinalScore.setText(String.format("%d:%02d", minutes, seconds));
+        
+        // Vẫn hiển thị số cặp đúng và số cặp sai
+        tvCorrectAnswers.setText(String.valueOf(score / 10)); // Mỗi cặp đúng được 10 điểm
+        tvWrongAnswers.setText(String.valueOf(totalQuestions - (score / 10)));
 
         btnRetryQuiz.setOnClickListener(v -> {
             // Quay lại màn hình thiết lập Quiz

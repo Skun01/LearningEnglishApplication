@@ -12,6 +12,11 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import com.example.learningenglishapplication.category.CategoryManagementActivity;
+import com.example.learningenglishapplication.Home.HomeActivity;
+import com.example.learningenglishapplication.Utils.ActivityTransitionManager;
 
 import com.example.learningenglishapplication.Data.DataHelper.CategoryDataHelper; // Cập nhật import
 import com.example.learningenglishapplication.Data.DataHelper.VocabularyDataHelper; // Cập nhật import
@@ -37,6 +42,7 @@ public class QuizSetupActivity extends AppCompatActivity {
     private DatabaseHelper databaseHelper;
     private VocabularyDataHelper vocabularyDataHelper; // Sửa tên lớp
     private CategoryDataHelper categoryDataHelper; // Sửa tên lớp
+    private BottomNavigationView bottomNavigation;
 
     private Map<String, Long> categoryMap;
     private List<String> categoryNames;
@@ -64,8 +70,29 @@ public class QuizSetupActivity extends AppCompatActivity {
         btnStartQuiz = findViewById(R.id.btn_start_quiz);
 
         loadCategoriesIntoSpinner();
+        setupBottomNavigation();
 
         btnStartQuiz.setOnClickListener(v -> startQuiz());
+    }
+    
+    private void handleSelectedCategory() {
+        // Kiểm tra xem có category được chọn từ màn hình trước không
+        Intent intent = getIntent();
+        if (intent.hasExtra("SELECTED_CATEGORY_ID") && intent.hasExtra("SELECTED_CATEGORY_NAME")) {
+            long selectedCategoryId = intent.getLongExtra("SELECTED_CATEGORY_ID", -1);
+            String selectedCategoryName = intent.getStringExtra("SELECTED_CATEGORY_NAME");
+            
+            if (selectedCategoryId != -1 && selectedCategoryName != null) {
+                // Tìm vị trí của category trong spinner
+                int position = categoryNames.indexOf(selectedCategoryName);
+                if (position >= 0) {
+                    // Chọn category trong spinner
+                    spinnerCategory.setSelection(position);
+                    // Cập nhật số lượng câu hỏi
+                    updateQuestionCount();
+                }
+            }
+        }
     }
 
     private void loadCategoriesIntoSpinner() {
@@ -94,6 +121,9 @@ public class QuizSetupActivity extends AppCompatActivity {
         if (!categoryNames.isEmpty()) {
             updateQuestionCount();
         }
+        
+        // Kiểm tra xem có category được chọn từ màn hình trước không
+        handleSelectedCategory();
     }
     
     private void updateQuestionCount() {
@@ -173,5 +203,27 @@ public class QuizSetupActivity extends AppCompatActivity {
         intent.putExtra("QUIZ_QUESTIONS", (Serializable) quizQuestions);
         intent.putExtra("ALL_VOCABS", (Serializable) allVocabs);
         startActivity(intent);
+    }
+    
+    private void setupBottomNavigation() {
+        bottomNavigation = findViewById(R.id.bottom_navigation);
+        bottomNavigation.setSelectedItemId(R.id.nav_quiz);
+        
+        bottomNavigation.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.nav_home) {
+                ActivityTransitionManager.startActivityWithSlideTransition(
+                        this, HomeActivity.class);
+                return true;
+            } else if (itemId == R.id.nav_categories) {
+                ActivityTransitionManager.startActivityWithSlideTransition(
+                        this, CategoryManagementActivity.class);
+                return true;
+            } else if (itemId == R.id.nav_quiz) {
+                // Đã ở màn hình Quiz Setup, không cần chuyển đổi
+                return true;
+            }
+            return false;
+        });
     }
 }

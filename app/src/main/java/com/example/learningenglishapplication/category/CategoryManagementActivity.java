@@ -13,16 +13,22 @@ import androidx.appcompat.widget.SearchView;
 import android.content.DialogInterface;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.learningenglishapplication.Data.DataHelper.CategoryDataHelper;
 import com.example.learningenglishapplication.Data.DatabaseHelper;
+import com.example.learningenglishapplication.Home.HomeActivity;
+import com.example.learningenglishapplication.Quiz.QuizSetupActivity;
 import com.example.learningenglishapplication.R;
+import com.example.learningenglishapplication.Utils.ActivityTransitionManager;
 import com.example.learningenglishapplication.Vocabulary.VocabularyListActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class CategoryManagementActivity extends AppCompatActivity implements CategoryAdapter.OnItemClickListener {
+public class CategoryManagementActivity extends AppCompatActivity 
+        implements CategoryAdapter.OnItemClickListener, AddCategoryDialog.OnCategorySavedListener {
 
     private RecyclerView recyclerView;
     private CategoryAdapter adapter;
@@ -30,6 +36,7 @@ public class CategoryManagementActivity extends AppCompatActivity implements Cat
     private FloatingActionButton fabAddCategory;
     private long currentUserId;
     private MaterialToolbar toolbar;
+    private BottomNavigationView bottomNavigation;
 
 
     @Override
@@ -70,14 +77,17 @@ public class CategoryManagementActivity extends AppCompatActivity implements Cat
         fabAddCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Chuyển đến màn hình thêm thể loại
-                startActivity(new Intent(CategoryManagementActivity.this, AddEditCategoryActivity.class));
+                // Hiển thị dialog toàn màn hình để thêm thể loại
+                showAddCategoryDialog();
             }
         });
 
         adapter = new CategoryAdapter(this, cursor);
         adapter.setOnItemClickListener(this); // Đăng ký listener
         recyclerView.setAdapter(adapter);
+        
+        // Thiết lập Bottom Navigation
+        setupBottomNavigation();
     }
 
     // Phương thức được gọi khi một thể loại được nhấn
@@ -122,6 +132,28 @@ public class CategoryManagementActivity extends AppCompatActivity implements Cat
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    
+    private void setupBottomNavigation() {
+        bottomNavigation = findViewById(R.id.bottom_navigation);
+        bottomNavigation.setSelectedItemId(R.id.nav_categories);
+
+        bottomNavigation.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+
+            if (itemId == R.id.nav_home) {
+                Intent intent = new Intent(CategoryManagementActivity.this, HomeActivity.class);
+                ActivityTransitionManager.startActivityWithTransition(this, intent, ActivityTransitionManager.TRANSITION_SLIDE);
+                return true;
+            } else if (itemId == R.id.nav_categories) {
+                return true;
+            } else if (itemId == R.id.nav_quiz) {
+                Intent intent = new Intent(CategoryManagementActivity.this, QuizSetupActivity.class);
+                ActivityTransitionManager.startActivityWithTransition(this, intent, ActivityTransitionManager.TRANSITION_SLIDE);
+                return true;
+            }
+            return false;
+        });
     }
 
     // THÊM PHƯƠNG THỨC MỚI ĐỂ XỬ LÝ LONG CLICK
@@ -168,6 +200,18 @@ public class CategoryManagementActivity extends AppCompatActivity implements Cat
     private void loadCategories() {
         Cursor newCursor = categoryHelper.getAllCategories(currentUserId);
         adapter.swapCursor(newCursor);
+    }
+    
+    private void showAddCategoryDialog() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        AddCategoryDialog dialog = new AddCategoryDialog();
+        dialog.show(fragmentManager, "AddCategoryDialog");
+    }
+    
+    @Override
+    public void onCategorySaved() {
+        // Tải lại danh sách thể loại sau khi thêm mới
+        loadCategories();
     }
 
     // Cập nhật lại danh sách mỗi khi quay lại màn hình này

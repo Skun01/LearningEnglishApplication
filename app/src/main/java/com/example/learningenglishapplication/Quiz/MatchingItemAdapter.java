@@ -49,8 +49,12 @@ public class MatchingItemAdapter extends RecyclerView.Adapter<MatchingItemAdapte
             // Nếu chưa ghép đúng, hiển thị item
             holder.cardView.setVisibility(View.VISIBLE);
             
-            // Cập nhật màu sắc dựa trên trạng thái được chọn
-            if (item.isSelected()) {
+            // Cập nhật màu sắc dựa trên trạng thái
+            if (item.isIncorrect()) {
+                // Nếu ghép sai, hiển thị màu đỏ
+                holder.cardView.setCardBackgroundColor(Color.parseColor("#F44336")); // Màu đỏ
+                holder.tvText.setTextColor(Color.WHITE);
+            } else if (item.isSelected()) {
                 // Nếu đang được chọn, đổi màu nền
                 holder.cardView.setCardBackgroundColor(Color.parseColor("#4CAF50")); // Màu xanh lá
                 holder.tvText.setTextColor(Color.WHITE);
