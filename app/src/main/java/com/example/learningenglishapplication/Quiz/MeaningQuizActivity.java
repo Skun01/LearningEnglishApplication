@@ -127,13 +127,16 @@ public class MeaningQuizActivity extends BaseChildActivity implements View.OnCli
 
         if (selectedAnswer.equals(correctAnswer)) {
             score++;
-            clickedButton.setBackgroundResource(R.drawable.button_correct_answer);
+            clickedButton.setBackgroundResource(R.drawable.enhanced_correct_answer);
+            clickedButton.setTextColor(getResources().getColor(android.R.color.white, getTheme()));
         } else {
-            clickedButton.setBackgroundResource(R.drawable.button_wrong_answer);
+            clickedButton.setBackgroundResource(R.drawable.enhanced_wrong_answer);
+            clickedButton.setTextColor(getResources().getColor(android.R.color.white, getTheme()));
             // Tìm và highlight đáp án đúng
             for (Button btn : answerButtons) {
                 if (btn.getText().toString().equals(correctAnswer)) {
-                    btn.setBackgroundResource(R.drawable.button_correct_answer);
+                    btn.setBackgroundResource(R.drawable.enhanced_correct_answer);
+                    btn.setTextColor(getResources().getColor(android.R.color.white, getTheme()));
                 }
             }
         }
@@ -148,6 +151,7 @@ public class MeaningQuizActivity extends BaseChildActivity implements View.OnCli
         for (Button btn : answerButtons) {
             btn.setEnabled(true);
             btn.setBackgroundResource(R.drawable.button_ripple_effect);
+            btn.setTextColor(getResources().getColor(R.color.text_color_primary, getTheme()));
         }
     }
 

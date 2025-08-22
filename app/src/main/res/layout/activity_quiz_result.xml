@@ -20,7 +20,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Đây là kết quả của bạn"
+        android:text="Kết quả bài kiểm tra trắc nghiệm"
         android:textSize="18sp"
         android:layout_marginTop="@dimen/spacing_small"
         android:textColor="@color/text_color_secondary"/>
@@ -37,7 +37,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Thời gian hoàn thành"
+            android:text="Điểm số của bạn"
             android:layout_gravity="center_horizontal"
             android:textColor="@color/text_color_secondary"/>
 
@@ -68,13 +68,13 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="Số cặp ghép đúng:"
+                android:text="Số câu trả lời đúng:"
                 android:textSize="16sp"/>
             <TextView
                 android:id="@+id/tv_correct_answers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="5"
+                tools:text="18"
                 android:textStyle="bold"
                 android:textSize="16sp"/>
         </LinearLayout>
@@ -87,37 +87,61 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="Số cặp ghép sai:"
+                android:text="Số câu trả lời sai:"
                 android:textSize="16sp"/>
             <TextView
                 android:id="@+id/tv_wrong_answers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="0"
+                tools:text="2"
                 android:textStyle="bold"
                 android:textSize="16sp"/>
         </LinearLayout>
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/spacing_small">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Tỷ lệ chính xác:"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/tv_accuracy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="90%"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+        </LinearLayout>
     </LinearLayout>
 
-    <!-- Nút chức năng -->
+    <!-- Nút điều hướng -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_marginTop="@dimen/spacing_extra_large">
 
         <Button
             android:id="@+id/btn_retry_quiz"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Làm lại bài kiểm tra"/>
+            android:text="Làm lại"
+            android:layout_marginEnd="@dimen/spacing_small"
+            style="@style/Widget.Material3.Button.OutlinedButton"/>
+
         <Button
             android:id="@+id/btn_back_to_home"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Về màn hình chính"
-            style="?attr/materialButtonOutlinedStyle"
-            android:layout_marginTop="@dimen/spacing_small"/>
+            android:text="Về trang chủ"
+            android:layout_marginStart="@dimen/spacing_small"/>
+
     </LinearLayout>
+
 </LinearLayout>

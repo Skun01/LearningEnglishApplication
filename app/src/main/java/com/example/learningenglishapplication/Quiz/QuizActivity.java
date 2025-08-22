@@ -145,16 +145,16 @@ public class QuizActivity extends BaseChildActivity implements View.OnClickListe
         if (selectedAnswer.equals(correctAnswer)) {
             score++;
             // Sử dụng drawable với màu đúng thay vì setBackgroundColor
-            clickedButton.setBackgroundResource(R.drawable.correct_answer_background);
+            clickedButton.setBackgroundResource(R.drawable.enhanced_correct_answer);
             clickedButton.setTextColor(getResources().getColor(android.R.color.white, getTheme()));
         } else {
             // Sử dụng drawable với màu sai thay vì setBackgroundColor
-            clickedButton.setBackgroundResource(R.drawable.wrong_answer_background);
+            clickedButton.setBackgroundResource(R.drawable.enhanced_wrong_answer);
             clickedButton.setTextColor(getResources().getColor(android.R.color.white, getTheme()));
             // Tìm và highlight đáp án đúng
             for (Button btn : answerButtons) {
                 if (btn.getText().toString().equals(correctAnswer)) {
-                    btn.setBackgroundResource(R.drawable.correct_answer_background);
+                    btn.setBackgroundResource(R.drawable.enhanced_correct_answer);
                     btn.setTextColor(getResources().getColor(android.R.color.white, getTheme()));
                 }
             }
@@ -184,6 +184,7 @@ public class QuizActivity extends BaseChildActivity implements View.OnClickListe
         for (Button btn : answerButtons) {
             btn.setEnabled(true);
             btn.setBackgroundResource(R.drawable.button_ripple_effect);
+            btn.setTextColor(getResources().getColor(R.color.text_color_primary, getTheme()));
         }
     }
 

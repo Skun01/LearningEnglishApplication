@@ -31,22 +31,24 @@ public class QuizResultActivity extends BaseChildActivity {
 
         int score = getIntent().getIntExtra("SCORE", 0);
         int totalQuestions = getIntent().getIntExtra("TOTAL_QUESTIONS", 0);
-        int completionTime = getIntent().getIntExtra("COMPLETION_TIME", 0);
 
         tvFinalScore = findViewById(R.id.tv_final_score);
         tvCorrectAnswers = findViewById(R.id.tv_correct_answers);
         tvWrongAnswers = findViewById(R.id.tv_wrong_answers);
+        TextView tvAccuracy = findViewById(R.id.tv_accuracy);
         btnRetryQuiz = findViewById(R.id.btn_retry_quiz);
         btnBackToHome = findViewById(R.id.btn_back_to_home);
 
-        // Hiển thị thời gian hoàn thành thay vì điểm số
-        int minutes = completionTime / 60;
-        int seconds = completionTime % 60;
-        tvFinalScore.setText(String.format("%d:%02d", minutes, seconds));
+        // Hiển thị điểm số
+        tvFinalScore.setText(String.format("%d/%d", score, totalQuestions));
         
-        // Vẫn hiển thị số cặp đúng và số cặp sai
-        tvCorrectAnswers.setText(String.valueOf(score / 10)); // Mỗi cặp đúng được 10 điểm
-        tvWrongAnswers.setText(String.valueOf(totalQuestions - (score / 10)));
+        // Hiển thị số câu trả lời đúng và sai
+        tvCorrectAnswers.setText(String.valueOf(score));
+        tvWrongAnswers.setText(String.valueOf(totalQuestions - score));
+        
+        // Tính và hiển thị tỷ lệ chính xác
+        int accuracyPercentage = totalQuestions > 0 ? (score * 100) / totalQuestions : 0;
+        tvAccuracy.setText(String.format("%d%%", accuracyPercentage));
 
         btnRetryQuiz.setOnClickListener(v -> {
             // Quay lại màn hình thiết lập Quiz
