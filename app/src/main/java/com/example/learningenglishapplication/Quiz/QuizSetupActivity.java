@@ -202,7 +202,10 @@ public class QuizSetupActivity extends AppCompatActivity {
         
         intent.putExtra("QUIZ_QUESTIONS", (Serializable) quizQuestions);
         intent.putExtra("ALL_VOCABS", (Serializable) allVocabs);
-        startActivity(intent);
+        intent.putExtra("USER_ID", userId);
+        
+        // Sử dụng ActivityTransitionManager để khởi chạy activity với hiệu ứng chuyển đổi
+        ActivityTransitionManager.startActivityWithDefaultTransition(this, intent);
     }
     
     private void setupBottomNavigation() {

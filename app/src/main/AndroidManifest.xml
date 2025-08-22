@@ -41,6 +41,7 @@
         <activity android:name=".Achivements.AchievementsActivity" />
         <activity android:name=".Quiz.MatchingQuizActivity" />
         <activity android:name=".Quiz.MeaningQuizActivity" />
+        <activity android:name=".Quiz.MatchingQuizResultActivity" />
         <!-- Đăng ký BroadcastReceiver cho thông báo nhắc nhở học tập -->
         <receiver
             android:name=".Receivers.NotificationReceiver"

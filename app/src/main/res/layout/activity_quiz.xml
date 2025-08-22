@@ -43,6 +43,7 @@
 
     <!-- Khung câu hỏi -->
     <LinearLayout
+        android:id="@+id/question_container"
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:layout_marginTop="@dimen/spacing_extra_large"

@@ -2,5 +2,37 @@
     <string name="app_name">LearningEnglishApplication</string>
     <string name="category_progress_label">%1$d/%2$d từ</string>
     <string name="category_progress_percent">%1$d%%</string>
-
+    
+    <!-- Font families for typography -->
+    <string name="font_family_display">sans-serif-light</string>
+    <string name="font_family_headline">sans-serif</string>
+    <string name="font_family_title">sans-serif-medium</string>
+    <string name="font_family_body">sans-serif</string>
+    <string name="font_family_label">sans-serif-medium</string>
+    
+    <!-- Common UI strings -->
+    <string name="back">Quay lại</string>
+    <string name="save">Lưu</string>
+    <string name="cancel">Hủy</string>
+    <string name="delete">Xóa</string>
+    <string name="edit">Sửa</string>
+    <string name="next">Tiếp</string>
+    <string name="previous">Trước</string>
+    <string name="finish">Hoàn thành</string>
+    <string name="favorite">Yêu thích</string>
+    
+    <!-- Flashcard strings -->
+    <string name="flashcard_title">Flashcard</string>
+    <string name="play_pronunciation">Phát âm</string>
+    <string name="rate_confidence">Đánh giá mức độ tự tin</string>
+    <string name="difficult">Khó</string>
+    <string name="good">Tốt</string>
+    <string name="easy">Dễ</string>
+    
+    <!-- Quiz strings -->
+    <string name="quiz_title">Quiz</string>
+    <string name="meaning_quiz_title">Quiz Nghĩa</string>
+    <string name="matching_quiz_title">Quiz Ghép Cặp</string>
+    <string name="quiz_result_title">Kết quả</string>
+    <string name="matching_quiz_result_title">Kết quả ghép từ</string>
 </resources>

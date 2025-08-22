@@ -9,17 +9,19 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
 
 import com.example.learningenglishapplication.R;
 import com.example.learningenglishapplication.Data.model.Vocabulary;
 import com.example.learningenglishapplication.Utils.ActivityTransitionManager;
+import com.example.learningenglishapplication.Utils.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class MeaningQuizActivity extends AppCompatActivity implements View.OnClickListener {
+public class MeaningQuizActivity extends BaseActivity implements View.OnClickListener {
 
     private TextView tvQuestionCounter, tvScore, tvQuestionMeaning;
     private ProgressBar pbQuizProgress;
@@ -37,6 +39,9 @@ public class MeaningQuizActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meaning_quiz);
+        
+        // Thiết lập toolbar với tiêu đề "Quiz Nghĩa"
+        setupToolbar(getString(R.string.meaning_quiz_title));
 
         quizQuestions = (List<Vocabulary>) getIntent().getSerializableExtra("QUIZ_QUESTIONS");
         allVocabs = (List<Vocabulary>) getIntent().getSerializableExtra("ALL_VOCABS");
@@ -122,13 +127,13 @@ public class MeaningQuizActivity extends AppCompatActivity implements View.OnCli
 
         if (selectedAnswer.equals(correctAnswer)) {
             score++;
-            clickedButton.setBackgroundColor(Color.GREEN);
+            clickedButton.setBackgroundResource(R.drawable.button_correct_answer);
         } else {
-            clickedButton.setBackgroundColor(Color.RED);
+            clickedButton.setBackgroundResource(R.drawable.button_wrong_answer);
             // Tìm và highlight đáp án đúng
             for (Button btn : answerButtons) {
                 if (btn.getText().toString().equals(correctAnswer)) {
-                    btn.setBackgroundColor(Color.GREEN);
+                    btn.setBackgroundResource(R.drawable.button_correct_answer);
                 }
             }
         }
@@ -142,7 +147,7 @@ public class MeaningQuizActivity extends AppCompatActivity implements View.OnCli
     private void resetButtons() {
         for (Button btn : answerButtons) {
             btn.setEnabled(true);
-            btn.setBackgroundColor(Color.parseColor("#6200EE")); // Màu primary
+            btn.setBackgroundResource(R.drawable.button_ripple_effect);
         }
     }
 
@@ -150,12 +155,15 @@ public class MeaningQuizActivity extends AppCompatActivity implements View.OnCli
         Intent intent = new Intent(this, QuizResultActivity.class);
         intent.putExtra("SCORE", score);
         intent.putExtra("TOTAL_QUESTIONS", quizQuestions.size());
-        ActivityTransitionManager.startActivityWithTransition(this, intent, ActivityTransitionManager.TRANSITION_FADE);
-        ActivityTransitionManager.finishWithTransition(this, ActivityTransitionManager.TRANSITION_FADE);
+        
+        // Tạo shared element transition cho score
+        View scoreView = findViewById(R.id.tv_score);
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                this,
+                Pair.create(scoreView, "score_transition")
+        );
+        
+        ActivityTransitionManager.startActivityWithExtras(this, intent, options.toBundle());
     }
     
-    @Override
-    public void onBackPressed() {
-        ActivityTransitionManager.finishWithTransition(this, ActivityTransitionManager.TRANSITION_SLIDE);
-    }
 }

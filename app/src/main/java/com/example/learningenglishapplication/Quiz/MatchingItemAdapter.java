@@ -51,19 +51,19 @@ public class MatchingItemAdapter extends RecyclerView.Adapter<MatchingItemAdapte
             
             // Cập nhật màu sắc dựa trên trạng thái
             if (item.isIncorrect()) {
-                // Nếu ghép sai, hiển thị màu đỏ
-                holder.cardView.setCardBackgroundColor(Color.parseColor("#F44336")); // Màu đỏ
+                // Nếu ghép sai, sử dụng drawable với màu đỏ
+                holder.cardView.setBackgroundResource(R.drawable.matching_incorrect_background);
                 holder.tvText.setTextColor(Color.WHITE);
             } else if (item.isSelected()) {
-                // Nếu đang được chọn, đổi màu nền
-                holder.cardView.setCardBackgroundColor(Color.parseColor("#4CAF50")); // Màu xanh lá
+                // Nếu đang được chọn, sử dụng drawable với màu xanh lá
+                holder.cardView.setBackgroundResource(R.drawable.matching_selected_background);
                 holder.tvText.setTextColor(Color.WHITE);
             } else {
-                // Nếu không được chọn, sử dụng màu mặc định
+                // Nếu không được chọn, sử dụng drawable với màu mặc định
                 if (item.getType() == MatchingQuizActivity.MatchingItem.TYPE_WORD) {
-                    holder.cardView.setCardBackgroundColor(Color.parseColor("#2196F3")); // Màu xanh dương cho từ
+                    holder.cardView.setBackgroundResource(R.drawable.matching_word_background); // Màu xanh dương cho từ
                 } else {
-                    holder.cardView.setCardBackgroundColor(Color.parseColor("#FF9800")); // Màu cam cho nghĩa
+                    holder.cardView.setBackgroundResource(R.drawable.matching_meaning_background); // Màu cam cho nghĩa
                 }
                 holder.tvText.setTextColor(Color.WHITE);
             }

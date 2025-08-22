@@ -10,22 +10,22 @@ import com.example.learningenglishapplication.R;
 import com.example.learningenglishapplication.Utils.ActivityTransitionManager;
 import com.example.learningenglishapplication.Utils.BaseActivity;
 
-public class QuizResultActivity extends BaseActivity {
+public class MatchingQuizResultActivity extends BaseActivity {
 
-    private TextView tvFinalScore, tvCorrectAnswers, tvWrongAnswers;
+    private TextView tvCompletionTime, tvCorrectPairs, tvWrongPairs, tvTotalScore;
     private Button btnRetryQuiz, btnBackToHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_quiz_result);
+        setContentView(R.layout.activity_matching_quiz_result);
         
-        // Thiết lập toolbar với tiêu đề "Kết quả"
-        setupToolbar(getString(R.string.quiz_result_title));
+        // Thiết lập toolbar với tiêu đề "Kết quả ghép từ"
+        setupToolbar(getString(R.string.matching_quiz_result_title));
         
         // Thiết lập shared element transition
         postponeEnterTransition();
-        TextView scoreView = findViewById(R.id.tv_final_score);
+        TextView scoreView = findViewById(R.id.tv_total_score);
         scoreView.setTransitionName("score_transition");
         startPostponedEnterTransition();
 
@@ -33,20 +33,25 @@ public class QuizResultActivity extends BaseActivity {
         int totalQuestions = getIntent().getIntExtra("TOTAL_QUESTIONS", 0);
         int completionTime = getIntent().getIntExtra("COMPLETION_TIME", 0);
 
-        tvFinalScore = findViewById(R.id.tv_final_score);
-        tvCorrectAnswers = findViewById(R.id.tv_correct_answers);
-        tvWrongAnswers = findViewById(R.id.tv_wrong_answers);
+        tvCompletionTime = findViewById(R.id.tv_completion_time);
+        tvCorrectPairs = findViewById(R.id.tv_correct_pairs);
+        tvWrongPairs = findViewById(R.id.tv_wrong_pairs);
+        tvTotalScore = findViewById(R.id.tv_total_score);
         btnRetryQuiz = findViewById(R.id.btn_retry_quiz);
         btnBackToHome = findViewById(R.id.btn_back_to_home);
 
-        // Hiển thị thời gian hoàn thành thay vì điểm số
+        // Hiển thị thời gian hoàn thành
         int minutes = completionTime / 60;
         int seconds = completionTime % 60;
-        tvFinalScore.setText(String.format("%d:%02d", minutes, seconds));
+        tvCompletionTime.setText(String.format("%d:%02d", minutes, seconds));
         
-        // Vẫn hiển thị số cặp đúng và số cặp sai
-        tvCorrectAnswers.setText(String.valueOf(score / 10)); // Mỗi cặp đúng được 10 điểm
-        tvWrongAnswers.setText(String.valueOf(totalQuestions - (score / 10)));
+        // Hiển thị số cặp đúng và số cặp sai
+        int correctPairs = score / 10; // Mỗi cặp đúng được 10 điểm
+        tvCorrectPairs.setText(String.valueOf(correctPairs));
+        tvWrongPairs.setText(String.valueOf(totalQuestions - correctPairs));
+        
+        // Hiển thị tổng điểm
+        tvTotalScore.setText(String.valueOf(score));
 
         btnRetryQuiz.setOnClickListener(v -> {
             // Quay lại màn hình thiết lập Quiz

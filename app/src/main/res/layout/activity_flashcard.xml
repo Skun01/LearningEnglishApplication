@@ -1,86 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="@dimen/spacing_medium"
-    android:background="?attr/colorSurfaceContainerLowest">
+    android:background="?attr/colorSurface">
 
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="start|center_vertical"
-        android:paddingBottom="8dp"
-        android:paddingTop="4dp">
+        android:background="?attr/colorSurface"
+        app:elevation="0dp">
 
-        <ImageButton
-            android:id="@+id/btn_back"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:padding="12dp"
-            android:src="@drawable/ic_arrow_back"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:tint="?attr/colorOnSurface"
-            android:contentDescription="Quay lại"/>
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:title="Flashcard"
+            app:titleTextAppearance="@style/TextAppearance.App.TitleLarge"
+            app:titleTextColor="?attr/colorOnSurface">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Flashcard"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginStart="@dimen/spacing_small"
-            android:textColor="?attr/colorOnSurface"/>
+            <TextView
+                android:id="@+id/tv_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="16dp"
+                android:text="1/10"
+                android:textAppearance="@style/TextAppearance.App.TitleMedium"
+                android:textColor="?attr/colorOnSurfaceVariant" />
 
-        <TextView
-            android:id="@+id/tv_progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1/10"
-            android:textSize="16sp"
-            android:textColor="?attr/colorOnSurfaceVariant"/>
-    </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_marginBottom="@dimen/spacing_small">
-        
-        <TextView
-            android:id="@+id/tv_learning_mode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Review Mode"
-            android:textSize="14sp"
-            android:textColor="?attr/colorPrimary"
-            android:background="@drawable/rounded_corner_background"
-            android:padding="8dp"
-            android:visibility="gone"/>
-            
-        <TextView
-            android:id="@+id/tv_learning_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Chưa học"
-            android:textSize="14sp"
-            android:textColor="?attr/colorSecondary"
-            android:background="@drawable/rounded_corner_background"
-            android:padding="8dp"
-            android:layout_marginStart="@dimen/spacing_small"
-            android:visibility="visible"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:padding="16dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <com.google.android.material.chip.ChipGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            app:singleLine="true"
+            app:singleSelection="false">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/tv_learning_mode"
+                style="@style/Widget.Material3.Chip.Assist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Review Mode"
+                android:textColor="?attr/colorOnPrimaryContainer"
+                app:chipBackgroundColor="?attr/colorPrimaryContainer"
+                android:visibility="gone" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/tv_learning_status"
+                style="@style/Widget.Material3.Chip.Assist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chưa học"
+                android:textColor="?attr/colorOnSecondaryContainer"
+                app:chipBackgroundColor="?attr/colorSecondaryContainer" />
+        </com.google.android.material.chip.ChipGroup>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/fl_flashcard_container"
@@ -88,228 +74,285 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_gravity="center"
-            style="@style/ElevatedCard"
-            app:cardElevation="8dp"
-            app:cardCornerRadius="16dp"
-            android:layout_marginEnd="@dimen/spacing_medium"
+            style="@style/FilledCard"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="24dp"
             android:clickable="true"
-            android:focusable="true">
+            android:focusable="true"
+            app:strokeWidth="0dp"
+            android:layout_marginBottom="16dp">
 
-            <FrameLayout
-                android:id="@+id/ll_card_front"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="?attr/colorSurfaceContainerHigh">
+                android:layout_height="match_parent">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:padding="@dimen/spacing_medium">
-
-                    <TextView
-                        android:id="@+id/tv_flashcard_word"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Word"
-                        android:textSize="36sp"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textStyle="bold"
-                        android:gravity="center" />
-
-                    <TextView
-                        android:id="@+id/tv_flashcard_pronunciation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="/pronunciation/"
-                        android:textSize="22sp"
-                        android:textColor="?attr/colorOnSurfaceVariant"
-                        android:layout_marginTop="@dimen/spacing_medium"
-                        android:gravity="center" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_play_audio"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_medium"
-                        app:icon="@drawable/ic_volume_up"
-                        android:text="Phát âm"
-                        style="@style/SecondaryButton"
-                        android:contentDescription="Phát âm" />
-
-                    <ImageView
-                        android:id="@+id/iv_flashcard_image"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:layout_marginTop="@dimen/spacing_small"
-                        android:visibility="gone"
-                        android:scaleType="centerCrop" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_gravity="top|end"
-                    android:layout_margin="@dimen/spacing_medium">
-
-                    <ImageView
-                        android:id="@+id/iv_edit_front"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:src="@drawable/ic_edit"
-                        android:padding="6dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        app:tint="?attr/colorPrimary"
-                        android:contentDescription="Sửa từ"/>
-
-                    <ImageView
-                        android:id="@+id/iv_favorite_front"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:src="@drawable/ic_favorite_border"
-                        android:padding="4dp"
-                        android:layout_marginStart="@dimen/spacing_small"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="Yêu thích"/>
-                </LinearLayout>
-            </FrameLayout>
-
-            <FrameLayout
-                android:id="@+id/ll_card_back"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone"
-                android:background="?attr/colorSurfaceContainerHighest">
-
-                <LinearLayout
+                <FrameLayout
+                    android:id="@+id/ll_card_front"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:padding="@dimen/spacing_large">
+                    android:layout_height="match_parent"
+                    android:background="?attr/colorSurfaceContainerHigh"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
 
-                    <TextView
-                        android:id="@+id/tv_flashcard_meaning"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Meaning"
-                        android:textSize="28sp"
-                        android:textColor="?attr/colorOnSurface"
-                        android:gravity="center"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="24dp">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_gravity="top|end"
-                    android:layout_margin="@dimen/spacing_medium">
+                        <TextView
+                            android:id="@+id/tv_flashcard_word"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Word"
+                            android:textAppearance="@style/TextAppearance.App.HeadlineLarge"
+                            android:textColor="?attr/colorOnSurface"
+                            android:gravity="center"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toTopOf="@id/tv_flashcard_pronunciation"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintVertical_chainStyle="packed" />
 
-                    <ImageView
-                        android:id="@+id/iv_edit_back"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:src="@drawable/ic_edit"
-                        android:padding="6dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        app:tint="?attr/colorPrimary"
-                        android:contentDescription="Sửa từ"/>
+                        <TextView
+                            android:id="@+id/tv_flashcard_pronunciation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="/pronunciation/"
+                            android:textAppearance="@style/TextAppearance.App.TitleLarge"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:layout_marginTop="16dp"
+                            android:gravity="center"
+                            app:layout_constraintTop_toBottomOf="@id/tv_flashcard_word"
+                            app:layout_constraintBottom_toTopOf="@id/btn_play_audio"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent" />
 
-                    <ImageView
-                        android:id="@+id/iv_favorite_back"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:src="@drawable/ic_favorite_border"
-                        android:padding="6dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:layout_marginStart="@dimen/spacing_small"
-                        android:contentDescription="Yêu thích"/>
-                </LinearLayout>
-            </FrameLayout>
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_play_audio"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="24dp"
+                            app:icon="@drawable/ic_volume_up"
+                            android:text="@string/play_pronunciation"
+                            style="@style/SecondaryButton"
+                            android:contentDescription="@string/play_pronunciation"
+                            app:layout_constraintTop_toBottomOf="@id/tv_flashcard_pronunciation"
+                            app:layout_constraintBottom_toTopOf="@id/iv_flashcard_image"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/iv_flashcard_image"
+                            android:layout_width="180dp"
+                            android:layout_height="180dp"
+                            android:layout_marginTop="24dp"
+                            android:visibility="gone"
+                            android:scaleType="centerCrop"
+                            android:background="@drawable/rounded_image_background"
+                            app:layout_constraintTop_toBottomOf="@id/btn_play_audio"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent" />
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/iv_edit_front"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_edit"
+                            app:fabSize="mini"
+                            app:tint="?attr/colorOnPrimaryContainer"
+                            app:backgroundTint="?attr/colorPrimaryContainer"
+                            android:contentDescription="@string/edit"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/iv_favorite_front"
+                            android:layout_margin="8dp" />
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/iv_favorite_front"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_favorite_border"
+                            app:fabSize="mini"
+                            app:tint="?attr/colorOnSecondaryContainer"
+                            app:backgroundTint="?attr/colorSecondaryContainer"
+                            android:contentDescription="@string/favorite"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:layout_margin="8dp" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/ll_card_back"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    android:background="?attr/colorSurfaceContainerHighest"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="24dp">
+
+                        <TextView
+                            android:id="@+id/tv_flashcard_meaning"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Meaning"
+                            android:textAppearance="@style/TextAppearance.App.HeadlineMedium"
+                            android:textColor="?attr/colorOnSurface"
+                            android:gravity="center"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent" />
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/iv_edit_back"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_edit"
+                            app:fabSize="mini"
+                            app:tint="?attr/colorOnPrimaryContainer"
+                            app:backgroundTint="?attr/colorPrimaryContainer"
+                            android:contentDescription="@string/edit"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/iv_favorite_back"
+                            android:layout_margin="8dp" />
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/iv_favorite_back"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_favorite_border"
+                            app:fabSize="mini"
+                            app:tint="?attr/colorOnSecondaryContainer"
+                            app:backgroundTint="?attr/colorSecondaryContainer"
+                            android:contentDescription="@string/favorite"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:layout_margin="8dp" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </FrameLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_marginTop="@dimen/spacing_medium">
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_prev_card"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="@dimen/spacing_medium"
-                android:gravity="center">
+                android:text="@string/previous"
+                style="@style/OutlinedButton"
+                app:icon="@drawable/ic_arrow_back"
+                app:iconGravity="start"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btn_next_card"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.48" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_prev_card"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Trước"
-                    style="@style/SecondaryButton"
-                    app:icon="@android:drawable/ic_media_previous"
-                    app:iconGravity="start"
-                    android:layout_marginEnd="@dimen/spacing_small" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_next_card"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Tiếp"
-                    style="@style/PrimaryButton"
-                    app:icon="@android:drawable/ic_media_next"
-                    app:iconGravity="end"
-                    android:layout_marginStart="@dimen/spacing_small" />
-            </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_next_card"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/next"
+                style="@style/PrimaryButton"
+                app:icon="@drawable/ic_arrow_forward"
+                app:iconGravity="end"
+                android:layout_marginStart="8dp"
+                app:layout_constraintStart_toEndOf="@id/btn_prev_card"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.48" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_complete"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Hoàn thành"
+                android:text="@string/finish"
                 style="@style/PrimaryButton"
                 android:visibility="gone"
-                android:layout_marginBottom="@dimen/spacing_medium" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/ll_confidence_buttons"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
+                android:layout_marginTop="16dp"
+                style="@style/OutlinedCard"
+                app:cardElevation="0dp"
+                app:layout_constraintTop_toBottomOf="@id/btn_next_card"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_again"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Khó"
-                    android:layout_marginBottom="@dimen/spacing_small"
-                    app:backgroundTint="?attr/colorErrorContainer"
-                    android:textColor="?attr/colorOnErrorContainer" />
+                    android:padding="16dp">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_good"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Tốt"
-                    android:layout_marginBottom="@dimen/spacing_small"
-                    style="@style/SecondaryButton" />
+                    <TextView
+                        android:id="@+id/tv_confidence_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rate_confidence"
+                        android:textAppearance="@style/TextAppearance.App.TitleMedium"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_easy"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Dễ"
-                    style="@style/PrimaryButton" />
-            </LinearLayout>
-        </LinearLayout>
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_again"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/difficult"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="4dp"
+                        style="@style/ErrorButton"
+                        app:layout_constraintTop_toBottomOf="@id/tv_confidence_title"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/btn_good"
+                        app:layout_constraintWidth_percent="0.32" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_good"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/good"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="4dp"
+                        style="@style/SecondaryButton"
+                        app:layout_constraintTop_toTopOf="@id/btn_again"
+                        app:layout_constraintStart_toEndOf="@id/btn_again"
+                        app:layout_constraintEnd_toStartOf="@id/btn_easy"
+                        app:layout_constraintWidth_percent="0.32" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_easy"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/easy"
+                        android:layout_marginStart="4dp"
+                        style="@style/PrimaryButton"
+                        app:layout_constraintTop_toTopOf="@id/btn_again"
+                        app:layout_constraintStart_toEndOf="@id/btn_good"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintWidth_percent="0.32" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

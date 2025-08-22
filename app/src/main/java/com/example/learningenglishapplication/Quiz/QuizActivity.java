@@ -9,17 +9,20 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
 
 import com.example.learningenglishapplication.R;
 import com.example.learningenglishapplication.Data.model.Vocabulary;
 import com.example.learningenglishapplication.Utils.ActivityTransitionManager;
+import com.example.learningenglishapplication.Utils.BaseActivity;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class QuizActivity extends AppCompatActivity implements View.OnClickListener {
+public class QuizActivity extends BaseActivity implements View.OnClickListener {
 
     private TextView tvQuestionCounter, tvScore, tvQuestionWord;
     private ProgressBar pbQuizProgress;
@@ -37,6 +40,9 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
+        
+        // Thiết lập toolbar với tiêu đề "Quiz"
+        setupToolbar(getString(R.string.quiz_title));
 
         quizQuestions = (List<Vocabulary>) getIntent().getSerializableExtra("QUIZ_QUESTIONS");
         allVocabs = (List<Vocabulary>) getIntent().getSerializableExtra("ALL_VOCABS");
@@ -63,6 +69,8 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
         for (Button btn : answerButtons) {
             btn.setOnClickListener(this);
+            // Thêm hiệu ứng ripple khi nhấn
+            btn.setBackgroundResource(R.drawable.button_ripple_effect);
         }
     }
 
@@ -120,29 +128,62 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         String selectedAnswer = clickedButton.getText().toString();
         String correctAnswer = quizQuestions.get(currentQuestionIndex).getMeaning();
 
+        // Thêm hiệu ứng animation khi chọn đáp án
+        clickedButton.animate()
+                .scaleX(1.1f)
+                .scaleY(1.1f)
+                .setDuration(200)
+                .withEndAction(() -> {
+                    clickedButton.animate()
+                            .scaleX(1.0f)
+                            .scaleY(1.0f)
+                            .setDuration(200)
+                            .start();
+                })
+                .start();
+
         if (selectedAnswer.equals(correctAnswer)) {
             score++;
-            clickedButton.setBackgroundColor(Color.GREEN);
+            // Sử dụng drawable với màu đúng thay vì setBackgroundColor
+            clickedButton.setBackgroundResource(R.drawable.correct_answer_background);
+            clickedButton.setTextColor(getResources().getColor(android.R.color.white, getTheme()));
         } else {
-            clickedButton.setBackgroundColor(Color.RED);
+            // Sử dụng drawable với màu sai thay vì setBackgroundColor
+            clickedButton.setBackgroundResource(R.drawable.wrong_answer_background);
+            clickedButton.setTextColor(getResources().getColor(android.R.color.white, getTheme()));
             // Tìm và highlight đáp án đúng
             for (Button btn : answerButtons) {
                 if (btn.getText().toString().equals(correctAnswer)) {
-                    btn.setBackgroundColor(Color.GREEN);
+                    btn.setBackgroundResource(R.drawable.correct_answer_background);
+                    btn.setTextColor(getResources().getColor(android.R.color.white, getTheme()));
                 }
             }
         }
 
         currentQuestionIndex++;
 
-        // Đợi một chút rồi chuyển sang câu tiếp theo
-        handler.postDelayed(this::loadNextQuestion, 1500); // 1.5 giây
+        // Đợi một chút rồi chuyển sang câu tiếp theo với hiệu ứng fade
+        handler.postDelayed(() -> {
+            // Thêm hiệu ứng fade out trước khi load câu hỏi mới
+            View questionContainer = findViewById(R.id.question_container);
+            questionContainer.animate()
+                    .alpha(0.0f)
+                    .setDuration(300)
+                    .withEndAction(() -> {
+                        loadNextQuestion();
+                        questionContainer.animate()
+                                .alpha(1.0f)
+                                .setDuration(300)
+                                .start();
+                    })
+                    .start();
+        }, 1500); // 1.5 giây
     }
 
     private void resetButtons() {
         for (Button btn : answerButtons) {
             btn.setEnabled(true);
-            btn.setBackgroundColor(Color.parseColor("#6200EE")); // Màu primary
+            btn.setBackgroundResource(R.drawable.button_ripple_effect);
         }
     }
 
@@ -150,12 +191,19 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent = new Intent(this, QuizResultActivity.class);
         intent.putExtra("SCORE", score);
         intent.putExtra("TOTAL_QUESTIONS", quizQuestions.size());
-        ActivityTransitionManager.startActivityWithTransition(this, intent, ActivityTransitionManager.TRANSITION_FADE);
-        ActivityTransitionManager.finishWithTransition(this, ActivityTransitionManager.TRANSITION_FADE);
+        
+        // Tạo shared element transition cho score
+        View scoreView = findViewById(R.id.tv_score);
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                this,
+                Pair.create(scoreView, "score_transition")
+        );
+        
+        ActivityTransitionManager.startActivityWithExtras(this, intent, options.toBundle());
     }
     
     @Override
     public void onBackPressed() {
-        ActivityTransitionManager.finishWithTransition(this, ActivityTransitionManager.TRANSITION_SLIDE);
+        ActivityTransitionManager.finishWithDefaultTransition(this);
     }
 }

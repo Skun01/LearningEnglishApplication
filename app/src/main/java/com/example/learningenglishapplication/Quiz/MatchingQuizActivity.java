@@ -7,20 +7,24 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.learningenglishapplication.Data.DataHelper.UserSettingDataHelper;
 import com.example.learningenglishapplication.Data.model.Vocabulary;
 import com.example.learningenglishapplication.R;
+import com.example.learningenglishapplication.Utils.ActivityTransitionManager;
+import com.example.learningenglishapplication.Utils.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,13 +32,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MatchingQuizActivity extends AppCompatActivity implements MatchingItemAdapter.OnItemClickListener {
+public class MatchingQuizActivity extends BaseActivity implements MatchingItemAdapter.OnItemClickListener {
 
     private TextView tvQuestionCounter, tvScore, tvInstructions, tvTimer;
     private ProgressBar pbQuizProgress;
     private RecyclerView rvMatchingItems;
     private Button btnNextRound;
-    private ImageView btnBack;
+    private ImageButton btnBack;
     
     private MatchingItemAdapter adapter;
     
@@ -63,6 +67,9 @@ public class MatchingQuizActivity extends AppCompatActivity implements MatchingI
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matching_quiz);
+        
+        // Thiết lập toolbar với tiêu đề "Quiz Ghép Cặp"
+        setupToolbar(getString(R.string.matching_quiz_title));
         
         quizQuestions = (List<Vocabulary>) getIntent().getSerializableExtra("QUIZ_QUESTIONS");
         userId = getIntent().getLongExtra("USER_ID", -1);
@@ -122,7 +129,7 @@ public class MatchingQuizActivity extends AppCompatActivity implements MatchingI
         btnBack.setOnClickListener(v -> {
             // Dừng timer trước khi thoát
             timerHandler.removeCallbacks(timerRunnable);
-            finish();
+            onBackPressed();
         });
     }
 
@@ -247,14 +254,21 @@ public class MatchingQuizActivity extends AppCompatActivity implements MatchingI
         // Tính thời gian hoàn thành (đổi từ milliseconds sang seconds)
         int completionTimeSeconds = (int) (timeInMilliseconds / 1000);
         
-        // Chuyển đến màn hình kết quả
-        Intent intent = new Intent(this, QuizResultActivity.class);
+        // Chuyển đến màn hình kết quả ghép từ
+        Intent intent = new Intent(this, MatchingQuizResultActivity.class);
         intent.putExtra("SCORE", score);
         intent.putExtra("TOTAL_QUESTIONS", quizQuestions.size());
         intent.putExtra("USER_ID", userId);
         intent.putExtra("COMPLETION_TIME", completionTimeSeconds);
-        startActivity(intent);
-        finish();
+        
+        // Tạo shared element transition cho score
+        View scoreView = findViewById(R.id.tv_matching_score);
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                this,
+                Pair.create(scoreView, "score_transition")
+        );
+        
+        ActivityTransitionManager.startActivityWithExtras(this, intent, options.toBundle());
     }
     
     // Lớp MatchingItem để lưu trữ thông tin từ và nghĩa
@@ -313,5 +327,12 @@ public class MatchingQuizActivity extends AppCompatActivity implements MatchingI
         public void setIncorrect(boolean incorrect) {
             isIncorrect = incorrect;
         }
+    }
+    
+    @Override
+    public void onBackPressed() {
+        // Dừng timer trước khi thoát
+        timerHandler.removeCallbacks(timerRunnable);
+        ActivityTransitionManager.finishWithDefaultTransition(this);
     }
 }

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Legacy color references for dark theme -->
-    <color name="colorPrimary">@color/md_theme_dark_primary</color>
-    <color name="colorPrimaryDark">@color/md_theme_dark_primary</color>
-    <color name="colorAccent">@color/md_theme_dark_secondary</color>
+    <color name="colorPrimary">@color/primary_dark</color>
+    <color name="colorPrimaryDark">@color/primary_dark</color>
+    <color name="colorAccent">@color/secondary_dark</color>
     
     <!-- Common app colors for dark theme -->
-    <color name="background_color">@color/md_theme_dark_background</color>
-    <color name="surface_color">@color/md_theme_dark_surface</color>
-    <color name="text_color_primary">@color/md_theme_dark_onSurface</color>
-    <color name="text_color_secondary">@color/md_theme_dark_onSurfaceVariant</color>
-    <color name="divider_color">@color/md_theme_dark_surfaceVariant</color>
+    <color name="background_color">@color/background_dark</color>
+    <color name="surface_color">@color/surface_dark</color>
+    <color name="text_color_primary">@color/on_surface_dark</color>
+    <color name="text_color_secondary">@color/on_surface_variant_dark</color>
+    <color name="divider_color">@color/surface_variant_dark</color>
 </resources>

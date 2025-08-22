@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="@dimen/spacing_medium"
+    android:background="@color/background_color"
+    tools:context=".Quiz.MatchingQuizResultActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hoàn Thành!"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:textColor="?attr/colorPrimary"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Kết quả trò chơi ghép từ"
+        android:textSize="18sp"
+        android:layout_marginTop="@dimen/spacing_small"
+        android:textColor="@color/text_color_secondary"/>
+
+    <!-- Khung kết quả -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_large"
+        android:layout_marginTop="@dimen/spacing_extra_large"
+        android:background="@drawable/item_background">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tổng điểm"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/text_color_secondary"/>
+
+        <TextView
+            android:id="@+id/tv_total_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_color_primary"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/spacing_small"
+            tools:text="50"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_color"
+            android:layout_marginTop="@dimen/spacing_medium"
+            android:layout_marginBottom="@dimen/spacing_medium"/>
+
+        <!-- Chi tiết -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Thời gian hoàn thành:"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/tv_completion_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="1:30"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/spacing_small">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Số cặp ghép đúng:"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/tv_correct_pairs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="5"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/spacing_small">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Số cặp ghép sai:"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/tv_wrong_pairs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="0"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Nút điều hướng -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/spacing_extra_large">
+
+        <Button
+            android:id="@+id/btn_retry_quiz"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Thử lại"
+            android:layout_marginEnd="@dimen/spacing_small"/>
+
+        <Button
+            android:id="@+id/btn_back_to_home"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Về trang chủ"
+            android:layout_marginStart="@dimen/spacing_small"/>
+    </LinearLayout>
+</LinearLayout>
