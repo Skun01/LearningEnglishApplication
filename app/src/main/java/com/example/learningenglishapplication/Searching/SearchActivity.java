@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import androidx.appcompat.app.AppCompatActivity;
+import com.example.learningenglishapplication.Utils.BaseChildActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,7 +15,7 @@ import com.example.learningenglishapplication.Data.DatabaseHelper;
 import com.example.learningenglishapplication.R;
 import com.example.learningenglishapplication.Vocabulary.VocabularyAdapter;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends BaseChildActivity {
 
     private EditText etSearchKeyword;
     private Button btnSearch;
@@ -30,13 +30,8 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_export);
 
-        // --- Thiết lập Toolbar ---
-        MaterialToolbar toolbar = findViewById(R.id.toolbar_search);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Tìm kiếm Từ vựng");
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        // Sử dụng phương thức setupToolbar từ BaseChildActivity
+        setupToolbar("Tìm kiếm Từ vựng");
 
         // --- Ánh xạ Views và khởi tạo ---
         databaseHelper = new DatabaseHelper(this); // KHỞI TẠO DatabaseHelper

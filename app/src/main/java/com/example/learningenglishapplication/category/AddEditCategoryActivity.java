@@ -6,13 +6,13 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
+import com.example.learningenglishapplication.Utils.BaseChildActivity;
 
 import com.example.learningenglishapplication.Data.DataHelper.CategoryDataHelper;
 import com.example.learningenglishapplication.Data.DatabaseHelper;
 import com.example.learningenglishapplication.R;
 
-public class AddEditCategoryActivity extends AppCompatActivity {
+public class AddEditCategoryActivity extends BaseChildActivity {
 
     private EditText etName, etDescription;
     private Button btnSave;
@@ -41,10 +41,10 @@ public class AddEditCategoryActivity extends AppCompatActivity {
         if (getIntent().hasExtra("CATEGORY_ID")) {
             isEditing = true;
             categoryIdToEdit = getIntent().getLongExtra("CATEGORY_ID", -1);
-            setTitle("Sửa Thể Loại"); // Đổi tiêu đề Activity
+            setupToolbar("Sửa Thể Loại"); // Đổi tiêu đề Activity
             loadCategoryData();
         } else {
-            setTitle("Thêm Thể Loại Mới");
+            setupToolbar("Thêm Thể Loại Mới");
         }
 
         btnSave.setOnClickListener(v -> saveCategory());

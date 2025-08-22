@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import com.google.android.material.appbar.MaterialToolbar;
 import androidx.core.content.ContextCompat;
@@ -35,9 +34,10 @@ import com.example.learningenglishapplication.Data.DataHelper.VocabularyDataHelp
 import com.example.learningenglishapplication.R;
 import com.example.learningenglishapplication.Data.model.Vocabulary;
 import com.example.learningenglishapplication.Utils.ActivityTransitionManager;
+import com.example.learningenglishapplication.Utils.BaseChildActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class VocabularyListActivity extends AppCompatActivity implements VocabularyAdapter.OnItemInteractionListener, VocabularyAdapter.OnFavoriteClickListener, AddVocabularyDialog.OnVocabularySavedListener {
+public class VocabularyListActivity extends BaseChildActivity implements VocabularyAdapter.OnItemInteractionListener, VocabularyAdapter.OnFavoriteClickListener, AddVocabularyDialog.OnVocabularySavedListener {
 
     private RecyclerView recyclerView;
     private VocabularyAdapter adapter;
@@ -73,19 +73,8 @@ public class VocabularyListActivity extends AppCompatActivity implements Vocabul
             return;
         }
 
-        MaterialToolbar toolbar = findViewById(R.id.toolbar_vocabulary_list);
-        setSupportActionBar(toolbar);
-
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setTitle(categoryName);
-        }
-        
-        // Thiết lập sự kiện cho nút quay lại
-        toolbar.setNavigationOnClickListener(v -> {
-            onBackPressed();
-        });
+        // Sử dụng phương thức setupToolbar từ BaseChildActivity
+        setupToolbar(categoryName);
 
         recyclerView = findViewById(R.id.rv_vocabularies);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -391,9 +380,6 @@ public class VocabularyListActivity extends AppCompatActivity implements Vocabul
         return super.onOptionsItemSelected(item);
     }
     
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        ActivityTransitionManager.applyTransition(this, ActivityTransitionManager.TRANSITION_SLIDE, true);
-    }
+    // Sử dụng phương thức onBackPressed từ BaseChildActivity
+    // BaseChildActivity đã ghi đè phương thức này để sử dụng hiệu ứng chuyển tiếp mặc định
 }

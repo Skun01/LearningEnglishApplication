@@ -21,6 +21,7 @@ public class ActivityTransitionManager {
     public static final int TRANSITION_FADE = 2;
     public static final int TRANSITION_ZOOM = 3;
     public static final int TRANSITION_SHARED_ELEMENT = 4;
+    public static final int TRANSITION_NONE = 5;
     
     // Hiệu ứng mặc định cho ứng dụng
     public static final int DEFAULT_TRANSITION = TRANSITION_SLIDE;
@@ -35,13 +36,35 @@ public class ActivityTransitionManager {
         // Thêm flag để xử lý back stack đúng cách
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         
-        // Áp dụng hiệu ứng chuyển tiếp
-        if (transitionType == TRANSITION_SHARED_ELEMENT) {
-            // Shared element transition sẽ được xử lý riêng
+        try {
+            // Áp dụng hiệu ứng chuyển tiếp
+            if (transitionType == TRANSITION_SHARED_ELEMENT) {
+                // Shared element transition sẽ được xử lý riêng
+                currentActivity.startActivity(intent);
+            } else {
+                currentActivity.startActivity(intent);
+                applyTransition(currentActivity, transitionType, false);
+            }
+        } catch (Exception e) {
+            // Xử lý ngoại lệ khi không thể khởi chạy activity
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Khởi chạy một Activity chính (có bottom navigation) mà không có hiệu ứng chuyển tiếp
+     * Sử dụng cho việc chuyển đổi giữa các activity chính mà vẫn giữ bottom navigation
+     * @param currentActivity Activity hiện tại
+     * @param targetActivityClass Class của Activity đích
+     */
+    public static void startMainActivityWithoutAnimation(Activity currentActivity, Class<?> targetActivityClass) {
+        // Kiểm tra nếu activity hiện tại không phải là activity đích
+        if (!currentActivity.getClass().equals(targetActivityClass)) {
+            Intent intent = new Intent(currentActivity, targetActivityClass);
+            // Sử dụng FLAG_ACTIVITY_CLEAR_TOP để đảm bảo không có nhiều instance của cùng một activity
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             currentActivity.startActivity(intent);
-        } else {
-            currentActivity.startActivity(intent);
-            applyTransition(currentActivity, transitionType, false);
+            applyTransition(currentActivity, TRANSITION_NONE, false);
         }
     }
 
@@ -84,6 +107,9 @@ public class ActivityTransitionManager {
             case TRANSITION_ZOOM:
                 activity.overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out);
                 break;
+            case TRANSITION_NONE:
+                activity.overridePendingTransition(R.anim.no_animation, R.anim.no_animation);
+                break;
             default:
                 // Mặc định sử dụng hiệu ứng slide
                 if (isReturning) {
@@ -111,7 +137,20 @@ public class ActivityTransitionManager {
      * @param intent Intent để khởi chạy Activity mới
      */
     public static void startActivityWithDefaultTransition(Activity currentActivity, Intent intent) {
-        startActivityWithTransition(currentActivity, intent, DEFAULT_TRANSITION);
+        try {
+            // Đảm bảo intent có flag đúng
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivityWithTransition(currentActivity, intent, DEFAULT_TRANSITION);
+        } catch (Exception e) {
+            // Xử lý ngoại lệ khi không thể khởi chạy activity
+            e.printStackTrace();
+            // Thử khởi chạy lại với cách khác nếu cần
+            try {
+                currentActivity.startActivity(intent);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
     
     /**

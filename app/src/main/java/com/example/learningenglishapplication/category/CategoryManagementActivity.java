@@ -12,7 +12,6 @@ import android.view.Menu;
 import androidx.appcompat.widget.SearchView;
 import android.content.DialogInterface;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,11 +22,11 @@ import com.example.learningenglishapplication.Home.HomeActivity;
 import com.example.learningenglishapplication.Quiz.QuizSetupActivity;
 import com.example.learningenglishapplication.R;
 import com.example.learningenglishapplication.Utils.ActivityTransitionManager;
+import com.example.learningenglishapplication.Utils.BaseMainActivity;
 import com.example.learningenglishapplication.Vocabulary.VocabularyListActivity;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class CategoryManagementActivity extends AppCompatActivity 
+public class CategoryManagementActivity extends BaseMainActivity 
         implements CategoryAdapter.OnItemClickListener, AddCategoryDialog.OnCategorySavedListener {
 
     private RecyclerView recyclerView;
@@ -36,7 +35,7 @@ public class CategoryManagementActivity extends AppCompatActivity
     private FloatingActionButton fabAddCategory;
     private long currentUserId;
     private MaterialToolbar toolbar;
-    private BottomNavigationView bottomNavigation;
+    // bottomNavigation được kế thừa từ BaseMainActivity
 
 
     @Override
@@ -87,7 +86,7 @@ public class CategoryManagementActivity extends AppCompatActivity
         recyclerView.setAdapter(adapter);
         
         // Thiết lập Bottom Navigation
-        setupBottomNavigation();
+        setupBottomNavigation(R.id.nav_categories);
     }
 
     // Phương thức được gọi khi một thể loại được nhấn
@@ -134,27 +133,7 @@ public class CategoryManagementActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
     
-    private void setupBottomNavigation() {
-        bottomNavigation = findViewById(R.id.bottom_navigation);
-        bottomNavigation.setSelectedItemId(R.id.nav_categories);
-
-        bottomNavigation.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-
-            if (itemId == R.id.nav_home) {
-                Intent intent = new Intent(CategoryManagementActivity.this, HomeActivity.class);
-                ActivityTransitionManager.startActivityWithTransition(this, intent, ActivityTransitionManager.TRANSITION_SLIDE);
-                return true;
-            } else if (itemId == R.id.nav_categories) {
-                return true;
-            } else if (itemId == R.id.nav_quiz) {
-                Intent intent = new Intent(CategoryManagementActivity.this, QuizSetupActivity.class);
-                ActivityTransitionManager.startActivityWithTransition(this, intent, ActivityTransitionManager.TRANSITION_SLIDE);
-                return true;
-            }
-            return false;
-        });
-    }
+    // setupBottomNavigation được kế thừa từ BaseMainActivity
 
     // THÊM PHƯƠNG THỨC MỚI ĐỂ XỬ LÝ LONG CLICK
     @Override

@@ -1,8 +1,10 @@
 package com.example.learningenglishapplication.Data.DataHelper;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.learningenglishapplication.Data.DatabaseHelper;
@@ -286,23 +288,42 @@ public class VocabularyDataHelper {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.query(DatabaseHelper.TABLE_VOCABULARIES, null, DatabaseHelper.COLUMN_VOCAB_CATEGORY_ID + "=?", new String[]{String.valueOf(categoryId)}, null, null, null);
 
-        if (cursor.moveToFirst()) {
-            do {
-                long id = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_ID));
-                String word = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_WORD));
-                String meaning = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_MEANING));
-                String pronunciation = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_PRONUNCIATION));
-                int isFavorite = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_IS_FAVORITE));
-                String imageUri = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_IMAGE_URI));
-                String audioUri = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_AUDIO_URI));
-                int box = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_BOX));
-                long nextReview = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_NEXT_REVIEW));
+        try {
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    try {
+                        long id = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_ID));
+                        String word = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_WORD));
+                        String meaning = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_MEANING));
+                        String pronunciation = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_PRONUNCIATION));
+                        int isFavorite = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_IS_FAVORITE));
+                        int learned = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_LEARNED));
+                        String dateLearned = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_DATE_LEARNED));
+                        String imageUri = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_IMAGE_URI));
+                        String audioUri = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_AUDIO_URI));
+                        int box = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_BOX));
+                        long nextReview = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_VOCAB_NEXT_REVIEW));
 
-                vocabularyList.add(new Vocabulary(id, word, meaning, pronunciation, isFavorite, 0, null, imageUri, audioUri, box, nextReview));
-            } while (cursor.moveToNext());
+                        // Kiểm tra dữ liệu hợp lệ
+                        if (word == null || word.isEmpty() || meaning == null || meaning.isEmpty()) {
+                            Log.w("VocabularyDataHelper", "Bỏ qua từ vựng không hợp lệ với ID: " + id);
+                            continue;
+                        }
+
+                        vocabularyList.add(new Vocabulary(id, word, meaning, pronunciation, isFavorite, learned, dateLearned, imageUri, audioUri, box, nextReview));
+                    } catch (Exception e) {
+                        Log.e("VocabularyDataHelper", "Lỗi khi đọc dữ liệu từ vựng: " + e.getMessage());
+                    }
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.e("VocabularyDataHelper", "Lỗi khi truy vấn dữ liệu từ vựng: " + e.getMessage());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            db.close();
         }
-        cursor.close();
-        db.close();
         return vocabularyList;
     }
 

@@ -3,7 +3,7 @@ package com.example.learningenglishapplication.Utils;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,7 +21,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected Toolbar toolbar;
     protected TextView tvTitle;
-    protected ImageButton btnBack;
+    protected ImageView btnBack;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

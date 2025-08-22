@@ -8,9 +8,9 @@ import android.widget.TextView;
 import com.example.learningenglishapplication.Home.HomeActivity;
 import com.example.learningenglishapplication.R;
 import com.example.learningenglishapplication.Utils.ActivityTransitionManager;
-import com.example.learningenglishapplication.Utils.BaseActivity;
+import com.example.learningenglishapplication.Utils.BaseChildActivity;
 
-public class MatchingQuizResultActivity extends BaseActivity {
+public class MatchingQuizResultActivity extends BaseChildActivity {
 
     private TextView tvCompletionTime, tvCorrectPairs, tvWrongPairs, tvTotalScore;
     private Button btnRetryQuiz, btnBackToHome;

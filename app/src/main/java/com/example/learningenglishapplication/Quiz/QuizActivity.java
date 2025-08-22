@@ -15,14 +15,14 @@ import androidx.core.util.Pair;
 import com.example.learningenglishapplication.R;
 import com.example.learningenglishapplication.Data.model.Vocabulary;
 import com.example.learningenglishapplication.Utils.ActivityTransitionManager;
-import com.example.learningenglishapplication.Utils.BaseActivity;
+import com.example.learningenglishapplication.Utils.BaseChildActivity;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class QuizActivity extends BaseActivity implements View.OnClickListener {
+public class QuizActivity extends BaseChildActivity implements View.OnClickListener {
 
     private TextView tvQuestionCounter, tvScore, tvQuestionWord;
     private ProgressBar pbQuizProgress;

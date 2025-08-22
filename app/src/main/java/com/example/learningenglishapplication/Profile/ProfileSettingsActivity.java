@@ -17,13 +17,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.learningenglishapplication.Auth.LoginActivity;
 import com.example.learningenglishapplication.Data.DataHelper.UserDataHelper;
 import com.example.learningenglishapplication.Data.DataHelper.UserSettingDataHelper;
 import com.example.learningenglishapplication.Data.DatabaseHelper;
 import com.example.learningenglishapplication.R;
+import com.example.learningenglishapplication.Utils.BaseChildActivity;
 import com.example.learningenglishapplication.Utils.NotificationHelper;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -34,7 +34,7 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import java.util.ArrayList;
 
-public class ProfileSettingsActivity extends AppCompatActivity {
+public class ProfileSettingsActivity extends BaseChildActivity {
 
     private UserSettingDataHelper userSettingDataHelper;
     private UserDataHelper userDataHelper;

@@ -6,15 +6,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 
 import com.example.learningenglishapplication.Data.DatabaseHelper;
 import com.example.learningenglishapplication.Data.DataHelper.VocabularyDataHelper; // SỬA: Sử dụng VocabularyDataHelper
 import com.example.learningenglishapplication.R;
 import com.example.learningenglishapplication.Data.model.Vocabulary;
+import com.example.learningenglishapplication.Utils.BaseChildActivity;
 
-public class VocabularyDetailActivity extends AppCompatActivity {
+public class VocabularyDetailActivity extends BaseChildActivity {
 
     private TextView tvWord, tvPronunciation, tvMeaning;
     private DatabaseHelper databaseHelper;
@@ -25,14 +25,8 @@ public class VocabularyDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vocabulary_detail);
 
-        // Ánh xạ và thiết lập Toolbar
-        MaterialToolbar toolbar = findViewById(R.id.toolbar_detail);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setTitle("Chi tiết từ vựng");
-        }
+        // Sử dụng phương thức setupToolbar từ BaseChildActivity
+        setupToolbar("Chi tiết từ vựng");
 
         databaseHelper = new DatabaseHelper(this);
         // SỬA LỖI: Khởi tạo VocabularyDataHelper bằng cách truyền DatabaseHelper vào

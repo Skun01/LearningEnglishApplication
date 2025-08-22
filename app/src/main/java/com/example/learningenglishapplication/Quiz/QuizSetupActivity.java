@@ -11,12 +11,10 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import com.example.learningenglishapplication.category.CategoryManagementActivity;
 import com.example.learningenglishapplication.Home.HomeActivity;
 import com.example.learningenglishapplication.Utils.ActivityTransitionManager;
+import com.example.learningenglishapplication.Utils.BaseMainActivity;
 
 import com.example.learningenglishapplication.Data.DataHelper.CategoryDataHelper; // Cập nhật import
 import com.example.learningenglishapplication.Data.DataHelper.VocabularyDataHelper; // Cập nhật import
@@ -30,7 +28,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class QuizSetupActivity extends AppCompatActivity {
+public class QuizSetupActivity extends BaseMainActivity {
 
     private Spinner spinnerCategory;
     private EditText etNumberOfQuestions;
@@ -42,7 +40,7 @@ public class QuizSetupActivity extends AppCompatActivity {
     private DatabaseHelper databaseHelper;
     private VocabularyDataHelper vocabularyDataHelper; // Sửa tên lớp
     private CategoryDataHelper categoryDataHelper; // Sửa tên lớp
-    private BottomNavigationView bottomNavigation;
+    // bottomNavigation được kế thừa từ BaseMainActivity
 
     private Map<String, Long> categoryMap;
     private List<String> categoryNames;
@@ -70,7 +68,7 @@ public class QuizSetupActivity extends AppCompatActivity {
         btnStartQuiz = findViewById(R.id.btn_start_quiz);
 
         loadCategoriesIntoSpinner();
-        setupBottomNavigation();
+        setupBottomNavigation(R.id.nav_quiz);
 
         btnStartQuiz.setOnClickListener(v -> startQuiz());
     }
@@ -204,29 +202,20 @@ public class QuizSetupActivity extends AppCompatActivity {
         intent.putExtra("ALL_VOCABS", (Serializable) allVocabs);
         intent.putExtra("USER_ID", userId);
         
-        // Sử dụng ActivityTransitionManager để khởi chạy activity với hiệu ứng chuyển đổi
-        ActivityTransitionManager.startActivityWithDefaultTransition(this, intent);
+        try {
+            // Sử dụng ActivityTransitionManager để khởi chạy activity với hiệu ứng chuyển đổi
+            ActivityTransitionManager.startActivityWithDefaultTransition(this, intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Thử khởi chạy trực tiếp nếu có lỗi
+            try {
+                startActivity(intent);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                Toast.makeText(this, "Không thể mở bài kiểm tra. Vui lòng thử lại.", Toast.LENGTH_LONG).show();
+            }
+        }
     }
     
-    private void setupBottomNavigation() {
-        bottomNavigation = findViewById(R.id.bottom_navigation);
-        bottomNavigation.setSelectedItemId(R.id.nav_quiz);
-        
-        bottomNavigation.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.nav_home) {
-                ActivityTransitionManager.startActivityWithSlideTransition(
-                        this, HomeActivity.class);
-                return true;
-            } else if (itemId == R.id.nav_categories) {
-                ActivityTransitionManager.startActivityWithSlideTransition(
-                        this, CategoryManagementActivity.class);
-                return true;
-            } else if (itemId == R.id.nav_quiz) {
-                // Đã ở màn hình Quiz Setup, không cần chuyển đổi
-                return true;
-            }
-            return false;
-        });
-    }
+    // setupBottomNavigation được kế thừa từ BaseMainActivity
 }

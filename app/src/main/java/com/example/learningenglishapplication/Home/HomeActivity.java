@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,16 +25,16 @@ import com.example.learningenglishapplication.Profile.ProfileSettingsActivity;
 import com.example.learningenglishapplication.Quiz.QuizSetupActivity;
 import com.example.learningenglishapplication.R;
 import com.example.learningenglishapplication.Utils.ActivityTransitionManager;
+import com.example.learningenglishapplication.Utils.BaseMainActivity;
 import com.example.learningenglishapplication.Vocabulary.VocabularyListActivity;
 import com.example.learningenglishapplication.category.CategoryAdapter;
 import com.example.learningenglishapplication.category.CategoryManagementActivity;
-import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class HomeActivity extends AppCompatActivity implements CategoryAdapter.OnItemClickListener {
+public class HomeActivity extends BaseMainActivity implements CategoryAdapter.OnItemClickListener {
 
     private RecyclerView recyclerView;
     private RecyclerView rvDailyWords;
@@ -47,7 +46,7 @@ public class HomeActivity extends AppCompatActivity implements CategoryAdapter.O
     private DatabaseHelper databaseHelper;
     private long currentUserId;
     private String currentUserEmail;
-    private NavigationBarView bottomNavigation;
+    // bottomNavigation được kế thừa từ BaseMainActivity
     private TextView quoteTextView;
     private TextView tvLoiChao, tvTenNguoiDung;
     private TextView tvStreakCount, tvWordsLearned, tvAccuracy;
@@ -158,7 +157,7 @@ public class HomeActivity extends AppCompatActivity implements CategoryAdapter.O
         quoteTextView.setOnClickListener(v -> showRandomQuote());
 
         // Bottom Navigation
-        setupBottomNavigation();
+        setupBottomNavigation(R.id.nav_home);
     }
 
     private void showRandomQuote() {
@@ -173,29 +172,6 @@ public class HomeActivity extends AppCompatActivity implements CategoryAdapter.O
         adapter = new CategoryAdapter(this, categoryDataHelper.getAllCategories(currentUserId));
         adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(adapter);
-    }
-
-    private void setupBottomNavigation() {
-        bottomNavigation = findViewById(R.id.bottom_navigation);
-        bottomNavigation.setSelectedItemId(R.id.nav_home);
-
-        bottomNavigation.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-
-            if (itemId == R.id.nav_home) {
-                return true;
-            } else if (itemId == R.id.nav_categories) {
-                ActivityTransitionManager.startActivityWithSlideTransition(
-                        this, CategoryManagementActivity.class);
-                return true;
-            } else if (itemId == R.id.nav_quiz) {
-                ActivityTransitionManager.startActivityWithSlideTransition(
-                        this, QuizSetupActivity.class);
-                return true;
-            // Đã xóa xử lý cho tab cá nhân và tích hợp vào icon ở trang chủ
-            }
-            return false;
-        });
     }
 
     @Override
@@ -298,8 +274,7 @@ public class HomeActivity extends AppCompatActivity implements CategoryAdapter.O
         
         // Xử lý sự kiện nút xem tất cả
         btnViewAllDailyWords.setOnClickListener(v -> {
-            // TODO: Mở màn hình xem tất cả từ vựng gợi ý
-            Toast.makeText(HomeActivity.this, "Tính năng đang phát triển", Toast.LENGTH_SHORT).show();
+            Toast.makeText(HomeActivity.this, "Không hoạt động đâu=)", Toast.LENGTH_SHORT).show();
         });
     }
 }

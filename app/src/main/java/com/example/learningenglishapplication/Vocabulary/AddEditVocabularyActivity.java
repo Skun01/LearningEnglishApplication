@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.example.learningenglishapplication.Utils.BaseChildActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 
 import com.example.learningenglishapplication.Data.DataHelper.StatisticsDataHelper;
@@ -18,7 +18,7 @@ import com.example.learningenglishapplication.Data.DatabaseHelper;
 import com.example.learningenglishapplication.Data.model.Vocabulary;
 import com.example.learningenglishapplication.R;
 
-public class AddEditVocabularyActivity extends AppCompatActivity {
+public class AddEditVocabularyActivity extends BaseChildActivity {
 
     private EditText etWord, etPronunciation, etMeaning;
     private Button btnSave;
@@ -47,13 +47,8 @@ public class AddEditVocabularyActivity extends AppCompatActivity {
         etMeaning = findViewById(R.id.et_meaning);
         btnSave = findViewById(R.id.btn_save_vocabulary);
 
-        // Cài đặt Toolbar
-        MaterialToolbar toolbar = findViewById(R.id.toolbar_add_edit_vocabulary);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
+        // Sử dụng phương thức setupToolbar từ BaseChildActivity
+        setupToolbar(isEditing ? "Chỉnh sửa từ vựng" : "Thêm từ vựng mới");
 
         // Lấy dữ liệu từ Intent và Shared Preferences
         categoryId = getIntent().getLongExtra("CATEGORY_ID", -1);

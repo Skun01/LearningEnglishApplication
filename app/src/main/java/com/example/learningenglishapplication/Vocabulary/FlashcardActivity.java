@@ -30,14 +30,14 @@ import com.example.learningenglishapplication.Data.DatabaseHelper;
 import com.example.learningenglishapplication.Data.DataHelper.VocabularyDataHelper;
 import com.example.learningenglishapplication.Data.DataHelper.StatisticsDataHelper;
 import com.example.learningenglishapplication.Utils.ActivityTransitionManager;
-import com.example.learningenglishapplication.Utils.BaseActivity;
+import com.example.learningenglishapplication.Utils.BaseChildActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 
 import java.util.List;
 import java.util.Locale;
 
-public class FlashcardActivity extends BaseActivity {
+public class FlashcardActivity extends BaseChildActivity {
 
     private List<Vocabulary> vocabularyList;
     private int currentCardIndex = 0;
