@@ -16,6 +16,7 @@ import com.example.learningenglishapplication.R;
 import com.example.learningenglishapplication.Data.model.Vocabulary;
 import com.example.learningenglishapplication.Utils.ActivityTransitionManager;
 import com.example.learningenglishapplication.Utils.BaseChildActivity;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
@@ -42,7 +43,11 @@ public class QuizActivity extends BaseChildActivity implements View.OnClickListe
         setContentView(R.layout.activity_quiz);
         
         // Thiết lập toolbar với tiêu đề "Quiz"
-        setupToolbar(getString(R.string.quiz_title));
+        MaterialToolbar toolbar = findViewById(R.id.toolbar_quiz);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(getString(R.string.quiz_title));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         quizQuestions = (List<Vocabulary>) getIntent().getSerializableExtra("QUIZ_QUESTIONS");
         allVocabs = (List<Vocabulary>) getIntent().getSerializableExtra("ALL_VOCABS");
@@ -144,17 +149,17 @@ public class QuizActivity extends BaseChildActivity implements View.OnClickListe
 
         if (selectedAnswer.equals(correctAnswer)) {
             score++;
-            // Sử dụng drawable với màu đúng thay vì setBackgroundColor
-            clickedButton.setBackgroundResource(R.drawable.enhanced_correct_answer);
+            // Sử dụng drawable với màu đúng
+            clickedButton.setBackgroundResource(R.drawable.button_correct_answer);
             clickedButton.setTextColor(getResources().getColor(android.R.color.white, getTheme()));
         } else {
-            // Sử dụng drawable với màu sai thay vì setBackgroundColor
-            clickedButton.setBackgroundResource(R.drawable.enhanced_wrong_answer);
+            // Sử dụng drawable với màu sai
+            clickedButton.setBackgroundResource(R.drawable.button_wrong_answer);
             clickedButton.setTextColor(getResources().getColor(android.R.color.white, getTheme()));
             // Tìm và highlight đáp án đúng
             for (Button btn : answerButtons) {
                 if (btn.getText().toString().equals(correctAnswer)) {
-                    btn.setBackgroundResource(R.drawable.enhanced_correct_answer);
+                    btn.setBackgroundResource(R.drawable.button_correct_answer);
                     btn.setTextColor(getResources().getColor(android.R.color.white, getTheme()));
                 }
             }
@@ -201,6 +206,12 @@ public class QuizActivity extends BaseChildActivity implements View.OnClickListe
         );
         
         ActivityTransitionManager.startActivityWithExtras(this, intent, options.toBundle());
+    }
+    
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
     
     @Override

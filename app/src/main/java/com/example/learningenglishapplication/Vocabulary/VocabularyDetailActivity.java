@@ -27,6 +27,7 @@ public class VocabularyDetailActivity extends BaseChildActivity {
 
         // Sử dụng phương thức setupToolbar từ BaseChildActivity
         setupToolbar("Chi tiết từ vựng");
+        enableHomeAsUp();
 
         databaseHelper = new DatabaseHelper(this);
         // SỬA LỖI: Khởi tạo VocabularyDataHelper bằng cách truyền DatabaseHelper vào

@@ -23,6 +23,16 @@ public abstract class BaseChildActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+    
+    /**
+     * Bật nút quay lại trên thanh công cụ
+     */
+    protected void enableHomeAsUp() {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+    }
 
     /**
      * Thiết lập toolbar với tiêu đề và nút quay lại

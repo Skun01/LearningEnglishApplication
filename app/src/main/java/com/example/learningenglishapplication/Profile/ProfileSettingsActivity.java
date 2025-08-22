@@ -31,6 +31,7 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.ArrayList;
 
@@ -59,6 +60,13 @@ public class ProfileSettingsActivity extends BaseChildActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_settings);
+        
+        // Thiết lập toolbar và nút quay lại
+        MaterialToolbar toolbar = findViewById(R.id.toolbar_profile_settings);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Cài đặt");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         // Khởi tạo helper
         userSettingDataHelper = new UserSettingDataHelper(this);
@@ -333,5 +341,11 @@ public class ProfileSettingsActivity extends BaseChildActivity {
             notificationHelper.cancelNotification();
             Toast.makeText(this, "Đã tắt nhắc nhở học tập hàng ngày", Toast.LENGTH_SHORT).show();
         }
+    }
+    
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }

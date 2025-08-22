@@ -45,10 +45,10 @@ public class CategoryManagementActivity extends BaseMainActivity
         // --- Thiết lập Toolbar ---
         toolbar = findViewById(R.id.toolbar_category);
         setSupportActionBar(toolbar);
-        // Hiển thị nút quay lại (mũi tên)
+        // Không hiển thị nút quay lại vì đây là màn hình chính có bottom navigation
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            getSupportActionBar().setDisplayShowHomeEnabled(false);
         }
 
         categoryHelper = new CategoryDataHelper(this);

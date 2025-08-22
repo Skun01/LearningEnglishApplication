@@ -73,8 +73,12 @@ public class VocabularyListActivity extends BaseChildActivity implements Vocabul
             return;
         }
 
-        // Sử dụng phương thức setupToolbar từ BaseChildActivity
-        setupToolbar(categoryName);
+        // Thiết lập toolbar trực tiếp
+        MaterialToolbar toolbar = findViewById(R.id.toolbar_vocabulary_list);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(categoryName);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         recyclerView = findViewById(R.id.rv_vocabularies);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -378,6 +382,12 @@ public class VocabularyListActivity extends BaseChildActivity implements Vocabul
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
     
     // Sử dụng phương thức onBackPressed từ BaseChildActivity

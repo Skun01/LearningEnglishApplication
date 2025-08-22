@@ -32,6 +32,7 @@ public class SearchActivity extends BaseChildActivity {
 
         // Sử dụng phương thức setupToolbar từ BaseChildActivity
         setupToolbar("Tìm kiếm Từ vựng");
+        enableHomeAsUp();
 
         // --- Ánh xạ Views và khởi tạo ---
         databaseHelper = new DatabaseHelper(this); // KHỞI TẠO DatabaseHelper

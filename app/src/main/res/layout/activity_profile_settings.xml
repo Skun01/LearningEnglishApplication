@@ -9,16 +9,14 @@
     tools:context=".Profile.ProfileSettingsActivity">
 
     <!-- Thanh tiêu đề -->
-    <TextView
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar_profile_settings"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Cá Nhân"
-        android:padding="@dimen/spacing_medium"
+        android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:gravity="center"/>
+        app:titleTextColor="@color/white"
+        app:title="Cá Nhân"
+        app:navigationIcon="@android:drawable/ic_menu_revert" />
 
     <ScrollView
         android:layout_width="match_parent"

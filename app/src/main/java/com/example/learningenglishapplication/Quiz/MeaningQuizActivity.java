@@ -16,6 +16,7 @@ import com.example.learningenglishapplication.R;
 import com.example.learningenglishapplication.Data.model.Vocabulary;
 import com.example.learningenglishapplication.Utils.ActivityTransitionManager;
 import com.example.learningenglishapplication.Utils.BaseChildActivity;
+import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,8 +41,12 @@ public class MeaningQuizActivity extends BaseChildActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meaning_quiz);
         
-        // Thiết lập toolbar với tiêu đề "Quiz Nghĩa"
-        setupToolbar(getString(R.string.meaning_quiz_title));
+        // Thiết lập toolbar trực tiếp
+        MaterialToolbar toolbar = findViewById(R.id.toolbar_meaning_quiz);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(getString(R.string.meaning_quiz_title));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         quizQuestions = (List<Vocabulary>) getIntent().getSerializableExtra("QUIZ_QUESTIONS");
         allVocabs = (List<Vocabulary>) getIntent().getSerializableExtra("ALL_VOCABS");
@@ -78,6 +83,7 @@ public class MeaningQuizActivity extends BaseChildActivity implements View.OnCli
             return;
         }
 
+        // Reset trạng thái các nút cho câu hỏi mới
         resetButtons();
 
         Vocabulary currentQuestion = quizQuestions.get(currentQuestionIndex);
@@ -125,26 +131,47 @@ public class MeaningQuizActivity extends BaseChildActivity implements View.OnCli
         String selectedAnswer = clickedButton.getText().toString();
         String correctAnswer = quizQuestions.get(currentQuestionIndex).getWord();
 
-        if (selectedAnswer.equals(correctAnswer)) {
-            score++;
-            clickedButton.setBackgroundResource(R.drawable.enhanced_correct_answer);
-            clickedButton.setTextColor(getResources().getColor(android.R.color.white, getTheme()));
-        } else {
-            clickedButton.setBackgroundResource(R.drawable.enhanced_wrong_answer);
-            clickedButton.setTextColor(getResources().getColor(android.R.color.white, getTheme()));
-            // Tìm và highlight đáp án đúng
-            for (Button btn : answerButtons) {
-                if (btn.getText().toString().equals(correctAnswer)) {
-                    btn.setBackgroundResource(R.drawable.enhanced_correct_answer);
-                    btn.setTextColor(getResources().getColor(android.R.color.white, getTheme()));
-                }
+        // Tìm nút có đáp án đúng
+        Button correctButton = null;
+        for (Button btn : answerButtons) {
+            if (btn.getText().toString().equals(correctAnswer)) {
+                correctButton = btn;
+                break;
             }
         }
 
-        currentQuestionIndex++;
+        if (selectedAnswer.equals(correctAnswer)) {
+            // Đáp án đúng - Đặt màu xanh lá cho nút được chọn
+            score++;
+            clickedButton.setBackgroundResource(R.drawable.button_correct_answer);
+            clickedButton.setTextColor(Color.WHITE);
+        } else {
+            // Đáp án sai - Đặt màu đỏ cho nút được chọn
+            clickedButton.setBackgroundResource(R.drawable.button_wrong_answer);
+            clickedButton.setTextColor(Color.WHITE);
 
-        // Đợi một chút rồi chuyển sang câu tiếp theo
-        handler.postDelayed(this::loadNextQuestion, 1500); // 1.5 giây
+            // Highlight đáp án đúng với màu xanh lá
+            if (correctButton != null) {
+                correctButton.setBackgroundResource(R.drawable.button_correct_answer);
+                correctButton.setTextColor(Color.WHITE);
+            }
+        }
+
+        // Đặt các nút còn lại (không phải đáp án đúng và không phải nút được chọn)
+        // về màu mặc định với độ mờ
+        for (Button btn : answerButtons) {
+            if (btn != clickedButton && btn != correctButton) {
+                btn.setBackgroundResource(R.drawable.button_ripple_effect);
+                btn.setTextColor(getResources().getColor(R.color.text_color_secondary, getTheme()));
+                btn.setAlpha(0.6f); // Làm mờ các nút không liên quan
+            }
+        }
+
+        // Tăng thời gian hiển thị kết quả để người dùng có thể thấy rõ màu sắc
+        handler.postDelayed(() -> {
+            currentQuestionIndex++;
+            loadNextQuestion();
+        }, 2500); // Giảm xuống 2.5 giây cho trải nghiệm tốt hơn
     }
 
     private void resetButtons() {
@@ -152,6 +179,7 @@ public class MeaningQuizActivity extends BaseChildActivity implements View.OnCli
             btn.setEnabled(true);
             btn.setBackgroundResource(R.drawable.button_ripple_effect);
             btn.setTextColor(getResources().getColor(R.color.text_color_primary, getTheme()));
+            btn.setAlpha(1.0f); // Đặt lại độ trong suốt về bình thường
         }
     }
 
@@ -170,4 +198,14 @@ public class MeaningQuizActivity extends BaseChildActivity implements View.OnCli
         ActivityTransitionManager.startActivityWithExtras(this, intent, options.toBundle());
     }
     
+    @Override
+    public void onBackPressed() {
+        ActivityTransitionManager.finishWithDefaultTransition(this);
+    }
+    
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
 }

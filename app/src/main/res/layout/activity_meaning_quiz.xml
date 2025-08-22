@@ -1,97 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background_color"
-    android:padding="@dimen/spacing_medium"
     tools:context=".Quiz.MeaningQuizActivity">
 
-    <!-- Thanh tiến trình và thông tin -->
-    <LinearLayout
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar_meaning_quiz"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
-        <TextView
-            android:id="@+id/tv_question_counter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@color/text_color_primary"
-            tools:text="Câu 5/20"/>
-        <ProgressBar
-            android:id="@+id/pb_quiz_progress"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:max="100"
-            android:progress="25"
-            android:layout_marginStart="@dimen/spacing_medium"
-            android:layout_marginEnd="@dimen/spacing_medium"/>
-        <TextView
-            android:id="@+id/tv_score"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="?attr/colorSecondary"
-            tools:text="Điểm: 4"/>
-    </LinearLayout>
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorSurfaceContainerHigh"
+        app:titleTextColor="?attr/colorOnSurface"
+        app:title="@string/meaning_quiz_title"
+        app:navigationIcon="@android:drawable/ic_menu_revert" />
 
-    <!-- Khung câu hỏi -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:layout_marginTop="@dimen/spacing_extra_large"
-        android:background="@drawable/item_background"
-        android:gravity="center"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         android:padding="@dimen/spacing_medium">
 
-        <TextView
-            android:id="@+id/tv_question_meaning"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@color/text_color_primary"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <TextView
+                android:id="@+id/tv_question_counter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/text_color_primary"
+                tools:text="Câu 5/20"/>
+            <ProgressBar
+                android:id="@+id/pb_quiz_progress"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:max="100"
+                android:progress="25"
+                android:layout_marginStart="@dimen/spacing_medium"
+                android:layout_marginEnd="@dimen/spacing_medium"/>
+            <TextView
+                android:id="@+id/tv_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorSecondary"
+                tools:text="Điểm: 4"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_marginTop="@dimen/spacing_extra_large"
+            android:background="@drawable/item_background"
             android:gravity="center"
-            tools:text="Hiện tượng tự nhiên hoặc xã hội đáng chú ý"/>
-    </LinearLayout>
+            android:padding="@dimen/spacing_medium">
 
-    <!-- Các lựa chọn trả lời -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:layout_marginTop="@dimen/spacing_large"
-        android:gravity="center">
+            <TextView
+                android:id="@+id/tv_question_meaning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_color_primary"
+                android:gravity="center"
+                tools:text="Hiện tượng tự nhiên hoặc xã hội đáng chú ý"/>
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/btn_answer_1"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/spacing_small"
-            tools:text="Phenomenon"/>
-        <Button
-            android:id="@+id/btn_answer_2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/spacing_small"
-            tools:text="Opportunity"/>
-        <Button
-            android:id="@+id/btn_answer_3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/spacing_small"
-            tools:text="Government"/>
-        <Button
-            android:id="@+id/btn_answer_4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="Environment"/>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/spacing_large"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btn_answer_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_small"
+                tools:text="Phenomenon"/>
+            <Button
+                android:id="@+id/btn_answer_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_small"
+                tools:text="Opportunity"/>
+            <Button
+                android:id="@+id/btn_answer_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_small"
+                tools:text="Government"/>
+            <Button
+                android:id="@+id/btn_answer_4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Environment"/>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
