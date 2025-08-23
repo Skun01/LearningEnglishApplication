@@ -8,17 +8,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
+import androidx.activity.OnBackPressedCallback;
 import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.util.Pair;
-
 import com.example.learningenglishapplication.R;
 import com.example.learningenglishapplication.Data.model.Vocabulary;
 import com.example.learningenglishapplication.Utils.ActivityTransitionManager;
 import com.example.learningenglishapplication.Utils.BaseChildActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,8 +26,8 @@ public class QuizActivity extends BaseChildActivity implements View.OnClickListe
 
     private TextView tvQuestionCounter, tvScore, tvQuestionWord;
     private ProgressBar pbQuizProgress;
-    private Button btnAnswer1, btnAnswer2, btnAnswer3, btnAnswer4;
-    private List<Button> answerButtons;
+    private MaterialButton btnAnswer1, btnAnswer2, btnAnswer3, btnAnswer4;
+    private List<MaterialButton> answerButtons;
 
     private List<Vocabulary> quizQuestions;
     private List<Vocabulary> allVocabs;
@@ -41,19 +40,27 @@ public class QuizActivity extends BaseChildActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
-        
-        // Thiết lập toolbar với tiêu đề "Quiz"
+
         MaterialToolbar toolbar = findViewById(R.id.toolbar_quiz);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getString(R.string.quiz_title));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(getString(R.string.quiz_title));
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
         quizQuestions = (List<Vocabulary>) getIntent().getSerializableExtra("QUIZ_QUESTIONS");
         allVocabs = (List<Vocabulary>) getIntent().getSerializableExtra("ALL_VOCABS");
 
         initViews();
         loadNextQuestion();
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                ActivityTransitionManager.finishWithDefaultTransition(QuizActivity.this);
+            }
+        });
     }
 
     private void initViews() {
@@ -72,15 +79,14 @@ public class QuizActivity extends BaseChildActivity implements View.OnClickListe
         answerButtons.add(btnAnswer3);
         answerButtons.add(btnAnswer4);
 
-        for (Button btn : answerButtons) {
+        for (MaterialButton btn : answerButtons) {
             btn.setOnClickListener(this);
-            // Thêm hiệu ứng ripple khi nhấn
-            btn.setBackgroundResource(R.drawable.button_ripple_effect);
+            // Thiết lập màu chữ mặc định cho tất cả các nút ngay từ đầu
+            btn.setTextColor(Color.WHITE);
         }
     }
 
     private void loadNextQuestion() {
-        // Nếu đã hết câu hỏi, chuyển sang màn hình kết quả
         if (currentQuestionIndex >= quizQuestions.size()) {
             showResults();
             return;
@@ -90,13 +96,11 @@ public class QuizActivity extends BaseChildActivity implements View.OnClickListe
 
         Vocabulary currentQuestion = quizQuestions.get(currentQuestionIndex);
 
-        // Cập nhật giao diện
         tvQuestionCounter.setText("Câu " + (currentQuestionIndex + 1) + "/" + quizQuestions.size());
         tvScore.setText("Điểm: " + score);
         pbQuizProgress.setProgress((currentQuestionIndex * 100) / quizQuestions.size());
         tvQuestionWord.setText(currentQuestion.getWord());
 
-        // Tạo các lựa chọn trả lời
         List<String> options = generateOptions(currentQuestion);
         for (int i = 0; i < answerButtons.size(); i++) {
             answerButtons.get(i).setText(options.get(i));
@@ -105,35 +109,32 @@ public class QuizActivity extends BaseChildActivity implements View.OnClickListe
 
     private List<String> generateOptions(Vocabulary correctVocab) {
         List<String> options = new ArrayList<>();
-        options.add(correctVocab.getMeaning()); // Thêm đáp án đúng
+        options.add(correctVocab.getMeaning());
 
-        // Tạo một danh sách các từ sai
         List<Vocabulary> wrongVocabs = new ArrayList<>(allVocabs);
-        wrongVocabs.removeIf(v -> v.getId() == correctVocab.getId()); // Xóa đáp án đúng khỏi danh sách
+        wrongVocabs.removeIf(v -> v.getId() == correctVocab.getId());
         Collections.shuffle(wrongVocabs);
 
-        // Thêm 3 đáp án sai
         for (int i = 0; i < 3; i++) {
-            options.add(wrongVocabs.get(i).getMeaning());
+            if (wrongVocabs.size() > i) {
+                options.add(wrongVocabs.get(i).getMeaning());
+            }
         }
 
-        // Trộn các lựa chọn để đáp án đúng không luôn ở vị trí đầu
         Collections.shuffle(options);
         return options;
     }
 
     @Override
     public void onClick(View v) {
-        // Vô hiệu hóa các nút để tránh nhấn nhiều lần
-        for (Button btn : answerButtons) {
+        for (MaterialButton btn : answerButtons) {
             btn.setEnabled(false);
         }
 
-        Button clickedButton = (Button) v;
+        MaterialButton clickedButton = (MaterialButton) v;
         String selectedAnswer = clickedButton.getText().toString();
         String correctAnswer = quizQuestions.get(currentQuestionIndex).getMeaning();
 
-        // Thêm hiệu ứng animation khi chọn đáp án
         clickedButton.animate()
                 .scaleX(1.1f)
                 .scaleY(1.1f)
@@ -149,27 +150,24 @@ public class QuizActivity extends BaseChildActivity implements View.OnClickListe
 
         if (selectedAnswer.equals(correctAnswer)) {
             score++;
-            // Sử dụng drawable với màu đúng
-            clickedButton.setBackgroundResource(R.drawable.button_correct_answer);
-            clickedButton.setTextColor(getResources().getColor(android.R.color.white, getTheme()));
+            // Thay đổi màu nền của nút đúng thành xanh lá
+            clickedButton.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.correct_answer));
+            // Không thay đổi màu chữ vì đã được đặt là màu trắng
         } else {
-            // Sử dụng drawable với màu sai
-            clickedButton.setBackgroundResource(R.drawable.button_wrong_answer);
-            clickedButton.setTextColor(getResources().getColor(android.R.color.white, getTheme()));
-            // Tìm và highlight đáp án đúng
-            for (Button btn : answerButtons) {
+            // Thay đổi màu nền của nút sai thành đỏ
+            clickedButton.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.wrong_answer));
+
+            for (MaterialButton btn : answerButtons) {
                 if (btn.getText().toString().equals(correctAnswer)) {
-                    btn.setBackgroundResource(R.drawable.button_correct_answer);
-                    btn.setTextColor(getResources().getColor(android.R.color.white, getTheme()));
+                    // Thay đổi màu nền của đáp án đúng thành xanh lá
+                    btn.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.correct_answer));
                 }
             }
         }
 
         currentQuestionIndex++;
 
-        // Đợi một chút rồi chuyển sang câu tiếp theo với hiệu ứng fade
         handler.postDelayed(() -> {
-            // Thêm hiệu ứng fade out trước khi load câu hỏi mới
             View questionContainer = findViewById(R.id.question_container);
             questionContainer.animate()
                     .alpha(0.0f)
@@ -182,14 +180,15 @@ public class QuizActivity extends BaseChildActivity implements View.OnClickListe
                                 .start();
                     })
                     .start();
-        }, 1500); // 1.5 giây
+        }, 1500);
     }
 
     private void resetButtons() {
-        for (Button btn : answerButtons) {
+        for (MaterialButton btn : answerButtons) {
             btn.setEnabled(true);
-            btn.setBackgroundResource(R.drawable.button_ripple_effect);
-            btn.setTextColor(getResources().getColor(R.color.text_color_primary, getTheme()));
+            // Khôi phục màu nền về màu xanh dương mặc định
+            btn.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.primary));
+            // Giữ nguyên màu chữ là màu trắng
         }
     }
 
@@ -197,25 +196,19 @@ public class QuizActivity extends BaseChildActivity implements View.OnClickListe
         Intent intent = new Intent(this, QuizResultActivity.class);
         intent.putExtra("SCORE", score);
         intent.putExtra("TOTAL_QUESTIONS", quizQuestions.size());
-        
-        // Tạo shared element transition cho score
+
         View scoreView = findViewById(R.id.tv_score);
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                 this,
                 Pair.create(scoreView, "score_transition")
         );
-        
+
         ActivityTransitionManager.startActivityWithExtras(this, intent, options.toBundle());
     }
-    
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
-    }
-    
-    @Override
-    public void onBackPressed() {
-        ActivityTransitionManager.finishWithDefaultTransition(this);
     }
 }
