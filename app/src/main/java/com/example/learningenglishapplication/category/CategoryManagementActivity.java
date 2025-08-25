@@ -15,6 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.example.learningenglishapplication.common.DeleteConfirmationDialog;
 
 import com.example.learningenglishapplication.Data.DataHelper.CategoryDataHelper;
 import com.example.learningenglishapplication.Data.DatabaseHelper;
@@ -27,7 +28,7 @@ import com.example.learningenglishapplication.Vocabulary.VocabularyListActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class CategoryManagementActivity extends BaseMainActivity 
-        implements CategoryAdapter.OnItemClickListener, AddCategoryDialog.OnCategorySavedListener {
+        implements CategoryAdapter.OnItemClickListener, AddCategoryDialog.OnCategorySavedListener, DeleteConfirmationDialog.OnDeleteConfirmedListener {
 
     private RecyclerView recyclerView;
     private CategoryAdapter adapter;
@@ -162,17 +163,8 @@ public class CategoryManagementActivity extends BaseMainActivity
     }
 
     private void showDeleteConfirmationDialog(long categoryId, String categoryName) {
-        new AlertDialog.Builder(this)
-                .setTitle("Xác nhận xóa")
-                .setMessage("Bạn có chắc chắn muốn xóa thể loại '" + categoryName + "' không? Tất cả từ vựng bên trong cũng sẽ bị xóa vĩnh viễn.")
-                .setPositiveButton("Xóa", (dialog, which) -> {
-                    categoryHelper.deleteCategory(categoryId);
-                    Toast.makeText(this, "Đã xóa thể loại: " + categoryName, Toast.LENGTH_SHORT).show();
-                    loadCategories(); // Tải lại danh sách
-                })
-                .setNegativeButton("Hủy", null) // Không làm gì khi nhấn Hủy
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
+        DeleteConfirmationDialog dialog = DeleteConfirmationDialog.newInstance(categoryId, categoryName, "thể loại");
+        dialog.show(getSupportFragmentManager(), "DeleteConfirmationDialog");
     }
 
     // Tạo một phương thức riêng để tải lại danh sách cho gọn
@@ -198,6 +190,13 @@ public class CategoryManagementActivity extends BaseMainActivity
     protected void onResume() {
         super.onResume();
         loadCategories(); // Sử dụng phương thức mới
+    }
+    
+    @Override
+    public void onDeleteConfirmed(long itemId, String itemName) {
+        categoryHelper.deleteCategory(itemId);
+        Toast.makeText(this, "Đã xóa thể loại: " + itemName, Toast.LENGTH_SHORT).show();
+        loadCategories();
     }
 
 }

@@ -82,9 +82,13 @@ public class AddCategoryDialog extends DialogFragment {
         super.onStart();
         Dialog dialog = getDialog();
         if (dialog != null) {
-            int width = ViewGroup.LayoutParams.MATCH_PARENT;
-            int height = ViewGroup.LayoutParams.MATCH_PARENT;
+            // Thiết lập kích thước dialog rộng hơn
+            int width = (int)(getResources().getDisplayMetrics().widthPixels * 0.9);
+            int height = ViewGroup.LayoutParams.WRAP_CONTENT;
             dialog.getWindow().setLayout(width, height);
+            
+            // Thêm hiệu ứng bo góc cho dialog
+            dialog.getWindow().setBackgroundDrawableResource(R.drawable.rounded_dialog_background);
             dialog.getWindow().setWindowAnimations(R.style.DialogAnimation);
         }
     }

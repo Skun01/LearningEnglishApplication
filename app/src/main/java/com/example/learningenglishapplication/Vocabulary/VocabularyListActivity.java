@@ -25,6 +25,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.example.learningenglishapplication.Vocabulary.ChooseVocabularyTypeDialog;
+import com.example.learningenglishapplication.common.DeleteConfirmationDialog;
 
 import java.io.Serializable;
 import java.util.List;
@@ -37,7 +39,7 @@ import com.example.learningenglishapplication.Utils.ActivityTransitionManager;
 import com.example.learningenglishapplication.Utils.BaseChildActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class VocabularyListActivity extends BaseChildActivity implements VocabularyAdapter.OnItemInteractionListener, VocabularyAdapter.OnFavoriteClickListener, AddVocabularyDialog.OnVocabularySavedListener {
+public class VocabularyListActivity extends BaseChildActivity implements VocabularyAdapter.OnItemInteractionListener, VocabularyAdapter.OnFavoriteClickListener, AddVocabularyDialog.OnVocabularySavedListener, ChooseVocabularyTypeDialog.OnVocabularyTypeSelectedListener, DeleteConfirmationDialog.OnDeleteConfirmedListener {
 
     private RecyclerView recyclerView;
     private VocabularyAdapter adapter;
@@ -98,34 +100,8 @@ public class VocabularyListActivity extends BaseChildActivity implements Vocabul
         btnStartFlashcard = findViewById(R.id.btn_start_flashcard);
         btnStartFlashcard.setOnClickListener(v -> {
             // Hiển thị dialog cho phép người dùng chọn loại từ vựng để học
-            final CharSequence[] options = {"Tất cả từ vựng", "Từ vựng chưa học", "Từ vựng cần ôn tập", "Từ vựng yêu thích"};
-            androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
-            builder.setTitle("Chọn từ vựng để học");
-            builder.setItems(options, (dialog, item) -> {
-                List<Vocabulary> vocabList;
-                
-                if (options[item].equals("Tất cả từ vựng")) {
-                    vocabList = vocabularyHelper.getVocabulariesAsList(categoryId);
-                } else if (options[item].equals("Từ vựng chưa học")) {
-                    vocabList = vocabularyHelper.getVocabulariesForFlashcard(categoryId);
-                } else if (options[item].equals("Từ vựng cần ôn tập")) {
-                    vocabList = vocabularyHelper.getVocabulariesForFlashcard(categoryId);
-                } else if (options[item].equals("Từ vựng yêu thích")) {
-                    vocabList = vocabularyHelper.getFavoriteVocabulariesAsList(categoryId);
-                } else {
-                    vocabList = vocabularyHelper.getVocabulariesAsList(categoryId);
-                }
-                
-                if (vocabList.isEmpty()) {
-                    Toast.makeText(VocabularyListActivity.this, "Chưa có từ nào để ôn tập!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Intent flashcardIntent = new Intent(VocabularyListActivity.this, FlashcardActivity.class);
-                    flashcardIntent.putExtra("VOCAB_LIST", (Serializable) vocabList);
-                    flashcardIntent.putExtra("LEARNING_MODE", options[item].toString());
-                    ActivityTransitionManager.startActivityWithTransition(this, flashcardIntent, ActivityTransitionManager.TRANSITION_ZOOM);
-                }
-            });
-            builder.show();
+            ChooseVocabularyTypeDialog dialog = new ChooseVocabularyTypeDialog();
+            dialog.show(getSupportFragmentManager(), "ChooseVocabularyTypeDialog");
         });
 
         tvEmptyMessage = findViewById(R.id.tv_empty_message);
@@ -274,16 +250,8 @@ public class VocabularyListActivity extends BaseChildActivity implements Vocabul
     }
 
     private void showDeleteConfirmationDialog(long vocabId, String word) {
-        new AlertDialog.Builder(this)
-                .setTitle("Xác nhận xóa")
-                .setMessage("Bạn có chắc chắn muốn xóa từ '" + word + "'?")
-                .setPositiveButton("Xóa", (dialog, which) -> {
-                    vocabularyHelper.deleteVocabulary(vocabId);
-                    Toast.makeText(this, "Đã xóa từ: " + word, Toast.LENGTH_SHORT).show();
-                    loadVocabularies();
-                })
-                .setNegativeButton("Hủy", null)
-                .show();
+        DeleteConfirmationDialog dialog = DeleteConfirmationDialog.newInstance(vocabId, word, "từ vựng");
+        dialog.show(getSupportFragmentManager(), "DeleteConfirmationDialog");
     }
 
     ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -390,6 +358,51 @@ public class VocabularyListActivity extends BaseChildActivity implements Vocabul
         return true;
     }
     
+    @Override
+    public void onVocabularyTypeSelected(ChooseVocabularyTypeDialog.VocabularyType type) {
+        List<Vocabulary> vocabList;
+        String learningMode;
+        
+        switch (type) {
+            case ALL:
+                vocabList = vocabularyHelper.getVocabulariesAsList(categoryId);
+                learningMode = "Tất cả từ vựng";
+                break;
+            case UNLEARNED:
+                vocabList = vocabularyHelper.getVocabulariesForFlashcard(categoryId);
+                learningMode = "Từ vựng chưa học";
+                break;
+            case REVIEW:
+                vocabList = vocabularyHelper.getVocabulariesForFlashcard(categoryId);
+                learningMode = "Từ vựng cần ôn tập";
+                break;
+            case FAVORITE:
+                vocabList = vocabularyHelper.getFavoriteVocabulariesAsList(categoryId);
+                learningMode = "Từ vựng yêu thích";
+                break;
+            default:
+                vocabList = vocabularyHelper.getVocabulariesAsList(categoryId);
+                learningMode = "Tất cả từ vựng";
+                break;
+        }
+        
+        if (vocabList.isEmpty()) {
+            Toast.makeText(this, "Chưa có từ nào để ôn tập!", Toast.LENGTH_SHORT).show();
+        } else {
+            Intent flashcardIntent = new Intent(this, FlashcardActivity.class);
+            flashcardIntent.putExtra("VOCAB_LIST", (Serializable) vocabList);
+            flashcardIntent.putExtra("LEARNING_MODE", learningMode);
+            ActivityTransitionManager.startActivityWithTransition(this, flashcardIntent, ActivityTransitionManager.TRANSITION_ZOOM);
+        }
+    }
+    
     // Sử dụng phương thức onBackPressed từ BaseChildActivity
     // BaseChildActivity đã ghi đè phương thức này để sử dụng hiệu ứng chuyển tiếp mặc định
+    
+    @Override
+    public void onDeleteConfirmed(long itemId, String itemName) {
+        vocabularyHelper.deleteVocabulary(itemId);
+        Toast.makeText(this, "Đã xóa từ: " + itemName, Toast.LENGTH_SHORT).show();
+        loadVocabularies();
+    }
 }

@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
+import com.example.learningenglishapplication.Vocabulary.FlashcardGuideDialog;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GestureDetectorCompat;
 
@@ -127,28 +128,8 @@ public class FlashcardActivity extends BaseChildActivity {
     }
     
     private void showFlashcardGuideDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Hướng dẫn học Flashcard");
-        
-        StringBuilder message = new StringBuilder();
-        message.append("Hệ thống Flashcard sử dụng phương pháp lặp lại ngắt quãng (Spaced Repetition) để giúp bạn ghi nhớ từ vựng hiệu quả.\n\n");
-        message.append("Cách hoạt động:\n");
-        message.append("• Mỗi từ vựng được phân loại vào 5 hộp (Box) tùy theo mức độ bạn nhớ từ đó.\n");
-        message.append("• Sau khi xem từ vựng, bạn đánh giá mức độ nhớ của mình:\n");
-        message.append("  - AGAIN (Lại): Từ khó, bạn chưa nhớ được. Từ sẽ quay lại hộp 1.\n");
-        message.append("  - GOOD (Tốt): Bạn nhớ được từ này. Từ sẽ được nâng lên 1 hộp.\n");
-        message.append("  - EASY (Dễ): Từ rất dễ nhớ. Từ sẽ được nâng lên 2 hộp.\n\n");
-        message.append("Thời gian ôn tập:\n");
-        message.append("• Hộp 1: Ôn tập sau 1 phút\n");
-        message.append("• Hộp 2: Ôn tập sau 5 phút\n");
-        message.append("• Hộp 3: Ôn tập sau 1 giờ\n");
-        message.append("• Hộp 4: Ôn tập sau 1 ngày\n");
-        message.append("• Hộp 5: Ôn tập sau 1 tuần\n\n");
-        message.append("Từ vựng được đánh dấu là đã học khi bạn chọn GOOD hoặc EASY.");
-        
-        builder.setMessage(message.toString());
-        builder.setPositiveButton("Đã hiểu", (dialog, which) -> dialog.dismiss());
-        builder.show();
+        FlashcardGuideDialog dialog = FlashcardGuideDialog.newInstance();
+        dialog.show(getSupportFragmentManager(), "FlashcardGuideDialog");
     }
 
     private void initializeViews() {

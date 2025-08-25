@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -23,6 +22,10 @@ import com.example.learningenglishapplication.Data.DataHelper.UserDataHelper;
 import com.example.learningenglishapplication.Data.DataHelper.UserSettingDataHelper;
 import com.example.learningenglishapplication.Data.DatabaseHelper;
 import com.example.learningenglishapplication.R;
+import com.example.learningenglishapplication.Dialog.DailyGoalDialog;
+import com.example.learningenglishapplication.Dialog.LogoutConfirmationDialog;
+import com.example.learningenglishapplication.Profile.EditProfileDialog;
+import com.example.learningenglishapplication.Profile.ThemeChooserDialog;
 import com.example.learningenglishapplication.Utils.BaseChildActivity;
 import com.example.learningenglishapplication.Utils.NotificationHelper;
 import com.github.mikephil.charting.charts.BarChart;
@@ -35,7 +38,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.ArrayList;
 
-public class ProfileSettingsActivity extends BaseChildActivity {
+public class ProfileSettingsActivity extends BaseChildActivity implements ThemeChooserDialog.OnThemeSelectedListener, EditProfileDialog.OnProfileUpdatedListener, DailyGoalDialog.OnDailyGoalSelectedListener, LogoutConfirmationDialog.OnLogoutConfirmedListener {
 
     private UserSettingDataHelper userSettingDataHelper;
     private UserDataHelper userDataHelper;
@@ -169,33 +172,25 @@ public class ProfileSettingsActivity extends BaseChildActivity {
     }
 
     private void showThemeChooserDialog() {
-        final String[] themes = {
-                ThemeManager.LIGHT_MODE,
-                ThemeManager.DARK_MODE,
-                ThemeManager.SYSTEM_MODE
-        };
-
-        new AlertDialog.Builder(this)
-                .setTitle("Chọn Giao Diện")
-                .setItems(themes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String selectedTheme = themes[which];
-                        userSettingDataHelper.saveThemeSetting(userId, selectedTheme);
-                        tvCurrentTheme.setText(selectedTheme);
-                        ThemeManager.applyTheme(selectedTheme);
-                    }
-                })
-                .show();
+        ThemeChooserDialog dialog = new ThemeChooserDialog();
+        dialog.show(getSupportFragmentManager(), "ThemeChooserDialog");
+    }
+    
+    @Override
+    public void onThemeSelected(String theme) {
+        userSettingDataHelper.saveThemeSetting(userId, theme);
+        tvCurrentTheme.setText(theme);
+        ThemeManager.applyTheme(theme);
     }
 
     private void showLogoutDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("Xác nhận đăng xuất")
-                .setMessage("Bạn có chắc chắn muốn đăng xuất?")
-                .setPositiveButton("Có", (dialog, which) -> logoutUser())
-                .setNegativeButton("Không", null)
-                .show();
+        LogoutConfirmationDialog dialog = LogoutConfirmationDialog.newInstance();
+        dialog.show(getSupportFragmentManager(), "LogoutConfirmationDialog");
+    }
+    
+    @Override
+    public void onLogoutConfirmed() {
+        logoutUser();
     }
 
     private void logoutUser() {
@@ -226,46 +221,31 @@ public class ProfileSettingsActivity extends BaseChildActivity {
     }
     
     private void showEditProfileDialog() {
-        // Tạo view cho dialog
-        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_edit_profile, null);
+        // Sử dụng EditProfileDialog mới
+        String username = tvUserName.getText().toString();
+        String email = tvUserEmail.getText().toString();
+        EditProfileDialog dialog = EditProfileDialog.newInstance(userId, username, email);
+        dialog.show(getSupportFragmentManager(), "EditProfileDialog");
+    }
+    
+    /**
+     * Triển khai phương thức từ OnProfileUpdatedListener
+     */
+    @Override
+    public void onProfileUpdated(String username, String email) {
+        // Cập nhật UI
+        tvUserName.setText(username);
+        tvUserEmail.setText(email);
+    }
+    
+    @Override
+    public void onDailyGoalSelected(int goal) {
+        // Lưu mục tiêu mới
+        userSettingDataHelper.saveDailyGoal(userId, goal);
         
-        // Lấy các thành phần UI từ dialog
-        EditText etUsername = dialogView.findViewById(R.id.et_username);
-        EditText etEmail = dialogView.findViewById(R.id.et_email);
-        
-        // Đặt giá trị hiện tại
-        etUsername.setText(tvUserName.getText());
-        etEmail.setText(tvUserEmail.getText());
-        
-        // Tạo dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Chỉnh sửa thông tin")
-               .setView(dialogView)
-               .setPositiveButton("Lưu", (dialog, which) -> {
-                   // Lấy thông tin mới
-                   String newUsername = etUsername.getText().toString().trim();
-                   String newEmail = etEmail.getText().toString().trim();
-                   
-                   // Kiểm tra dữ liệu
-                   if (newUsername.isEmpty() || newEmail.isEmpty()) {
-                       Toast.makeText(this, "Vui lòng điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
-                       return;
-                   }
-                   
-                   // Cập nhật thông tin người dùng
-                   boolean success = userDataHelper.updateUserInfo(userId, newUsername, newEmail);
-                   if (success) {
-                       // Cập nhật UI
-                       tvUserName.setText(newUsername);
-                       tvUserEmail.setText(newEmail);
-                       Toast.makeText(this, "Cập nhật thông tin thành công", Toast.LENGTH_SHORT).show();
-                   } else {
-                       Toast.makeText(this, "Cập nhật thông tin thất bại", Toast.LENGTH_SHORT).show();
-                   }
-               })
-               .setNegativeButton("Hủy", null);
-        
-        builder.create().show();
+        // Cập nhật UI
+        tvDailyGoal.setText(goal + " từ");
+        Toast.makeText(this, "Đã cập nhật mục tiêu hàng ngày", Toast.LENGTH_SHORT).show();
     }
     
     /**
@@ -285,41 +265,12 @@ public class ProfileSettingsActivity extends BaseChildActivity {
      * Hiển thị dialog để thay đổi mục tiêu học tập hằng ngày
      */
     private void showDailyGoalDialog() {
-        // Tạo các lựa chọn mục tiêu
-        final String[] options = {"5 từ", "10 từ", "15 từ", "20 từ", "25 từ", "30 từ"};
-        final int[] values = {5, 10, 15, 20, 25, 30};
-        
         // Lấy mục tiêu hiện tại
         int currentGoal = userSettingDataHelper.getDailyGoal(userId);
-        int selectedIndex = 1; // Mặc định chọn 10 từ
         
-        // Tìm vị trí của mục tiêu hiện tại trong mảng
-        for (int i = 0; i < values.length; i++) {
-            if (values[i] == currentGoal) {
-                selectedIndex = i;
-                break;
-            }
-        }
-        
-        // Tạo dialog
-        new AlertDialog.Builder(this)
-                .setTitle("Chọn mục tiêu hàng ngày")
-                .setSingleChoiceItems(options, selectedIndex, null)
-                .setPositiveButton("Xác nhận", (dialog, which) -> {
-                    // Lấy vị trí được chọn
-                    int position = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
-                    if (position != -1) {
-                        // Lưu mục tiêu mới
-                        int newGoal = values[position];
-                        userSettingDataHelper.saveDailyGoal(userId, newGoal);
-                        
-                        // Cập nhật UI
-                        tvDailyGoal.setText(newGoal + " từ");
-                        Toast.makeText(this, "Đã cập nhật mục tiêu hàng ngày", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .setNegativeButton("Hủy", null)
-                .show();
+        // Hiển thị dialog chọn mục tiêu hàng ngày
+        DailyGoalDialog dialog = DailyGoalDialog.newInstance(currentGoal);
+        dialog.show(getSupportFragmentManager(), "DailyGoalDialog");
     }
     
     /**

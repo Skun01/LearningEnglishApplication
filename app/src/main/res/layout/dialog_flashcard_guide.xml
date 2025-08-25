@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_color"
+    android:elevation="8dp">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar_flashcard_guide"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:titleTextColor="@android:color/white"
+        app:title="Hướng dẫn học Flashcard"
+        app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge"
+        app:navigationIcon="@android:drawable/ic_menu_close_clear_cancel" />
+        
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="@dimen/spacing_large">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@android:color/transparent"
+            android:padding="@dimen/spacing_medium">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Hệ thống Flashcard sử dụng phương pháp lặp lại ngắt quãng (Spaced Repetition) để giúp bạn ghi nhớ từ vựng hiệu quả."
+                android:textSize="@dimen/text_size_medium"
+                android:layout_marginBottom="@dimen/spacing_medium" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cách hoạt động:"
+                android:textSize="@dimen/text_size_large"
+                android:textStyle="bold"
+                android:layout_marginBottom="@dimen/spacing_small"
+                style="@style/TextAppearance.Material3.TitleMedium" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="• Mỗi từ vựng được phân loại vào 5 hộp (Box) tùy theo mức độ bạn nhớ từ đó."
+                android:textSize="@dimen/text_size_medium"
+                android:layout_marginBottom="@dimen/spacing_small" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="• Sau khi xem từ vựng, bạn đánh giá mức độ nhớ của mình:"
+                android:textSize="@dimen/text_size_medium"
+                android:layout_marginBottom="@dimen/spacing_small" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="  - AGAIN (Lại): Từ khó, bạn chưa nhớ được. Từ sẽ quay lại hộp 1."
+                android:textSize="@dimen/text_size_medium"
+                android:layout_marginStart="@dimen/spacing_medium"
+                android:layout_marginBottom="@dimen/spacing_small" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="  - GOOD (Tốt): Bạn nhớ được từ này. Từ sẽ được nâng lên 1 hộp."
+                android:textSize="@dimen/text_size_medium"
+                android:layout_marginStart="@dimen/spacing_medium"
+                android:layout_marginBottom="@dimen/spacing_small" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="  - EASY (Dễ): Từ rất dễ nhớ. Từ sẽ được nâng lên 2 hộp."
+                android:textSize="@dimen/text_size_medium"
+                android:layout_marginStart="@dimen/spacing_medium"
+                android:layout_marginBottom="@dimen/spacing_medium" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thời gian ôn tập:"
+                android:textSize="@dimen/text_size_large"
+                android:textStyle="bold"
+                android:layout_marginBottom="@dimen/spacing_small"
+                style="@style/TextAppearance.Material3.TitleMedium" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="• Hộp 1: Ôn tập sau 1 phút"
+                android:textSize="@dimen/text_size_medium"
+                android:layout_marginBottom="@dimen/spacing_small" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="• Hộp 2: Ôn tập sau 5 phút"
+                android:textSize="@dimen/text_size_medium"
+                android:layout_marginBottom="@dimen/spacing_small" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="• Hộp 3: Ôn tập sau 1 giờ"
+                android:textSize="@dimen/text_size_medium"
+                android:layout_marginBottom="@dimen/spacing_small" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="• Hộp 4: Ôn tập sau 1 ngày"
+                android:textSize="@dimen/text_size_medium"
+                android:layout_marginBottom="@dimen/spacing_small" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="• Hộp 5: Ôn tập sau 1 tuần"
+                android:textSize="@dimen/text_size_medium"
+                android:layout_marginBottom="@dimen/spacing_medium" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Từ vựng được đánh dấu là đã học khi bạn chọn GOOD hoặc EASY."
+                android:textSize="@dimen/text_size_medium"
+                android:textStyle="italic"
+                android:layout_marginBottom="@dimen/spacing_small" />
+        </LinearLayout>
+    </ScrollView>
+    
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_understood"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Đã hiểu"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold"
+        android:padding="@dimen/spacing_medium"
+        app:cornerRadius="8dp"
+        android:layout_marginStart="@dimen/spacing_large"
+        android:layout_marginEnd="@dimen/spacing_large"
+        android:layout_marginBottom="@dimen/spacing_large" />
+
+</LinearLayout>

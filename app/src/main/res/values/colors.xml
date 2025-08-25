@@ -69,7 +69,7 @@
     <color name="text_color_primary">@color/on_surface</color>
     <color name="text_color_secondary">@color/on_surface_variant</color>
     <color name="divider_color">@color/surface_variant</color>
-    
+    <color name="red_500">#F44336</color>
     <!-- Seed color -->
     <color name="seed">#6750A4</color>
     <color name="white">#FFFFFF</color>
