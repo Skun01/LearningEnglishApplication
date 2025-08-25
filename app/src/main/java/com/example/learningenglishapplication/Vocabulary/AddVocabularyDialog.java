@@ -64,12 +64,29 @@ public class AddVocabularyDialog extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         
         // Thiết lập animation
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         
+        // Thêm padding cho dialog
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        
         return dialog;
+    }
+    
+    @Override
+    public void onStart() {
+        super.onStart();
+        Dialog dialog = getDialog();
+        if (dialog != null) {
+            // Thiết lập kích thước dialog rộng hơn
+            int width = (int)(getResources().getDisplayMetrics().widthPixels * 0.9);
+            int height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            dialog.getWindow().setLayout(width, height);
+            
+            // Thêm hiệu ứng bo góc cho dialog
+            dialog.getWindow().setBackgroundDrawableResource(R.drawable.rounded_dialog_background);
+        }
     }
 
     @Nullable
